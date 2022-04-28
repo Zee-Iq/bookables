@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "workspaces":["Server", "Client"],
+  "workspaces": [
+    "Server",
+    "Client",
+    "types"
+  ],
   "scripts": {
-    "start:Client":"npm start -w Client",
-    "start:Server":"npm start -w Server",
+    "start:Client": "npm start -w Client",
+    "start:Server": "npm start -w Server",
     "start": "concurrently \"npm:start:*\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
 }

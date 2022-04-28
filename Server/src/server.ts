@@ -1,5 +1,5 @@
 import express from "express"
-import "types"
+import Bookables from "types"
 
 let SpecialUser: Bookables.SpecialUser = {doesSomething: () => 5, email:"test",password:"1234",phoneNumber:"123456", somethingElse: "dwadwa"}
 let user: Bookables.User = {doesSomething: () => 5, email:"test",password:"1234",phoneNumber:"123456"}
