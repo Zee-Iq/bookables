@@ -5,33 +5,15 @@ import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
+import { selectFilters, setFromDate, setLocationInput, setToDate } from "../../slices/filterSlice";
 
-//Should select all the available Filters and return them as a object
-function selectFilters(): {
-  fromDate: Date;
-  toDate: Date;
-  location: string;
-} {
-  return {
-    fromDate: new Date(),
-    toDate: new Date( ),
-    location: ""
-  };
-}
 
-//Required Actions:
-//Takes a new ToDate, the Reducer should store this new ToDate in the store
-function setToDate(date: Date): any {}
-//Takes a new FromDate, the Reducer should store this new FromDate in the store
-function setFromDate(date: Date): any {}
-//Takes a new Location, the Reducer should store this location in the store
-function setLocation(location: string): any {}
 
 export default function Search() {
   const [showsAdditionalFilters, setShowsAdditionalFilters] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { fromDate, toDate, location} =
+  const { fromDate, toDate, locationInput} =
     useAppSelector(selectFilters);
 
   return (
@@ -42,8 +24,8 @@ export default function Search() {
           label="Location"
           type="Location"
           variant="outlined"
-          value={location}
-          onChange={(e) => dispatch(setLocation(e.target.value))}
+          value={locationInput}
+          onChange={(e) => dispatch(setLocationInput(e.target.value))}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
