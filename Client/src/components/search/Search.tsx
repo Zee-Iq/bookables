@@ -32,16 +32,16 @@ export default function Search() {
             renderInput={(props) => <TextField {...props} />}
             label="From"
             value={fromDate}
-            onChange={(newValue) => {
-              newValue && dispatch(setFromDate(newValue));
+            onChange={(date: unknown) => {
+              date instanceof Date && dispatch(setFromDate(date.toISOString()));
             }}
           />
           <DateTimePicker
             renderInput={(props) => <TextField {...props} />}
             label="To"
             value={toDate}
-            onChange={(newValue) => {
-              newValue && dispatch(setToDate(newValue));
+            onChange={(date: unknown) => {
+              date instanceof Date && dispatch(setFromDate(date.toISOString()));
             }}
           />
         </LocalizationProvider>
