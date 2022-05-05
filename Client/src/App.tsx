@@ -1,18 +1,20 @@
-import "./App.css";
-import { useAppDispatch, useAppSelector } from "./hooks";
-import { selectCounter, increment, decrement, incrementByAmount } from "./slices/counterSlice";
+import { Route, Routes } from "react-router-dom";
+import Home from "./Components/Home/Home";
+import Layout from "./Components/Layout";
 
-function App() {
-  const dispatch = useAppDispatch();
-  const counter = useAppSelector(selectCounter);
+import YourSpaces from "./Components/YourSpaces/YourSpaces";
+
+const App = () => {
   return (
-    <div className="App">
-      Counter: {counter}
-      <button onClick={() => dispatch(increment())}>increment</button>
-      <button onClick={() => dispatch(decrement())}>decrement</button>
-      <button onClick={() => dispatch(incrementByAmount(10))}>inc.incrementByAmount</button>
+    <div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="yourspace" element={<YourSpaces />} />
+        </Route>
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
