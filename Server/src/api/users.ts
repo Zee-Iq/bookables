@@ -20,6 +20,8 @@ router.post("/register", async (req, res) => {
 
     const user = await newUser.save();
     console.log("user",user);
+
+
     
 
     res.send({ success: true });
