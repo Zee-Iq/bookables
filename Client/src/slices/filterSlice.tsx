@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, dispatch } from "../store";
+import { RootState } from "../store";
 import Bookables from "types";
 
 type Location =
