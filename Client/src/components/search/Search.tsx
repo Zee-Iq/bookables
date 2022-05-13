@@ -10,6 +10,8 @@ import {
   TextField,
   Typography,
   BoxProps,
+  Autocomplete,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -24,15 +26,25 @@ import {
   setToDate,
   setSearchRadius,
   setTypes,
+  setSelectedLocation,
+  LabeledLocation,
 } from "../../slices/filterSlice";
+
+const isSameLocation = (location1: LabeledLocation, location2: LabeledLocation) => {
+  if(location1.label !== location2.label) return false;
+  if(location1.point.coordinates[0] !== location2.point.coordinates[0]) return false
+  if(location1.point.coordinates[1] !== location2.point.coordinates[1]) return false
+  return true
+}
 
 export default function Search(props: BoxProps) {
   const [showsAdditionalFilters, setShowsAdditionalFilters] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { fromDate, toDate, locationInput, searchRadius, types } =
+  const { fromDate, toDate, locationInput, searchRadius, types, locationSuggestions, selectedLocation, fetchingLocationSuggestions } =
     useAppSelector(selectFilters);
 
+  
   return (
     <Box
       {...{
@@ -51,14 +63,33 @@ export default function Search(props: BoxProps) {
           gap: 2,
         }}
       >
-        <TextField
-          id="locationSearch"
-          label="Location"
-          type="text"
-          variant="outlined"
-          className="searchInput"
-          value={locationInput}
-          onChange={(e) => dispatch(setLocationInput(e.target.value))}
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={locationSuggestions}
+          clearOnEscape={true}
+          clearOnBlur={true}
+          inputValue={locationInput}
+          value={selectedLocation}
+          loading={fetchingLocationSuggestions}
+          isOptionEqualToValue={isSameLocation}
+          onChange={(_, value) => dispatch(setSelectedLocation(value))}
+          onInputChange={(_,value) => {
+            console.log("e",_)
+            dispatch(setLocationInput(value))}}
+          renderInput={(params) => <TextField {...params}
+            id="locationSearch"
+            label="Location"
+            type="text"
+            variant="outlined"
+            className="searchInput"
+            InputProps={{...params.InputProps, endAdornment: (
+              <>
+                {fetchingLocationSuggestions ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            )}}
+          />}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
@@ -90,7 +121,7 @@ export default function Search(props: BoxProps) {
           />
         </LocalizationProvider>
       </Box>
-      <Box sx={{display: "flex", flexDirection: "column"}}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Button
           variant="text"
           endIcon={
