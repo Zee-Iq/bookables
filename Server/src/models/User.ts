@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import Bookable from "types";
+import jwt from "jsonwebtoken";
+import env from "../config/env"
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -65,6 +67,8 @@ const payoutInformationSchema = new mongoose.Schema<Bookable.PayoutInformation>(
   }
 );
 
+
+
 const userSchema = new mongoose.Schema<Bookable.User>({
   email: {
     type: emailSchema,
@@ -84,7 +88,8 @@ const userSchema = new mongoose.Schema<Bookable.User>({
 
   payoutInformation: {
     type: payoutInformationSchema,
-  },
+  }
+ 
 });
 
 const fakePassword = "12345";

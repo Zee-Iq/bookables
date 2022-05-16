@@ -25,6 +25,7 @@ declare namespace Bookables {
     roles: UserRole[];
     paymentProviders?: PaymentProvider[];
     payoutInformation?: PayoutInformation;
+   
   }
 
   interface Tenant extends User {

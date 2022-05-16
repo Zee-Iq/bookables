@@ -1,6 +1,10 @@
 import express from "express";
 import User from "../models/User";
+import jwt from "jsonwebtoken";
+import env from "../config/env";
+import sendEmail from '../utils/email'
 const router = express.Router();
+
 
 router.use(express.json())
 router.post("/register", async (req, res) => {
@@ -19,6 +23,13 @@ router.post("/register", async (req, res) => {
     const newUser = new User({"email.address": email, password, paymentProviders, payoutInformation});
 
     const user = await newUser.save();
+
+    const token = await jwt.sign({id: user._id.toHexString(), "email.address": user.email.address}, env.SECRET, {
+      expiresIn: "1d"
+  })
+    // send an email to the user that just got registered
+    sendEmail(user.email.address, token)
+
     console.log("user",user);
 
 
