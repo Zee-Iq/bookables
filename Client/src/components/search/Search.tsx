@@ -80,6 +80,7 @@ export default function Search(props: BoxProps) {
         }}
       >
         <Autocomplete
+          filterOptions={(x) => x}
           disablePortal
           id="combo-box-demo"
           options={locationSuggestions}
