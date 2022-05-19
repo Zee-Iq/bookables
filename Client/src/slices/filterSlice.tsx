@@ -93,9 +93,13 @@ const filterSlice = createSlice({
         state.locationSuggestions = [];
       })
       .addCase(fetchAutosuggest.fulfilled, (state, action) => {
-        console.log("action", action);
-        state.locationSuggestions = action.payload;
+        const unique = Array.from(
+          new Map(action.payload.map((item) => [item["label"], item])).values()
+        );
+          console.log(unique)
+        state.locationSuggestions = unique
         state.fetchingLocationSuggestions = false;
+        
       });
   },
 });
@@ -113,9 +117,12 @@ export const selectFilters = (state: RootState) => state.filter;
 const fetchAutosuggest = createAsyncThunk(
   "filter/fetchAutosuggest",
   async (query: string, thunkApi) => {
-    const encodedQuery = encodeURIComponent(query)
-    const response = await fetch(`http://dev.virtualearth.net/REST/v1/Locations?key=${process.env.REACT_APP_BING_MAPS}&query=${encodedQuery}`);
-    const locationSuggestions: Location[] = (await response.json()).resourceSets[0]?.resources;
+    const encodedQuery = encodeURIComponent(query);
+    const response = await fetch(
+      `http://dev.virtualearth.net/REST/v1/Locations?key=${process.env.REACT_APP_BING_MAPS}&query=${encodedQuery}`
+    );
+    const locationSuggestions: Location[] = (await response.json())
+      .resourceSets[0]?.resources;
     return locationSuggestions.map((suggestion) => ({
       label: suggestion.name,
       ...suggestion,

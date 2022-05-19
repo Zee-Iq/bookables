@@ -30,21 +30,37 @@ import {
   LabeledLocation,
 } from "../../slices/filterSlice";
 
-const isSameLocation = (location1: LabeledLocation, location2: LabeledLocation) => {
-  if(location1.label !== location2.label) return false;
-  if(location1.point.coordinates[0] !== location2.point.coordinates[0]) return false
-  if(location1.point.coordinates[1] !== location2.point.coordinates[1]) return false
-  return true
-}
+
+
+const isSameLocation = (
+  location1: LabeledLocation,
+  location2: LabeledLocation
+) => {
+  if (location1.label !== location2.label) return false;
+  if (location1.point.coordinates[0] !== location2.point.coordinates[0])
+    return false;
+  if (location1.point.coordinates[1] !== location2.point.coordinates[1])
+    return false;
+  return true;
+};
 
 export default function Search(props: BoxProps) {
   const [showsAdditionalFilters, setShowsAdditionalFilters] = useState(false);
+  
 
   const dispatch = useAppDispatch();
-  const { fromDate, toDate, locationInput, searchRadius, types, locationSuggestions, selectedLocation, fetchingLocationSuggestions } =
-    useAppSelector(selectFilters);
+  const {
+    fromDate,
+    toDate,
+    locationInput,
+    searchRadius,
+    types,
+    locationSuggestions,
+    selectedLocation,
+    fetchingLocationSuggestions,
+  } = useAppSelector(selectFilters);
 
-  
+  console.log(locationSuggestions)
   return (
     <Box
       {...{
@@ -64,6 +80,7 @@ export default function Search(props: BoxProps) {
         }}
       >
         <Autocomplete
+          filterOptions={(x) => x}
           disablePortal
           id="combo-box-demo"
           options={locationSuggestions}
@@ -74,23 +91,34 @@ export default function Search(props: BoxProps) {
           loading={fetchingLocationSuggestions}
           isOptionEqualToValue={isSameLocation}
           onChange={(_, value) => dispatch(setSelectedLocation(value))}
-          onInputChange={(_,value) => {
-            console.log("e",_)
-            dispatch(setLocationInput(value))}}
-          renderInput={(params) => <TextField {...params}
-            id="locationSearch"
-            label="Location"
-            type="text"
-            variant="outlined"
-            className="searchInput"
-            InputProps={{...params.InputProps, endAdornment: (
-              <>
-                {fetchingLocationSuggestions ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            )}}
-          />}
-        />
+          onInputChange={(_, value) => {
+            dispatch(setLocationInput(value));
+          }}
+          renderInput={(params) => (
+            
+            <TextField
+              {...params}
+              id="locationSearch"
+              label="Location"
+              type="text"
+              variant="outlined"
+              className="searchInput"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {fetchingLocationSuggestions ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+              />
+              )}
+              />
+              
+        
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             renderInput={(props) => (
@@ -148,7 +176,6 @@ export default function Search(props: BoxProps) {
                 label="Bookable Type"
                 value={types}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   dispatch(
                     setTypes(
                       Array.isArray(e.target.value) ? e.target.value : types
