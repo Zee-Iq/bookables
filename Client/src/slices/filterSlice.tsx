@@ -1,18 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction, AsyncThunkPayloadCreator} from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
-
-type Latitude = number;
-type Longitude = number;
-
-type Point = {
-  type: "Point";
-  coordinates: [Latitude, Longitude];
-};
+import { getMapSession } from "../components/map/Map";
 
 type Location = {
   name: string;
-  point: Point;
+  point: Bookables.Point;
   address: Partial<{
     addressLine: string;
     locality: string;
@@ -25,6 +18,7 @@ type Location = {
     countryRegionIso2: string;
     landmark: string;
   }>;
+  confidence: "Low" | "Medium" | "High"
 };
 
 export type LabeledLocation = { label: string } & Location;
@@ -93,9 +87,12 @@ const filterSlice = createSlice({
         state.locationSuggestions = [];
       })
       .addCase(fetchAutosuggest.fulfilled, (state, action) => {
-        console.log("action", action);
-        state.locationSuggestions = action.payload;
+        const unique = Array.from(
+          new Map(action.payload.map((item) => [item["label"], item])).values()
+        );
+        state.locationSuggestions = unique
         state.fetchingLocationSuggestions = false;
+        
       });
   },
 });
@@ -105,16 +102,16 @@ const filterReducer = filterSlice.reducer;
 export default filterReducer;
 
 // exporting selectors
-
 export const selectFilters = (state: RootState) => state.filter;
 
 // exporting actions
 
 const fetchAutosuggest = createAsyncThunk(
   "filter/fetchAutosuggest",
-  async (query: string, thunkApi) => {
+  async (query: string) => {
     const encodedQuery = encodeURIComponent(query)
-    const response = await fetch(`http://dev.virtualearth.net/REST/v1/Locations?key=${process.env.REACT_APP_BING_MAPS}&query=${encodedQuery}`);
+    const key = (await getMapSession()) || process.env.REACT_APP_BING_MAPS
+    const response = await fetch(`http://dev.virtualearth.net/REST/v1/Locations?key=${key}&query=${encodedQuery}&maxResults=${20}`);
     const locationSuggestions: Location[] = (await response.json()).resourceSets[0]?.resources;
     return locationSuggestions.map((suggestion) => ({
       label: suggestion.name,
