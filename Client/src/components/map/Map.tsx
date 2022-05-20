@@ -1,6 +1,5 @@
-import { Box } from "@mui/system";
+import { Box, BoxProps } from "@mui/material";
 import {
-  createContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -13,7 +12,7 @@ import { selectSpaces } from "../../slices/spacesSlice";
 
 export let getMapSession: () => Promise<string> | null = () => null;
 
-export default function Map() {
+export default function Map(props: BoxProps) {
   const ref = useRef<HTMLDivElement>();
   const { selectedLocation, searchRadius } = useSelector(selectFilters);
   const [map, setMap] = useState<Microsoft.Maps.Map | null>(null);
@@ -45,6 +44,7 @@ export default function Map() {
       setSpacesLayer(null);
     };
   }, []);
+
 
   //If the map changes, set the exported getMapSession function
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function Map() {
     setSpacesLayer(spacesLayer);
   }
 
-  return <Box ref={ref} sx={{ width: "100%", aspectRatio: "1/1" }}></Box>;
+  return <Box  sx={{ width: "100%", aspectRatio: "1/1" }} {...props} ref={ref}></Box>;
 }
 
 function setMapView(
