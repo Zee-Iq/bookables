@@ -30,8 +30,6 @@ import {
   LabeledLocation,
 } from "../../slices/filterSlice";
 
-
-
 const isSameLocation = (
   location1: LabeledLocation,
   location2: LabeledLocation
@@ -46,7 +44,6 @@ const isSameLocation = (
 
 export default function Search(props: BoxProps) {
   const [showsAdditionalFilters, setShowsAdditionalFilters] = useState(false);
-  
 
   const dispatch = useAppDispatch();
   const {
@@ -60,7 +57,7 @@ export default function Search(props: BoxProps) {
     fetchingLocationSuggestions,
   } = useAppSelector(selectFilters);
 
-  console.log(locationSuggestions)
+  console.log(locationSuggestions);
   return (
     <Box
       {...{
@@ -95,7 +92,6 @@ export default function Search(props: BoxProps) {
             dispatch(setLocationInput(value));
           }}
           renderInput={(params) => (
-            
             <TextField
               {...params}
               id="locationSearch"
@@ -114,11 +110,10 @@ export default function Search(props: BoxProps) {
                   </>
                 ),
               }}
-              />
-              )}
-              />
-              
-        
+            />
+          )}
+        />
+
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             renderInput={(props) => (
