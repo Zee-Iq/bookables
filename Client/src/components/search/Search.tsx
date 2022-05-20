@@ -59,12 +59,13 @@ export default function Search(props: BoxProps) {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { sx: "1fr", sm: "1fr 1fr 1fr" },
+          gridTemplateColumns: { xs: "1fr 1fr", sm: "1fr 1fr 1fr" },
           gap: 2,
         }}
       >
         <Autocomplete
           disablePortal
+          sx={{gridRow: {xs:"1", sm: "unset"}, gridColumn: {xs:"1 / 3", sm: "unset"}}}
           id="combo-box-demo"
           options={locationSuggestions}
           clearOnEscape={true}
@@ -94,7 +95,7 @@ export default function Search(props: BoxProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             renderInput={(props) => (
-              <TextField {...props} className="searchInput" />
+              <TextField {...props} className="searchInput" sx={{gridRow: {xs:"2", sm: "unset"}, gridColumn: {xs:"1 / 2", sm: "unset"}}} />
             )}
             label="From"
             value={fromDate}
@@ -108,7 +109,7 @@ export default function Search(props: BoxProps) {
           />
           <DateTimePicker
             renderInput={(props) => (
-              <TextField {...props} className="searchInput" />
+              <TextField {...props} className="searchInput" sx={{gridRow: {xs:"2", sm: "unset"}, gridColumn: {xs:"2 / 3", sm: "unset"}}} />
             )}
             label="To"
             value={toDate}
@@ -136,7 +137,7 @@ export default function Search(props: BoxProps) {
             sx={{
               pt: 2,
               display: "grid",
-              gridTemplateColumns: { sx: "1fr", sm: "1fr 1fr 1fr" },
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
               gap: 2,
             }}
           >
