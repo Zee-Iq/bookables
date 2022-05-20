@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import Topbar from "./Topbar";
+import Topbar from "./Topbar/Topbar";
 
 const Layout = () => {
   return (
