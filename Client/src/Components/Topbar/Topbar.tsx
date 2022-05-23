@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import {
   AppBar,
   Button,
@@ -9,28 +8,31 @@ import {
 } from "@mui/material";
 import style from "./TopbarStyles";
 
-const Topbar = () => {
+const Navbar = () => {
   return (
     <Box sx={style}>
-      <AppBar position="sticky" sx={{ backgroundColor: "primary.main" }}>
+      <AppBar
+        className="navbar"
+        position="sticky"
+        sx={{ backgroundColor: "primary.main" }}
+      >
         <Toolbar className="toolbar">
-          <Box>
-            <Typography
-              color="text.main"
-              title="Home"
-              sx={{ cursor: "pointer", display: { xs: "none", sm: "block" } }}
-              variant="h6"
-            >
+          <Box className="navContainer">
+            <Typography className="logo" title="Home" variant="h6">
               BOOKABLES
             </Typography>
           </Box>
 
-          <Box  className="toolbarButtons">
-            <Button  variant="contained">Register Co-working Space</Button>
-            <Button color="primary" variant="contained">
-              Login
+          <Box className="navItems">
+            <Button title="" color="secondary" variant="contained">
+              Register Co-working Space
             </Button>
-            <Button variant="contained">Register</Button>
+            <Button color="secondary" variant="contained">
+              Register
+            </Button>
+            <Button color="secondary" variant="contained">
+              Sign in
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -38,4 +40,4 @@ const Topbar = () => {
   );
 };
 
-export default Topbar;
+export default Navbar;

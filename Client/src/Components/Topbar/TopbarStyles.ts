@@ -5,12 +5,18 @@ const style: SxProps<Theme> = {
         display: "flex",
         justifyContent: "space-between",
     },
-    ".toolbarButtons": {
+    ".navItems": {
         display: "flex",
-        gap: 2,
+        gap: 1,
     },
-    "toolbarButtonsWrapper":{
-        border: "10px solid red",
+    ".logo": {
+        color:"text.main",
+        cursor: "pointer",
+        display: { xs: "none", sm: "block" },
+        
     }
+
 }
+ 
+
 export default style

@@ -10,7 +10,9 @@ const theme = createTheme({
 
         },
         secondary: {
-            main: "#e52501" //red
+            main: "hsl(211, 75%, 55%)", //blue
+
+
         },
         text: {
             primary: "#393939", //black
