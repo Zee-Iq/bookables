@@ -3,6 +3,8 @@ import env from "../config/env";
 
 export default (to: string, token: string) => {
 
+  const URL = process.env.PRODUCTION ? env.URL_PRODUCTION : env.URL_DEV
+
     const smtpTransport = nodemailer.createTransport({
 
       host: env.SMTP_SERVER,
@@ -19,14 +21,14 @@ export default (to: string, token: string) => {
     const data = {
         from: env.SMTP_USER,
         to: to,
-        subject: 'Welcome to our Social Media App',
+        subject: 'Welcome to Bookables',
         html: `
           <!DOCTYPE html>
           <html>
             <body style="margin: 0; padding: 0;background-color: #000000;min-height:70vh;width:100%;">
-              <p>Welcome to our Social App!</p>
+              <p>Welcome to  Bookables!</p>
               <p>Click the following link to verify your email address</p>
-              <a href="http://localhost:3000/emailconfirm/${token}">Verify your email</a>
+              <a href="${URL}/emailConfirmation/${token}">Verify your email</a>
             </body>
           </html>
         `
