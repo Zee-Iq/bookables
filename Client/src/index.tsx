@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import { ThemeProvider, CssBaseline, Container } from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
@@ -17,15 +17,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CssBaseline>
-      <Container maxWidth="lg" >
-        <ThemeProvider theme={theme}>
-          <Provider store={store}>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </Provider>
-        </ThemeProvider>
-      </Container>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     </CssBaseline>
   </React.StrictMode>
 );
