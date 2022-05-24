@@ -9,17 +9,15 @@ import SingleSpaces from "./Components/SingleSpaces/SingleSpaces";
 
 const App = () => {
   return (
-    <div>
-      <Box sx={AppStyles}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="singlespaces" element={<SingleSpaces />} />
-            <Route path="yourspace" element={<YourSpaces />} />
-          </Route>
-        </Routes>
-      </Box>
-    </div>
+    <Box sx={AppStyles}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="singlespaces" element={<SingleSpaces />} />
+          <Route path="yourspace" element={<YourSpaces />} />
+        </Route>
+      </Routes>
+    </Box>
   );
 };
 
