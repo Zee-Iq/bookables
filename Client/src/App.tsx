@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Components/Home/Home";
-import Layout from "./Components/Layout";
+import Home from "./components/Home/Home";
+import Layout from "./components/Layout";
 import AppStyles from "./AppStyles";
 
-import YourSpaces from "./Components/YourSpaces/YourSpaces";
-import SingleSpaces from "./Components/SingleSpaces/SingleSpaces";
+import YourSpaces from "./components/YourSpaces/YourSpaces";
+import SingleSpaces from "./components/SingleSpaces/SingleSpaces";
 
 const App = () => {
   return (
