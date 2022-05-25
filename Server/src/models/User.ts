@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
-import Bookable from "types";
+import mongoose, {Model, Types, Document} from "mongoose";
+import Bookables from "types";
 import jwt from "jsonwebtoken";
 import env from "../config/env"
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const emailSchema = new mongoose.Schema<Bookable.Email>({
+const emailSchema = new mongoose.Schema<Bookables.Email>({
   address: {
     type: String,
     required: true,
@@ -21,7 +21,7 @@ const emailSchema = new mongoose.Schema<Bookable.Email>({
   },
 });
 
-const paymentProvidersSchema = new mongoose.Schema<Bookable.PaymentProvider>({
+const paymentProvidersSchema = new mongoose.Schema<Bookables.PaymentProvider>({
   provider: {
     type: String,
     required: true,
@@ -48,7 +48,7 @@ const paymentProvidersSchema = new mongoose.Schema<Bookable.PaymentProvider>({
   },
 });
 
-const payoutInformationSchema = new mongoose.Schema<Bookable.PayoutInformation>(
+const payoutInformationSchema = new mongoose.Schema<Bookables.PayoutInformation>(
   {
     bic: {
       type: String,
@@ -69,7 +69,7 @@ const payoutInformationSchema = new mongoose.Schema<Bookable.PayoutInformation>(
 
 
 
-const userSchema = new mongoose.Schema<Bookable.User>({
+const userSchema = new mongoose.Schema<Bookables.User, UserModel>({
   email: {
     type: emailSchema,
     required: true
@@ -92,6 +92,14 @@ const userSchema = new mongoose.Schema<Bookable.User>({
  
 });
 
+
+interface UserModel extends Model<Bookables.User> {
+
+  verifyUser(email: string, password: string): (Document<unknown, any, Bookables.User> & Bookables.User & {
+    _id: Types.ObjectId;
+}) | null
+}
+
 const fakePassword = "12345";
 
 let hashedPassword = "";
@@ -101,7 +109,7 @@ let hashedPassword = "";
 })();
 
 userSchema.static("verifyUser", async function (email, password) {
-  const user = this.findOne({ "email.address": email });
+  const user = await this.findOne({ "email.address": email });
   if (user) {
     return (await bcrypt.compare(password, user.password)) ? user : null;
   } else {
@@ -133,6 +141,6 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<Bookables.User, UserModel>("User", userSchema);
 
 export default User;
