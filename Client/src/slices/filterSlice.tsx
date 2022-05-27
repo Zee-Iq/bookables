@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction, AsyncThunkPayloadCreator} from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
-import { getMapSession } from "../components/map/Map";
+import { getMapSession } from "../components/Map/Map";
 
 type Location = {
   name: string;
