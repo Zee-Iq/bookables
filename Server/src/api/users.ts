@@ -1,9 +1,9 @@
 import express from "express";
 import User from "../models/User";
-const router = express.Router();
+const userRouter = express.Router();
 
-router.use(express.json())
-router.post("/register", async (req, res) => {
+userRouter.use(express.json())
+userRouter.post("/register", async (req, res) => {
   try {
     const { email, password, paymentProviders, payoutInformation } =
       req.body;
@@ -38,4 +38,4 @@ router.post("/register", async (req, res) => {
 });
 
 
-module.exports = router ;
+export default userRouter ;
