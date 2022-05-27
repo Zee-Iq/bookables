@@ -95,6 +95,7 @@ export default function Search(props: BoxProps) {
           renderInput={(params) => (
             <TextField
               {...params}
+              placeholder="City, Street, Zip"
               id="locationSearch"
               label="Location"
               type="text"
