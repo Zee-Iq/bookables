@@ -1,11 +1,16 @@
-import { AppBar, Box, Drawer, List, ListItem, ListItemButton, Toolbar, Typography, BoxProps } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Paper } from "@mui/material";
+import Bookables from "types";
 
-const SpaceEditor = (props: BoxProps) => {
+interface SpaceEditorProps {
+    space?: Bookables.Space,
+    isNew?: boolean
+}
+
+const SpaceEditor = ({space, isNew}: SpaceEditorProps) => {
   return (
-    <Box {...props} sx={{ display: 'flex' }}>
+    <Paper sx={{ display: 'flex', padding: 2 }}>
         Editor here      
-    </Box>
+    </Paper>
   );
 };
 
