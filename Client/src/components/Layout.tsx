@@ -5,9 +5,10 @@ import Navbar from "./Topbar/Navbar";
 
 const Layout = () => {
   return (
-    <Container>
+    <Container
+      sx={{ display: "grid", gridTemplateRows: "max-content 1fr", gap: 1, minHeight: "100vh" }}
+    >
       <Navbar />
-
       <Outlet />
     </Container>
   );
