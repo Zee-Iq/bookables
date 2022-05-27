@@ -9,14 +9,19 @@ const navbarStyles: SxProps<Theme> = {
         display: "flex",
         gap: 1,
     },
+
     ".logo": {
-        color:"text.main",
+        display: { xs: "none", md: "block" },
+        color: "text.main",
         cursor: "pointer",
-        display: { xs: "none", sm: "block" },
-        
+
+    },
+
+    "avatar": {
+        cursor: "pointer"
     }
 
 }
- 
+
 
 export default navbarStyles
