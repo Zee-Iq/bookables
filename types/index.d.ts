@@ -30,7 +30,7 @@ declare namespace Bookables {
     payoutInformation?: PayoutInformation;
   }
 
-  type ShareAbleUser = Pick<User, "email" | "roles" | "_id">;
+  type ShareableUser = Pick<User, "email" | "roles" | "_id">;
 
   interface Tenant extends User {
     roles: ["tenant"];
