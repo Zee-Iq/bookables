@@ -1,17 +1,24 @@
-import "./App.css";
-import Map from "./components/map/Map";
-import Search from "./components/search/Search";
+import { Box } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Layout from "./components/Layout";
+import AppStyles from "./AppStyles";
 
+import YourSpaces from "./components/YourSpaces/YourSpaces";
+import SingleSpaces from "./components/SingleSpaces/SingleSpaces";
 
-
-function App() {
-
+const App = () => {
   return (
-    <div className="App">
-      <Search/>
-      <Map/>
-    </div>
+    <Box sx={AppStyles}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="singlespaces" element={<SingleSpaces />} />
+          <Route path="yourspace" element={<YourSpaces />} />
+        </Route>
+      </Routes>
+    </Box>
   );
-}
+};
 
 export default App;
