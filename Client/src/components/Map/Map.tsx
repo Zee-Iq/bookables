@@ -8,7 +8,7 @@ import {
 import { useSelector } from "react-redux";
 import env from "../../config/env";
 import { LabeledLocation, selectFilters } from "../../slices/filterSlice";
-import { selectSpaces } from "../../slices/spacesSlice";
+import { selectSpacesInArea } from "../../slices/spacesSlice";
 
 export let getMapSession: () => Promise<string> | null = () => null;
 
@@ -19,7 +19,7 @@ export default function Map(props: BoxProps) {
   const [spacesLayer, setSpacesLayer] = useState<Microsoft.Maps.Layer | null>(
     null
   );
-  const spaces = useSelector(selectSpaces);
+  const spaces = useSelector(selectSpacesInArea);
 
   //Check if the Bing Maps is already loaded, if not register an event listener to do so
   useLayoutEffect(() => {
