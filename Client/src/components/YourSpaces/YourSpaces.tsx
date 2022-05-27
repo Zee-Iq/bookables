@@ -1,13 +1,15 @@
+import { AppBar, Box, Drawer, List, ListItem, ListItemButton, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import SpaceEditor from "../SpaceEditor/SpaceEditor";
 
 const YourSpaces = () => {
   return (
-    <div>
-      <h1>Hello from YourSpaces.tsx</h1>
-      <p>
-        <Link to="/">Layout</Link>
-      </p>
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      <List>
+        <ListItem>Space</ListItem>
+      </List>
+      <SpaceEditor/>
+    </Box>
   );
 };
 

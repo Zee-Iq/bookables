@@ -8,7 +8,7 @@ import userRouter from "./api/users"
 declare global {
   namespace Express {
     interface Request {
-      user?: Bookables.ShareAbleUser;
+      user?: Bookables.ShareableUser;
     }
   }
 }

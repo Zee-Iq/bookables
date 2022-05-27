@@ -14,7 +14,7 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="singlespaces" element={<SingleSpaces />} />
-          <Route path="yourspace" element={<YourSpaces />} />
+          <Route path="yourspaces" element={<YourSpaces />} />
         </Route>
       </Routes>
     </Box>
