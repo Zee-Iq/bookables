@@ -4,6 +4,7 @@ const navbarStyles: SxProps<Theme> = {
     ".toolbar": {
         display: "flex",
         justifyContent: "space-between",
+        border: "10px solid red",
     },
     ".navItems": {
         display: "flex",
@@ -19,7 +20,16 @@ const navbarStyles: SxProps<Theme> = {
 
     "avatar": {
         cursor: "pointer"
+    },
+    "toolbarMobile": {
+        display: "flex",
+        justifyContent: "space-between",
+        border: "10px solid red",
+
     }
+
+
+
 
 }
 

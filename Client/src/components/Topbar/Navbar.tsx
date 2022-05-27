@@ -7,6 +7,7 @@ import {
   Box,
   Container,
 } from "@mui/material";
+import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import navbarStyles from "./NavbarStyles";
 import NavigationMenu from "./NavigationMenu/NavigationMenu";
 
@@ -20,6 +21,7 @@ const Navbar = () => {
         position="fixed"
         sx={{ ...navbarStyles, backgroundColor: "primary.main" }}
       >
+        {/* DESKTOP VIEW */}
         <Container>
           <Toolbar className="toolbar">
             <Box className="navContainer">
@@ -29,7 +31,6 @@ const Navbar = () => {
               </Typography>
             </Box>
 
-            {/* BUTTONS */}
             <Box className="navItems">
               <Button className="logo" color="secondary" variant="contained">
                 Register Co-working Space
@@ -41,13 +42,43 @@ const Navbar = () => {
                 Sign in
               </Button>
 
-              {/* MENU COMPONENT REFERENCE HERE */}
-              <NavigationMenu />
+              {/* NavigationMenu component reference  */}
+              <Box className="logo">
+                <NavigationMenu />
+              </Box>
             </Box>
           </Toolbar>
+          {/* MOBILE */}
+          <Toolbar className="toolbarMobile">
+            <Box className="navContainer">
+              {/* LOGO */}
+              <Typography className="logo" title="Home" variant="h6">
+                BOOKABLES
+              </Typography>
+            </Box>
+
+            <Box className="navItems">
+           
+
+              {/* NavigationMenu component reference  */}
+              <Box className="logo">
+                <NavigationMenu />
+              </Box>
+            </Box>
+          </Toolbar>
+
+          {/* MOBILE VIEW */}
+            {/* <Box className="toolbarMobile">  
+              <Box className="AvatarMobile">
+                <NavigationMenu />
+              </Box>
+              <Box className="burgerMenu">
+                <BurgerMenu />
+              </Box>
+            </Box> */}
         </Container>
       </AppBar>
-      <Toolbar />
+      
     </>
   );
 };
