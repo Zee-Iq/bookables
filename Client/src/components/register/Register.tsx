@@ -29,15 +29,15 @@ export default function Register() {
     
       
       
-    console.log("data is", data);
+    
 
     if (!data.password || !data.email) return;
 
     const response = await axios.post("/users/register", data);
-    console.log("response is", response);
+   
   };
 
-  console.log("user client", data);
+  
   
 
   return (

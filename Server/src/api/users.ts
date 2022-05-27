@@ -104,8 +104,7 @@ router.post("/login", async (req, res) => {
       }
     );
 
-    res.send({success: true, token: token})
-
+    res.send({ success: true, token: token });
   } catch (error) {
     if (error instanceof Error) {
       console.log("ERROR:", error.message);

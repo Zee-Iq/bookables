@@ -3,7 +3,9 @@ import Register from "./components/register/Register";
 import Login from "./components/login/Login"
 import { Route, Routes } from "react-router-dom";
 import EmailConfirmed from "./components/emailConfirmed/EmailConfirmed";
-import { JsxAttributeLike } from "typescript";
+import Map from "./components/map/Map";
+import Search from "./components/search/Search";
+
 
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
       <Routes>
         <Route path="/emailConfirmation/:token" element={<EmailConfirmed />} />
       </Routes>
+      <Search/>
+      <Map/>
     </div>
   );
 }

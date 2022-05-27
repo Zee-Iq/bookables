@@ -29,20 +29,20 @@ declare namespace Bookables {
   }
 
   interface Tenant extends User {
-    roles: ["tenant"]
-    paymentProviders: [PaymentProvider]
+    roles: ["tenant"];
+    paymentProviders: [PaymentProvider];
   }
 
   interface Host extends User {
-    roles: ["host"]
+    roles: ["host"];
     payoutInformation: PayoutInformation;
   }
 
-  type BookableType = "seat" | "room";
+  export type BookableType = "seat" | "room";
   interface Bookable {
     id: string;
     type: BookableType;
-    equipment:String[]
+    equipment: String[];
   }
 
   interface ContactInformation {
@@ -57,14 +57,23 @@ declare namespace Bookables {
     houseNumber: string;
     name: string;
   }
+
+  type Latitude = number;
+  type Longitude = number;
+  type Coordinates = [Latitude, Longitude];
+
+  type Point = {
+    type: "Point";
+    coordinates: Coordinates;
+  };
   interface Space {
-    owner: Host;
+    owner: string; //Reference to Host
     name: string;
     description: string;
     address: Address;
+    point: Point;
     contactInformation: ContactInformation;
   }
-
 }
 
 export default Bookables;
