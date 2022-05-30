@@ -1,12 +1,12 @@
 import "dotenv/config";
 interface Env {
-    PORT: string,
+    WEBSITES_PORT: string,
     MONGO_URI: string 
 }
 
  function parseEnv(env : NodeJS.ProcessEnv ): Env {
 
-    if (typeof env.PORT !== "string" ) throw new Error("env.PORT is missing");
+    if (typeof env.WEBSITES_PORT !== "string" ) throw new Error("env.WEBSITES_PORT is missing");
 
     if (typeof env.MONGO_URI !== "string" ) throw new Error("env.MONGO_URI is missing");
     
