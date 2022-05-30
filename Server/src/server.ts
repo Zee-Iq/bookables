@@ -28,6 +28,6 @@ app.get("*", (req, res) => {
   res.sendFile(spaIndex)
 })
 
-app.listen(4000, () => {
+app.listen(env.PORT || 80, () => {
   console.log(" App running on 4000");
 });
