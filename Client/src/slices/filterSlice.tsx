@@ -111,7 +111,7 @@ const fetchAutosuggest = createAsyncThunk(
   async (query: string) => {
     const encodedQuery = encodeURIComponent(query)
     const key = (await getMapSession()) || process.env.REACT_APP_BING_MAPS
-    const response = await fetch(`http://dev.virtualearth.net/REST/v1/Locations?key=${key}&query=${encodedQuery}&maxResults=${20}`);
+    const response = await fetch(`https://dev.virtualearth.net/REST/v1/Locations?key=${key}&query=${encodedQuery}&maxResults=${20}`);
     const locationSuggestions: Location[] = (await response.json()).resourceSets[0]?.resources;
     return locationSuggestions.map((suggestion) => ({
       label: suggestion.name,
