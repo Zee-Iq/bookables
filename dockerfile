@@ -20,3 +20,4 @@ RUN rm -rf ./dockerfile
 RUN rm -rf ./package-lock.json
 RUN rm -rf ./package.json
 CMD ["node", "./server.js"]
+EXPOSE 80
