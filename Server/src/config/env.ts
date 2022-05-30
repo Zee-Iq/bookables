@@ -13,7 +13,7 @@ function parseEnv(env: NodeJS.ProcessEnv): Env {
     throw new Error("env.WEBSITES_PORT is missing");
 
   if (typeof parsedEnv.APPSETTING_MONGO_URI === "string")
-    parsedEnv.MONGO_URI = parsedEnv.MONGO_URI;
+    parsedEnv.MONGO_URI = parsedEnv.APPSETTING_MONGO_URI;
   if (typeof parsedEnv.MONGO_URI !== "string")
     throw new Error("env.MONGO_URI is missing");
 
