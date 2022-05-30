@@ -7,8 +7,10 @@ interface Env {
 function parseEnv(env: NodeJS.ProcessEnv): Env {
   const parsedEnv = { ...env };
 
+  console.log(env)
   if (typeof parsedEnv.APPSETTING_WEBSITES_PORT === "string")
     parsedEnv.WEBSITES_PORT = parsedEnv.APPSETTING_WEBSITES_PORT;
+
   if (typeof parsedEnv.WEBSITES_PORT !== "string")
     throw new Error("env.WEBSITES_PORT is missing");
 
