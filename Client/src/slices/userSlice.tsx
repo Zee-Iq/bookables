@@ -23,15 +23,30 @@ const initialState: UserState = {
 
 // login action
 
-interface LoginInformation{
-    email: string;
-    password: string;
+interface LoginInformation {
+  email: string;
+  password: string;
 }
 
-const login = createAsyncThunk("user/login", async (loginInformation:LoginInformation) => {
-    const response = await axios.post("/api/login", 
-        loginInformation)
-})
+export const login = createAsyncThunk(
+  "user/login",
+  async (loginInformation: LoginInformation, thunkApi) => {
+    thunkApi.dispatch(userSlice.actions.setLoginInProgress(true));
+    const response = await axios.post<
+      | { success: false; loginError: string }
+      | { success: true; token: string; user: Bookables.ShareableUser }
+    >("/users/login", loginInformation);
+    if (response.data.success) {
+      thunkApi.dispatch(userSlice.actions.setToken(response.data.token));
+      thunkApi.dispatch(userSlice.actions.setUser(response.data.user));
+    } else {
+      thunkApi.dispatch(
+        userSlice.actions.setLoginError(response.data.loginError)
+      );
+    }
+    thunkApi.dispatch(userSlice.actions.setLoginInProgress(false));
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -45,13 +60,12 @@ const userSlice = createSlice({
       localStorage.setItem("token", action.payload);
     },
     setLoginInProgress: (state, action: PayloadAction<boolean>) => {
-        state.loginInProgress = action.payload;
+      state.loginInProgress = action.payload;
     },
     setLoginError: (state, action: PayloadAction<string>) => {
-        state.loginError = action.payload;
-    }
+      state.loginError = action.payload;
+    },
   },
-
 });
 
 export default userSlice.reducer;

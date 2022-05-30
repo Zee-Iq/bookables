@@ -98,7 +98,8 @@ userRouter.post("/login", async (req, res) => {
 
     const user = await User.verifyUser(email, password);
 
-    if (!user) return res.send({ success: false, errorId: 3 });
+    // 
+    if (!user) return res.send({ success: false, loginError: "user or password invalid" });
 
     const token = await jwt.sign(
       { id: user._id.toHexString(), "email.address": user.email.address },
@@ -108,7 +109,8 @@ userRouter.post("/login", async (req, res) => {
       }
     );
 
-    res.send({success: true, token: token})
+    res.send({success: true, token: token, user: user});
+
 
   } catch (error) {
     if (error instanceof Error) {
