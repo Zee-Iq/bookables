@@ -1,27 +1,32 @@
-import "./App.css";
-import Register from "./components/register/Register";
-import Login from "./components/login/Login"
+import Register from "./Components/Register/Register";
+import Login from "./Components/login/Login";
+import EmailConfirmed from "./Components/emailConfirmed/EmailConfirmed";
+import { Box } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
-import EmailConfirmed from "./components/emailConfirmed/EmailConfirmed";
-import Map from "./components/map/Map";
-import Search from "./components/search/Search";
+import Home from "./Components/Home/Home";
+import Layout from "./Components/Layout";
+import AppStyles from "./AppStyles";
+import YourSpaces from "./Components/YourSpaces/YourSpaces";
+import SingleSpaces from "./Components/SingleSpaces/SingleSpaces";
 
-
-
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <div>test</div>
-      <Register />
-      <Login />
-
+    <Box sx={AppStyles}>
       <Routes>
-        <Route path="/emailConfirmation/:token" element={<EmailConfirmed />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="singlespaces" element={<SingleSpaces />} />
+          <Route path="yourspace" element={<YourSpaces />} />
+          <Route
+            path="/emailConfirmation/:token"
+            element={<EmailConfirmed />}
+          />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
       </Routes>
-      <Search/>
-      <Map/>
-    </div>
+    </Box>
   );
-}
+};
 
 export default App;

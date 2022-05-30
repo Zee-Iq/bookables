@@ -4,20 +4,26 @@ import "./index.css";
 import App from "./App";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import theme from "./config/theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <CssBaseline>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
+    </CssBaseline>
   </React.StrictMode>
 );
 
