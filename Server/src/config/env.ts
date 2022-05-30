@@ -17,6 +17,6 @@ function parseEnv(env: NodeJS.ProcessEnv): Env {
   if (typeof parsedEnv.MONGO_URI !== "string")
     throw new Error("env.MONGO_URI is missing");
 
-  return env as unknown as Env;
+  return parsedEnv as unknown as Env;
 }
 export default parseEnv(process.env);
