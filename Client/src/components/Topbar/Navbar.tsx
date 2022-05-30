@@ -48,37 +48,9 @@ const Navbar = () => {
               </Box>
             </Box>
           </Toolbar>
-          {/* MOBILE */}
-          <Toolbar className="toolbarMobile">
-            <Box className="navContainer">
-              {/* LOGO */}
-              <Typography className="logo" title="Home" variant="h6">
-                BOOKABLES
-              </Typography>
-            </Box>
-
-            <Box className="navItems">
-           
-
-              {/* NavigationMenu component reference  */}
-              <Box className="logo">
-                <NavigationMenu />
-              </Box>
-            </Box>
-          </Toolbar>
-
-          {/* MOBILE VIEW */}
-            {/* <Box className="toolbarMobile">  
-              <Box className="AvatarMobile">
-                <NavigationMenu />
-              </Box>
-              <Box className="burgerMenu">
-                <BurgerMenu />
-              </Box>
-            </Box> */}
+          
         </Container>
       </AppBar>
-      
     </>
   );
 };
