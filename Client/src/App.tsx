@@ -9,6 +9,7 @@ import AppStyles from "./AppStyles";
 import YourSpaces from "./Components/YourSpaces/YourSpaces";
 import SingleSpaces from "./Components/SingleSpaces/SingleSpaces";
 
+
 const App = () => {
   return (
     <Box sx={AppStyles}>
@@ -22,6 +23,7 @@ const App = () => {
             element={<EmailConfirmed />}
           />
           <Route path="/register" element={<Register />} />
+        
           <Route path="/login" element={<Login />} />
         </Route>
       </Routes>

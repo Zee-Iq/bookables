@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 declare namespace Bookables {
   type UserRole = "tenant" | "host";
 
@@ -20,6 +22,7 @@ declare namespace Bookables {
     isConfirmed: boolean;
   }
   interface User {
+    _id: Types.ObjectId;
     email: Email;
     password: string;
     roles: UserRole[];
@@ -27,6 +30,8 @@ declare namespace Bookables {
     payoutInformation?: PayoutInformation;
    
   }
+
+  type ShareableUser = Pick<User, "email" | "roles" | "_id">;
 
   interface Tenant extends User {
     roles: ["tenant"];
@@ -40,9 +45,10 @@ declare namespace Bookables {
 
   export type BookableType = "seat" | "room";
   interface Bookable {
-    id: string;
+    _id: Types.ObjectId;
+    identification: string;
     type: BookableType;
-    equipment: String[];
+    hourlyRate: number;
   }
 
   interface ContactInformation {
@@ -51,11 +57,14 @@ declare namespace Bookables {
   }
 
   interface Address {
-    countryCode: string;
+    _id: Types.ObjectId;
+    addressLine: string;
+    adminDistrict: string;
+    adminDistrict2: string;
+    countryRegion: strin;
+    formattedAddress: string;
+    locality: string;
     postalCode: string;
-    streetName: string;
-    houseNumber: string;
-    name: string;
   }
 
   type Latitude = number;
@@ -67,11 +76,13 @@ declare namespace Bookables {
     coordinates: Coordinates;
   };
   interface Space {
-    owner: string; //Reference to Host
+    _id: Types.ObjectId;
+    owner: Types.ObjectId; //Reference to Host
     name: string;
     description: string;
     address: Address;
     point: Point;
+    bookables: Bookable[];
     contactInformation: ContactInformation;
   }
 }
