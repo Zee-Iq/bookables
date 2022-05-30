@@ -64,6 +64,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
           file: ./Dockerfile
+          build-args: REACT_APP_BING_MAPS=${{secrets.REACT_APP_BING_MAPS}}
 
   deploy:
     permissions:
