@@ -11,7 +11,10 @@
   "scripts": {
     "start:Client": "npm start -w Client",
     "start:Server": "npm start -w Server",
-    "start": "concurrently \"npm:start:*\""
+    "start": "concurrently \"npm:start:*\"",
+    "build": "concurrently \"npm:build:*\"",
+    "build:Client": "npm run build -w Client",
+    "build:Server": "npm run build -w Server"
   },
   "keywords": [],
   "author": "",
