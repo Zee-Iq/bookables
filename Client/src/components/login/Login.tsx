@@ -12,13 +12,8 @@ export default function Login() {
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    console.log("data is", data);
-
     if (!data.password || !data.email) return;
-
     const response = await axios.post("/users/login", data);
-    console.log("response is", response);
   };
 
   return (

@@ -14,8 +14,6 @@ export default function EmailConfirmed() {
       try {
         const response = await axios.get(`/users/emailConfirmation/${token}`);
 
-        console.log("reponse is", response);
-
         if (response.data.success) {
           setMessage(
             "Your email has been verified! In few seconds you will be redirected to the home page"
@@ -28,7 +26,7 @@ export default function EmailConfirmed() {
           );
         }
       } catch (error: any) {
-        console.log(error.message);
+        console.error(error.message);
       }
     };
 

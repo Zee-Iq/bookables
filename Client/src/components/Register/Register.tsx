@@ -36,9 +36,6 @@ export default function Register() {
     if (!data.password || !data.email) return;
 
     const response = await axios.post("/users/register", data);
-
-   console.log("user is", response);
-   
    
   };
 
@@ -51,8 +48,6 @@ export default function Register() {
     }
 
   }
-
-  console.log(data);
   
   
 
