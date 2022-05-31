@@ -15,11 +15,7 @@ interface Env {
 function parseEnv(env: NodeJS.ProcessEnv): Env {
   const parsedEnv = { ...env };
 
-  if (typeof parsedEnv.APPSETTING_PORT === "string")
-    parsedEnv.PORT = parsedEnv.APPSETTING_PORT;
-
-  if (typeof parsedEnv.PORT !== "string")
-    throw new Error("env.PORT is missing");
+  
 
 
 
@@ -93,7 +89,7 @@ function parseEnv(env: NodeJS.ProcessEnv): Env {
   if (typeof parsedEnv.URL_PRODUCTION !== "string")
     throw new Error("env.URL_PRODUCTION is missing");
 
-    
+
 
 
   if (typeof parsedEnv.APPSETTING_URL_DEV === "string")
