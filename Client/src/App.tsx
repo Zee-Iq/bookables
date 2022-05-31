@@ -1,13 +1,13 @@
-import Register from "./Components/Register/Register";
-import Login from "./Components/login/Login";
-import EmailConfirmed from "./Components/emailConfirmed/EmailConfirmed";
+import Register from "./components/Register/Register";
+import Login from "./components/login/Login";
+import EmailConfirmed from "./components/emailConfirmed/EmailConfirmed";
 import { Box } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Components/Home/Home";
-import Layout from "./Components/Layout";
+import Home from "./components/Home/Home";
+import Layout from "./components/Layout";
 import AppStyles from "./AppStyles";
-import YourSpaces from "./Components/YourSpaces/YourSpaces";
-import SingleSpaces from "./Components/SingleSpaces/SingleSpaces";
+import YourSpaces from "./components/YourSpaces/YourSpaces";
+import SingleSpaces from "./components/SingleSpaces/SingleSpaces";
 
 
 const App = () => {
