@@ -7,7 +7,7 @@ import Home from "./components/Home/Home";
 import Layout from "./components/Layout";
 import AppStyles from "./AppStyles";
 import YourSpaces from "./components/YourSpaces/YourSpaces";
-import SingleSpaces from "./components/SingleSpace/SingleSpace";
+import SingleSpace from "./components/SingleSpace/SingleSpace";
 
 
 const App = () => {
@@ -16,7 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="singlespace" element={<SingleSpaces />} />
+          <Route path="singlespace" element={<SingleSpace />} />
           <Route path="yourspaces" element={<YourSpaces />} />
           <Route
             path="/emailConfirmation/:token"
