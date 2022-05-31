@@ -1,8 +1,5 @@
 import {
-  createAsyncThunk,
   createSlice,
-  PayloadAction,
-  AsyncThunkPayloadCreator,
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
@@ -31,4 +28,4 @@ export default spacesReducer;
 export const selectSpaces = (state: RootState) => state.spaces.spacesInArea;
 
 // exporting actions
-export const {} = spacesSlice.actions;
+//export const {} = spacesSlice.actions;

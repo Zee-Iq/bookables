@@ -47,8 +47,6 @@ spacesRouter.patch(
     const { spaceId } = req.params;
     const space = await Space.findById(spaceId).exec();
     if (!space) spaceNotFoundError(spaceId);
-    console.log("owner", space.owner)
-    console.log("user", req.user!._id)
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403)
     Space.schema.eachPath((path) => {
       if (!path.startsWith("_") && req.body[path] !== undefined)

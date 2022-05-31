@@ -1,17 +1,15 @@
 import express from "express";
 import User from "../models/User";
-
-
-
 import jwt from "jsonwebtoken";
 import env from "../config/env";
 import sendEmail from "../utils/email";
-import Module from "module";
+
+
+
 const userRouter = express.Router();
 
 userRouter.use(express.json());
 userRouter.post("/register", async (req, res) => {
-
   try {
     const { email, password, paymentProviders, payoutInformation } = req.body;
 
@@ -35,21 +33,17 @@ userRouter.post("/register", async (req, res) => {
       }
     );
 
-    console.log("token is", token);
-
     // send an email to the user that just got registered
     sendEmail(user.email.address, token);
-
-    console.log("user", user);
 
     res.send({ success: true });
   } catch (error) {
     if (error instanceof Error) {
-      console.log("ERROR:", error.message);
+      console.error("ERROR:", error);
       return res.send(error.message);
     }
 
-    console.log(error);
+    console.error(error);
 
     return res.status(500).send("unknown error code");
   }
@@ -64,7 +58,6 @@ userRouter.get("/emailConfirmation/:token", async (req, res) => {
       return res.sendStatus(400);
     }
 
-    console.log("verify", verify);
 
     const updatedUser = await User.findByIdAndUpdate(
       verify.id,
@@ -74,19 +67,17 @@ userRouter.get("/emailConfirmation/:token", async (req, res) => {
       { new: true }
     );
 
-    console.log("user by id is", await User.findById(verify.id).exec());
-
     if (!updatedUser) return res.send({ success: false });
 
     res.send({ success: true });
   } catch (error) {
     if (error instanceof Error) {
-      console.log("ERROR:", error.message);
+      console.error("ERROR:", error);
 
       return res.send(error.message);
     }
 
-    console.log(error);
+    console.error(error);
 
     return res.status(500).send("unknown error code");
   }
@@ -109,20 +100,20 @@ userRouter.post("/login", async (req, res) => {
       }
     );
 
-    res.send({success: true, token: token, user: user});
+    res.send({ success: true, token: token, user: user });
 
 
   } catch (error) {
     if (error instanceof Error) {
-      console.log("ERROR:", error.message);
+      console.error("ERROR:", error);
 
       return res.send(error.message);
     }
 
-    console.log(error);
+    console.error(error);
 
     return res.status(500).send("unknown error code");
   }
 });
 
-export default userRouter ;
+export default userRouter;

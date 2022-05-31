@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 
 export default function Register() {
+  const [pass, setPass] = useState("")
+  const [confirmPass, setConfirmPass] = useState("")
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -37,6 +39,15 @@ export default function Register() {
    
   };
 
+  const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
+    
+    if((pass === confirmPass) && pass.length > 0 ) {
+
+      setData({ ...data, password: pass })
+
+    }
+
+  }
   
   
 
@@ -64,147 +75,19 @@ export default function Register() {
           label="Password"
           type="password"
           autoComplete="current-password"
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
-        />
-        <h3>Payment Provider</h3>
-        <TextField
-          required
-          id="outlined-required"
-          label="Provider"
-          type="text"
-          value={data.paymentProviders.provider}
-          onChange={(e) =>
-            setData({
-              ...data,
-              paymentProviders: {
-                ...data.paymentProviders,
-                provider: e.target.value,
-              },
-            })
-          }
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
         />
 
         <TextField
-          required
-          id="outlined-required"
-          label="Card Number"
-          type="number"
-          value={(data.paymentProviders.cardnumber)}
-          onChange={(e) =>
-            setData({
-              ...data,
-              paymentProviders: {
-                ...data.paymentProviders,
-                cardnumber: parseInt(e.target.value),
-              },
-            })
-          }
+          id="outlined-password-input2"
+          label="Repeat Password"
+          type="password"
+          autoComplete="current-password"
+          value={confirmPass}
+          onChange={(e) => setConfirmPass(e.target.value )}
         />
-
-        <TextField
-          required
-          id="outlined-required"
-          label="Validation Number"
-          type="number"
-          value={data.paymentProviders.validationNumber}
-          onChange={(e) =>
-            setData({
-              ...data,
-              paymentProviders: {
-                ...data.paymentProviders,
-                validationNumber: parseInt(e.target.value)
-              },
-            })
-          }
-        />
-
-        <TextField
-          required
-          id="outlined-required"
-          label="Owner"
-          type="text"
-          value={data.paymentProviders.owner}
-          onChange={(e) =>
-            setData({
-              ...data,
-              paymentProviders: {
-                ...data.paymentProviders,
-                owner: e.target.value,
-              },
-            })
-          }
-        />
-
-        <TextField
-          required
-          id="outlined-required"
-          label="Expiration"
-          type="date"
-          value={data.paymentProviders.expiration}
-          onChange={(e) =>
-            setData({
-              ...data,
-              paymentProviders: {
-                ...data.paymentProviders,
-                expiration: e.target.value,
-              },
-            })
-          }
-        />
-
-        <h3>Payout Information</h3>
-
-        <TextField
-          required
-          id="outlined-required"
-          label="BIC"
-          type="text"
-          value={data.payoutInformation.bic}
-          onChange={(e) =>
-            setData({
-              ...data,
-              payoutInformation: {
-                ...data.payoutInformation,
-                bic: e.target.value,
-              },
-            })
-          }
-        />
-
-        <TextField
-          required
-          id="outlined-required"
-          label="IBAN"
-          type="text"
-          value={data.payoutInformation.iban}
-          onChange={(e) =>
-            setData({
-              ...data,
-              payoutInformation: {
-                ...data.payoutInformation,
-                iban: e.target.value,
-              },
-            })
-          }
-        />
-
-        <TextField
-          required
-          id="outlined-required"
-          label="Owner"
-          type="text"
-          value={data.payoutInformation.owner}
-          onChange={(e) =>
-            setData({
-              ...data,
-              payoutInformation: {
-                ...data.payoutInformation,
-                owner: e.target.value,
-              },
-            })
-          }
-        />
+      
 
         <Button type="submit" variant="contained" onClick={handleClick}>
           Register

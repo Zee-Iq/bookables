@@ -29,5 +29,5 @@ app.get("*", (req, res) => {
 })
 
 app.listen(env.WEBSITES_PORT || 4000, () => {
-  console.log(`App running on ${env.WEBSITES_PORT}`);
+  console.log(`App running on ${env.WEBSITES_PORT ? env.WEBSITES_PORT : 4000}`);
 });
