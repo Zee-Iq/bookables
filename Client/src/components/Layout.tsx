@@ -1,6 +1,5 @@
 import { Container } from "@mui/material";
-import { Link, Outlet } from "react-router-dom";
-import Header from "./Header/Header";
+import {  Outlet } from "react-router-dom";
 import Navbar from "./Topbar/Navbar";
 
 const Layout = () => {

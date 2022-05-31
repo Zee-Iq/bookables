@@ -1,7 +1,7 @@
 import {
-  createAsyncThunk,
   createSlice,
   PayloadAction,
+  createAsyncThunk
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
@@ -63,4 +63,4 @@ export const selectSpacesInArea = (state: RootState) => state.spaces.spacesInAre
 export const seletOwnedSpaces = (state: RootState) => state.spaces.ownedSpaces;
 
 // exporting actions
-export const {} = spacesSlice.actions;
+//export const {} = spacesSlice.actions;
