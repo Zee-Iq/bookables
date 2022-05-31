@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { SuccessCondition } from "concurrently/dist/src/completion-listener";
 import Bookables from "types";
+import { RootState } from "../store";
 
 // initialState
 
@@ -9,6 +11,9 @@ interface UserState {
   token: string | null;
   loginInProgress: boolean;
   loginError: string | null;
+  regInProgress: boolean;
+  regError: string | null;
+  regSuccess: boolean;
 }
 
 const initialState: UserState = {
@@ -19,6 +24,9 @@ const initialState: UserState = {
   token: localStorage.getItem("token"),
   loginInProgress: false,
   loginError: null,
+  regInProgress: false,
+  regError: null,
+  regSuccess: false,
 };
 
 // login action
@@ -47,6 +55,31 @@ export const login = createAsyncThunk(
     thunkApi.dispatch(userSlice.actions.setLoginInProgress(false));
   }
 );
+
+// register action
+export interface RegisterInformation {
+  email: string;
+  password: string;
+}
+
+export const register = createAsyncThunk(
+  "user/register",
+  async (registerInformation: RegisterInformation, thunkApi) => {
+    const response = await axios.post<{ success: boolean }>(
+      "users/register",
+      registerInformation
+    );
+    if (response.data.success)
+      thunkApi.dispatch(userSlice.actions.setRegSuccess);
+    else throw new Error("something went wrong");
+  }
+);
+
+// 1. set registration is in progress
+// 2. api call user/register , with registar info
+// 3. if sucessfull response --> set registration not in progress anymore
+// when not successfull --> set registration error, stay on registration form and say not in progress anymore
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -65,7 +98,38 @@ const userSlice = createSlice({
     setLoginError: (state, action: PayloadAction<string>) => {
       state.loginError = action.payload;
     },
+    setRegError: (state, action: PayloadAction<string>) => {
+      state.regError = action.payload;
+    },
+    setRegSuccess: (state, action: PayloadAction<boolean>) => {
+      state.regSuccess = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(register.pending, (state) => {
+        state.regInProgress = true;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.regInProgress = false;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.regInProgress = false;
+        state.regError = action.error.message || "Unknown Error";
+      });
   },
 });
 
 export default userSlice.reducer;
+
+// selectors
+// select user
+export const selectUser = (state: RootState) => state.user.user;
+export const selectLoginInProgress = (state: RootState) =>
+  state.user.loginInProgress;
+export const selectToken = (state: RootState) => state.user.token;
+export const selectLoginInError = (state: RootState) => state.user.loginError;
+
+// select progress
+// select error
+// select token
