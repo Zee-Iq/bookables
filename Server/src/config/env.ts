@@ -7,25 +7,18 @@ interface Env {
   SMTP_USER: string;
   SMTP_PASS: string;
   SECRET: string;
-  URL_PRODUCTION: string;
-  URL_DEV: string;
+  URL: string;
   WEBSITES_PORT: string;
 }
 
 function parseEnv(env: NodeJS.ProcessEnv): Env {
   const parsedEnv = { ...env };
 
-  
-
-
-
   if (typeof parsedEnv.APPSETTING_WEBSITES_PORT === "string")
   parsedEnv.WEBSITES_PORT = parsedEnv.APPSETTING_WEBSITES_PORT;
 
   if (typeof parsedEnv.WEBSITES_PORT !== "string")
     throw new Error("env.WEBSITES_PORT is missing");
-
-
 
 
   if (typeof parsedEnv.APPSETTING_MONGO_URI === "string")
@@ -50,13 +43,10 @@ function parseEnv(env: NodeJS.ProcessEnv): Env {
   if (typeof parsedEnv.SMTP_PORT !== "string")
     throw new Error("env.SMTP_PORT is missing");
 
-  env.SMTP_PORT = parseInt(parsedEnv.SMTP_PORT) as any;
+    parsedEnv.SMTP_PORT = parseInt(parsedEnv.SMTP_PORT) as any;
 
   if (Number.isNaN(parsedEnv.SMTP_PORT))
     throw new Error("env.SMTP_PORT needs to be a number.");
-
-
-
 
   if (typeof parsedEnv.APPSETTING_SMTP_USER === "string")
     parsedEnv.SMTP_USER = parsedEnv.APPSETTING_SMTP_USER;
@@ -83,24 +73,13 @@ function parseEnv(env: NodeJS.ProcessEnv): Env {
 
 
 
-  if (typeof parsedEnv.APPSETTING_PRODUCTION === "string")
-    parsedEnv.PRODUCTION = parsedEnv.APPSETTING_PRODUCTION;
+  if (typeof parsedEnv.APPSETTING_URL === "string")
+    parsedEnv.URL = parsedEnv.APPSETTING_URL;
 
-  if (typeof parsedEnv.URL_PRODUCTION !== "string")
-    throw new Error("env.URL_PRODUCTION is missing");
+  if (typeof parsedEnv.URL !== "string")
+    throw new Error("env.URL is missing");
 
-
-
-
-  if (typeof parsedEnv.APPSETTING_URL_DEV === "string")
-    parsedEnv.URL_DEV = parsedEnv.APPSETTING_URL_DEV;  
-
-  if (typeof env.URL_DEV !== "string")
-    throw new Error("env.URL_DEV is missing");
-
-  return parsedEnv as unknown as Env;
-
-  
+  return parsedEnv as unknown as Env;  
 }
 
 export default parseEnv(process.env);
