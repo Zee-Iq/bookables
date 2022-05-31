@@ -24,25 +24,44 @@ export default function Map(props: BoxProps) {
   //Check if the Bing Maps is already loaded, if not register an event listener to do so
   useLayoutEffect(() => {
     if (!ref.current) return;
+    let map: Microsoft.Maps.Map | null = null;
+    let spacesLayer: Microsoft.Maps.Layer | null = null;
 
     if (window.Microsoft?.Maps?.Map) {
-      return initializeMap(ref.current, selectedLocation, searchRadius);
+      return initializeMap(ref.current);
     }
 
     const listener = () => {
       if (!ref.current) return;
-      initializeMap(ref.current, selectedLocation, searchRadius);
+      initializeMap(ref.current);
     };
 
     window.addEventListener("load", listener, { once: true });
 
-    return () => {
+     return () => {
       window.removeEventListener("load", listener);
       map?.dispose();
       setMap(null);
       spacesLayer?.dispose();
       setSpacesLayer(null);
-    };
+    }; 
+
+    function initializeMap(
+      parentElement: HTMLElement,
+    ) {
+      map = new Microsoft.Maps.Map(parentElement, {
+        credentials: env.REACT_APP_BING_MAPS,
+        showMapTypeSelector: false,
+        showLogo: false,
+        showScalebar: true,
+        showZoomButtons: false,
+      });
+      setMap(map);
+  
+      spacesLayer = new Microsoft.Maps.Layer("spaces");
+      map.layers.insert(spacesLayer);
+      setSpacesLayer(spacesLayer);
+    }
   }, []);
 
 
@@ -63,7 +82,7 @@ export default function Map(props: BoxProps) {
   useLayoutEffect(() => {
     if (!map || !selectedLocation) return;
     setMapView(map, selectedLocation, searchRadius);
-  }, [selectedLocation, searchRadius]);
+  }, [map, selectedLocation, searchRadius]);
 
   //If the spaces change, update the spacesLayer
   useLayoutEffect(() => {
@@ -79,29 +98,6 @@ export default function Map(props: BoxProps) {
       })
     );
   }, [spaces, spacesLayer, map]);
-
-  function initializeMap(
-    parentElement: HTMLElement,
-    selectedLocation: LabeledLocation | null,
-    searchRadius?: number
-  ) {
-    const map = new Microsoft.Maps.Map(parentElement, {
-      credentials: env.REACT_APP_BING_MAPS,
-      showMapTypeSelector: false,
-      showLogo: false,
-      showScalebar: true,
-      showZoomButtons: false,
-    });
-    setMap(map);
-
-    if (selectedLocation && searchRadius) {
-      setMapView(map, selectedLocation, searchRadius);
-    }
-
-    const spacesLayer = new Microsoft.Maps.Layer("spaces");
-    map.layers.insert(spacesLayer);
-    setSpacesLayer(spacesLayer);
-  }
 
   return <Box  sx={{ width: "100%", aspectRatio: "1/1" }} {...props} ref={ref}></Box>;
 }
