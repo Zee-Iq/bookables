@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import env from "../config/env";
 import sendEmail from "../utils/email";
 import Module from "module";
-const router = express.Router();
+
 
 /* router.use(express.json());
 router.post("/register", async (req, res) => { */
@@ -55,7 +55,7 @@ userRouter.post("/register", async (req, res) => {
   }
 });
 
-router.get("/emailConfirmation/:token", async (req, res) => {
+userRouter.get("/emailConfirmation/:token", async (req, res) => {
   try {
     const token = req.params.token;
     const verify = jwt.verify(token, env.SECRET);
@@ -92,7 +92,7 @@ router.get("/emailConfirmation/:token", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -122,5 +122,5 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;
+
 export default userRouter ;

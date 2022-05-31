@@ -23,46 +23,46 @@ const emailSchema = new mongoose.Schema<Bookables.Email>({
 
 const paymentProvidersSchema = new mongoose.Schema<Bookables.PaymentProvider>({
   provider: {
-    type: String,
-    required: true,
+    type: String
+   
   },
 
   cardnumber: {
-    type: Number,
-    required: true,
+    type: Number
+    
   },
 
   validationNumber: {
-    type: Number,
-    required: true,
+    type: Number
+    
   },
 
   owner: {
-    type: String,
-    required: true,
+    type: String
+    
   },
 
   expiration: {
-    type: Date,
-    required: true,
+    type: Date
+    
   },
 });
 
 const payoutInformationSchema = new mongoose.Schema<Bookables.PayoutInformation>(
   {
     bic: {
-      type: String,
-      required: true,
+      type: String
+     
     },
 
     iban: {
-      type: String,
-      required: true,
+      type: String
+      
     },
 
     owner: {
-      type: String,
-      required: true,
+      type: String
+      
     },
   }
 );
