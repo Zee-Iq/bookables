@@ -69,8 +69,10 @@ export const register = createAsyncThunk(
       "users/register",
       registerInformation
     );
+
+    console.log("response.data.success ", response.data.success);
     if (response.data.success)
-      thunkApi.dispatch(userSlice.actions.setRegSuccess);
+      thunkApi.dispatch(userSlice.actions.setRegSuccess(true));
     else throw new Error("something went wrong");
   }
 );
@@ -104,6 +106,12 @@ const userSlice = createSlice({
     setRegSuccess: (state, action: PayloadAction<boolean>) => {
       state.regSuccess = action.payload;
     },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      localStorage.removeItem("user");
+      localStorage.removeItem("token")
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -112,10 +120,12 @@ const userSlice = createSlice({
       })
       .addCase(register.fulfilled, (state) => {
         state.regInProgress = false;
+        state.regSuccess = false;
       })
       .addCase(register.rejected, (state, action) => {
         state.regInProgress = false;
         state.regError = action.error.message || "Unknown Error";
+        state.regSuccess = false;
       });
   },
 });
@@ -130,6 +140,9 @@ export const selectLoginInProgress = (state: RootState) =>
 export const selectToken = (state: RootState) => state.user.token;
 export const selectLoginInError = (state: RootState) => state.user.loginError;
 
-// select progress
-// select error
-// select token
+export const selectRegInProgress = (state: RootState) =>
+  state.user.regInProgress;
+export const selectRegSuccess = (state: RootState) => state.user.regSuccess;
+export const selectRegError = (state: RootState) => state.user.regError;
+
+export const {logout} = userSlice.actions

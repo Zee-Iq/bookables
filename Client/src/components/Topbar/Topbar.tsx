@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { logout } from "../../slices/userSlice";
 
 const pages = ["Register your Co-working Space", "Login", "Register"];
 const settings = ["Profile", "Bookings", "Favourites", "Logout"];
@@ -38,6 +40,17 @@ const Topbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const dispatch = useAppDispatch();
+
+  const handleSelectMenuItem = (item: string) => {
+    switch (item) {
+      case "Logout":
+        dispatch(logout());
+        break;
+    }
+    handleCloseUserMenu();
   };
 
   return (
@@ -93,7 +106,7 @@ const Topbar = () => {
               BOOKABLES
             </Typography>
 
-            <Box sx={{display:"flex"}}>
+            <Box sx={{ display: "flex" }}>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
                   <Button
@@ -121,7 +134,10 @@ const Topbar = () => {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={setting}
+                      onClick={() => handleSelectMenuItem(setting)}
+                    >
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   ))}

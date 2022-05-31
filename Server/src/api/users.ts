@@ -11,16 +11,15 @@ const userRouter = express.Router();
 userRouter.use(express.json());
 userRouter.post("/register", async (req, res) => {
   try {
-    const { email, password, paymentProviders, payoutInformation } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !paymentProviders || !payoutInformation)
+    if (!email || !password)
       return res.send({ success: false, errorId: 1 });
 
     const newUser = new User({
       "email.address": email,
-      password,
-      paymentProviders,
-      payoutInformation,
+      password
+
     });
 
     const user = await newUser.save();

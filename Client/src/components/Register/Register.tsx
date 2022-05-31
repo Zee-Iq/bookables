@@ -3,8 +3,9 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { useAppDispatch } from "../../hooks";
-import { register, RegisterInformation } from "../../slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess } from "../../slices/userSlice";
+import { Navigate } from "react-router-dom";
 
 export default function Register() {
   const [pass, setPass] = useState("");
@@ -26,13 +27,21 @@ export default function Register() {
     },
   });
 
+  const regInProgress = useAppSelector(selectRegInProgress)
+  const regError = useAppSelector(selectRegError)
+  const regSuccess = useAppSelector(selectRegSuccess)
   const dispatch = useAppDispatch();
+
+
 
   useEffect(() => {
     if (pass === confirmPass && pass.length > 0) {
       setData({ ...data, password: pass });
     }
   }, [pass, confirmPass]);
+
+  if (regInProgress && regSuccess) return <Navigate to="/pleaseconfirm" />
+
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
