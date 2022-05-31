@@ -28,6 +28,7 @@ declare namespace Bookables {
     roles: UserRole[];
     paymentProviders?: PaymentProvider[];
     payoutInformation?: PayoutInformation;
+   
   }
 
   type ShareableUser = Pick<User, "email" | "roles" | "_id">;

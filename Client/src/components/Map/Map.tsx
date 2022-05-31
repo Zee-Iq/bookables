@@ -72,7 +72,6 @@ export default function Map(props: BoxProps) {
       return;
     }
     getMapSession = () => new Promise(map.getCredentials);
-    Microsoft.Maps.Events.addHandler(map, "viewchangeend", (e) => {console.log(e)})
 
     return () => {
       getMapSession = () => null;
@@ -113,7 +112,6 @@ function setMapView(
     selectedLocation.point.coordinates[1]
   );
   const angle = radiusToAngle(searchRadius);
-  console.log("angle", angle);
   const locationRect = new Microsoft.Maps.LocationRect(location, angle, angle);
   map.setView({ bounds: locationRect });
 }

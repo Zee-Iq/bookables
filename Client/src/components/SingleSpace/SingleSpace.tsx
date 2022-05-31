@@ -1,5 +1,5 @@
 
-const SingleSpaces = () => {
+const SingleSpace = () => {
   return (
    <>
     <h1>Hello from SingleSpaces.tsx</h1>
@@ -9,4 +9,4 @@ const SingleSpaces = () => {
   );
 };
 
-export default SingleSpaces;
+export default SingleSpace;

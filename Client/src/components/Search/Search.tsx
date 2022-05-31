@@ -57,7 +57,6 @@ export default function Search(props: BoxProps) {
     fetchingLocationSuggestions,
   } = useAppSelector(selectFilters);
 
-  console.log(locationSuggestions);
   return (
     <Box
       {...{
