@@ -46,7 +46,3 @@ export default (to: string, token: string) => {
 
 
     
-/* module.exports = (to) => {
-  const smtpTransport = nodemailer.createTransport({});
-};
- */
