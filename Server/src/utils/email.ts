@@ -23,12 +23,14 @@ export default (to: string, token: string) => {
         html: `
           <!DOCTYPE html>
           <html>
-            <body style="margin: 0; padding: 0;background-color: white;min-height:70vh;width:100%;">
-              <h1 style="background-color: #787878; color: white">Bookables</h1>
-              <p>Welcome to  Bookables!</p>
-              <p>Click the following link to verify your email address</p>
-              <a href="${env.URL}/emailConfirmation/${token}">Verify your email</a>
-            </body>
+          <body style="margin: 0; padding: 0; min-height: 70vh; width: 100%">
+          <div style="width: 60%; margin: 100px auto; border: solid 1px gray; border-radius: 10px; padding: 50px; text-align: center; height: 400px;">
+            <h1 style="background-color: #a39f9f; color: white; text-align: center; width: 400px; margin:50px auto; border-radius: 10px;">Bookables</h1>
+            <p style="margin-top: 70px; font-size: 1.5rem;">Welcome to Bookables!</p>
+            <p style="margin-bottom: 50px;">Click the following link to verify your email address</p>
+            <a style="background-color: rgb(0, 199, 0);padding: 10px; font-size: 1.3rem;text-decoration: none; color: white;" href="${env.URL}/emailConfirmation/${token}">Verify your email</a>
+          </div>
+        </body>
           </html>
         `
     }
@@ -47,7 +49,3 @@ export default (to: string, token: string) => {
 
 
     
-/* module.exports = (to) => {
-  const smtpTransport = nodemailer.createTransport({});
-};
- */

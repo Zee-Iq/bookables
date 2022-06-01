@@ -3,26 +3,23 @@ import User from "../models/User";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
 import sendEmail from "../utils/email";
-import Module from "module";
 
 
-/* router.use(express.json());
-router.post("/register", async (req, res) => { */
+
 const userRouter = express.Router();
 
-userRouter.use(express.json())
+userRouter.use(express.json());
 userRouter.post("/register", async (req, res) => {
   try {
-    const { email, password, paymentProviders, payoutInformation } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !paymentProviders || !payoutInformation)
+    if (!email || !password)
       return res.send({ success: false, errorId: 1 });
 
     const newUser = new User({
       "email.address": email,
-      password,
-      paymentProviders,
-      payoutInformation,
+      password
+
     });
 
     const user = await newUser.save();
@@ -91,7 +88,8 @@ userRouter.post("/login", async (req, res) => {
 
     const user = await User.verifyUser(email, password);
 
-    if (!user) return res.send({ success: false, errorId: 3 });
+    // 
+    if (!user) return res.send({ success: false, loginError: "user or password invalid" });
 
     const token = await jwt.sign(
       { id: user._id.toHexString(), "email.address": user.email.address },
@@ -101,7 +99,9 @@ userRouter.post("/login", async (req, res) => {
       }
     );
 
-    res.send({ success: true, token: token });
+    res.send({ success: true, token: token, user: user });
+
+
   } catch (error) {
     if (error instanceof Error) {
       console.error("ERROR:", error);
@@ -115,5 +115,4 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-
-export default userRouter ;
+export default userRouter;
