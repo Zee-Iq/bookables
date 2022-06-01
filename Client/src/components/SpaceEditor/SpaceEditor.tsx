@@ -49,7 +49,7 @@ const SpaceEditor = ({ space }: SpaceEditorProps) => {
       <form>
         <FormGroup>
           <TextField
-            label="name"
+            label="Name"
             value={updatedSpace.name}
             onChange={(e) =>
               setUpdatedSpace({ ...updatedSpace, name: e.target.value })
