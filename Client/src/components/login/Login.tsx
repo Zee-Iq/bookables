@@ -14,6 +14,7 @@ export default function Login() {
     e.preventDefault();
     if (!data.password || !data.email) return;
     const response = await axios.post("/users/login", data);
+   
   };
 
   return (
@@ -25,8 +26,15 @@ export default function Login() {
       noValidate
       autoComplete="off"
     >
-      <h1>Login</h1>
-      <div>
+     
+      <div 
+       style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "500px",
+      }}>
         <TextField
           required
           id="outlined-required"
@@ -45,7 +53,9 @@ export default function Login() {
           onChange={(e) => setData({ ...data, password: e.target.value })}
         />
 
-        <Button type="submit" variant="contained" onClick={handleClick}>
+        <Button type="submit" 
+        sx={{ marginTop: "10px" }}
+        variant="contained" onClick={handleClick}>
           Login
         </Button>
       </div>

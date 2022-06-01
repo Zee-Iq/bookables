@@ -23,7 +23,8 @@ export default (to: string, token: string) => {
         html: `
           <!DOCTYPE html>
           <html>
-            <body style="margin: 0; padding: 0;background-color: #000000;min-height:70vh;width:100%;">
+            <body style="margin: 0; padding: 0;background-color: white;min-height:70vh;width:100%;">
+              <h1 style="background-color: #787878; color: white">Bookables</h1>
               <p>Welcome to  Bookables!</p>
               <p>Click the following link to verify your email address</p>
               <a href="${env.URL}/emailConfirmation/${token}">Verify your email</a>

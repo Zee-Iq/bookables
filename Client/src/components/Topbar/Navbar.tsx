@@ -7,6 +7,7 @@ import {
   Box,
   Container,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import navbarStyles from "./NavbarStyles";
 
 const Navbar = () => {
@@ -29,12 +30,12 @@ const Navbar = () => {
               <Button title="" color="secondary" variant="contained">
                 Register Co-working Space
               </Button>
-              <Button color="secondary" variant="contained">
+             <NavLink to="register" style={{textDecoration: "none"}}> <Button color="secondary" variant="contained">
                 Register
-              </Button>
-              <Button color="secondary" variant="contained">
+              </Button></NavLink>
+             <NavLink to="login" style={{textDecoration: "none"}} > <Button color="secondary" variant="contained">
                 Sign in
-              </Button>
+              </Button></NavLink>
             </Box>
           </Toolbar>
         </Container>
