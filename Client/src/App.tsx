@@ -19,7 +19,7 @@ const App = () => {
           <Route path="singlespace" element={<SingleSpace />} />
           <Route path="yourspaces" element={<YourSpaces />} />
           <Route
-            path="/emailConfirmation/:token"
+            path="/emailConfirmed/:token"
             element={<EmailConfirmed />}
           />
           <Route path="/register" element={<Register />} />
