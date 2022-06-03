@@ -78,7 +78,10 @@ export default function Search(props: BoxProps) {
         <Autocomplete
           filterOptions={(x) => x}
           disablePortal
-          sx={{gridRow: {xs:"1", sm: "unset"}, gridColumn: {xs:"1 / 3", sm: "unset"}}}
+          sx={{
+            gridRow: { xs: "1", sm: "unset" },
+            gridColumn: { xs: "1 / 3", sm: "unset" },
+          }}
           id="combo-box-demo"
           options={locationSuggestions}
           clearOnEscape={true}
@@ -117,7 +120,14 @@ export default function Search(props: BoxProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             renderInput={(props) => (
-              <TextField {...props} className="searchInput" sx={{gridRow: {xs:"2", sm: "unset"}, gridColumn: {xs:"1 / 2", sm: "unset"}}} />
+              <TextField
+                {...props}
+                className="searchInput"
+                sx={{
+                  gridRow: { xs: "2", sm: "unset" },
+                  gridColumn: { xs: "1 / 2", sm: "unset" },
+                }}
+              />
             )}
             label="From"
             value={fromDate}
@@ -131,7 +141,14 @@ export default function Search(props: BoxProps) {
           />
           <DateTimePicker
             renderInput={(props) => (
-              <TextField {...props} className="searchInput" sx={{gridRow: {xs:"2", sm: "unset"}, gridColumn: {xs:"2 / 3", sm: "unset"}}} />
+              <TextField
+                {...props}
+                className="searchInput"
+                sx={{
+                  gridRow: { xs: "2", sm: "unset" },
+                  gridColumn: { xs: "2 / 3", sm: "unset" },
+                }}
+              />
             )}
             label="To"
             value={toDate}
@@ -196,9 +213,11 @@ export default function Search(props: BoxProps) {
               type="number"
               variant="outlined"
               value={searchRadius}
-              onChange={(e) =>
-                dispatch(setSearchRadius(Number.parseInt(e.target.value)))
-              }
+              onChange={(e) => {
+                const newRadius = Number.parseInt(e.target.value);
+                if (Number.isNaN(newRadius) || newRadius < 5 ) return;
+                dispatch(setSearchRadius(newRadius));
+              }}
               className="searchInput"
             />
           </Box>
