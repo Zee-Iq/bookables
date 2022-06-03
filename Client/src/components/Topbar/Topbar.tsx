@@ -105,11 +105,11 @@ const Topbar = () => {
             >
               BOOKABLES
             </Typography>
-
+                
             <Box sx={{ display: "flex" }}>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
-                  <Button
+                  <Button variant="text" 
                     key={page}
                     onClick={handleCloseNavMenu}
                     sx={{ display: "block", color: "inherit" }}
