@@ -1,13 +1,37 @@
+import { WindowSharp } from "@mui/icons-material";
 import { Box, BoxProps } from "@mui/material";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import env from "../../config/env";
 import { LabeledLocation, selectFilters } from "../../slices/filterSlice";
 import { selectSpacesInArea } from "../../slices/spacesSlice";
+
+declare global {
+  interface Window {
+    setMapReady: () => void;
+  }
+}
+
+const MapState: {
+  callbacks: ((value: boolean) => void)[];
+  onReady: (cb: (value: boolean) => void) => void;
+  mapReady: boolean;
+  setMapReady: () => void;
+  loadingStarted: boolean;
+} = {
+  callbacks: [],
+  onReady(cb) {
+    this.callbacks.push(cb);
+  },
+  mapReady: false,
+  setMapReady() {
+    this.mapReady = true;
+    for (const cb of this.callbacks) {
+      cb(this.mapReady);
+    }
+  },
+  loadingStarted: false,
+};
 
 export let getMapSession: () => Promise<string> | null = () => null;
 
@@ -16,7 +40,10 @@ export default function Map(props: BoxProps) {
   let map = useRef<Microsoft.Maps.Map>();
   let spacesLayer = useRef<Microsoft.Maps.Layer>();
 
-  getMapSession = useCallback(() => (map.current ? new Promise(map.current.getCredentials) : null), [])
+  getMapSession = useCallback(
+    () => (map.current ? new Promise(map.current.getCredentials) : null),
+    []
+  );
 
   const initializeSpacesLayer = useCallback((map: Microsoft.Maps.Map) => {
     if (spacesLayer.current) return;
@@ -24,10 +51,9 @@ export default function Map(props: BoxProps) {
     map.layers.insert(spacesLayer.current);
   }, []);
 
-  const initializeMap = useCallback((parentElement: HTMLElement) => {
-    if (!window.Microsoft?.Maps?.Map) return;
+  const initializeMap = useCallback(() => {
     if (map.current) return initializeSpacesLayer(map.current);
-    map.current = new Microsoft.Maps.Map(parentElement, {
+    map.current = new Microsoft.Maps.Map(mapContainer.current as any, {
       credentials: env.REACT_APP_BING_MAPS,
       showMapTypeSelector: false,
       showLogo: false,
@@ -37,34 +63,20 @@ export default function Map(props: BoxProps) {
     initializeSpacesLayer(map.current);
   }, []);
 
+  useEffect(() => {
+    if (!MapState.loadingStarted) loadMapsPackage();
+
+    if (MapState.mapReady) initializeMap();
+
+    MapState.onReady(() => initializeMap());
+  }, []);
+
   const { selectedLocation, searchRadius } = useSelector(selectFilters);
   const spaces = useSelector(selectSpacesInArea);
-
-  //Check if the Bing Maps is already loaded, if not register an event listener to do so
-  useEffect(() => {
-    if (!mapContainer.current) return;
-
-    const listener = () => {
-      if (!mapContainer.current) return;
-      initializeMap(mapContainer.current);
-    };
-
-    if (window.Microsoft?.Maps?.Map) return initializeMap(mapContainer.current);
-    window.addEventListener("load", listener, { once: true });
-
-    return () => {
-      window.removeEventListener("load", listener);
-      map.current?.dispose();
-      map.current = undefined;
-      spacesLayer.current?.dispose();
-      spacesLayer.current = undefined; 
-    };
-  }, []);
 
   //If the selectedLocation or searchRadius change, update the mapView
   useEffect(() => {
     if (!map.current || !selectedLocation || Number.isNaN(searchRadius)) return;
-    
     setMapView(map.current, selectedLocation, searchRadius);
   }, [selectedLocation, searchRadius]);
 
@@ -87,9 +99,18 @@ export default function Map(props: BoxProps) {
     <Box
       sx={{ width: "100%", aspectRatio: "1/1" }}
       {...props}
-      ref={(ref) => (mapContainer.current = ref as HTMLDivElement)}
+      ref={mapContainer}
     ></Box>
   );
+}
+
+function loadMapsPackage() {
+  let script = document.createElement("script");
+  script.src = `https://www.bing.com/api/maps/mapcontrol?callback=setMapReady&key=${env.REACT_APP_BING_MAPS}`;
+  document.body.append(script);
+
+  window.setMapReady = MapState.setMapReady.bind(MapState);
+  MapState.loadingStarted = true;
 }
 
 function setMapView(
