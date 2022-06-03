@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
@@ -26,6 +25,9 @@ export default function Register() {
       owner: "",
     },
   });
+
+ 
+  
 
   const regInProgress = useAppSelector(selectRegInProgress)
   const regError = useAppSelector(selectRegError)
@@ -55,6 +57,9 @@ export default function Register() {
     console.log("registerInformation ", registerInformation);
     dispatch(register(registerInformation));
   };
+
+console.log("response is", );
+
 
   return (
     <Box
