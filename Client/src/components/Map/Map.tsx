@@ -27,10 +27,6 @@ export default function Map(props: BoxProps) {
     let map: Microsoft.Maps.Map | null = null;
     let spacesLayer: Microsoft.Maps.Layer | null = null;
 
-    if (window.Microsoft?.Maps?.Map) {
-      return initializeMap(ref.current);
-    }
-
     const listener = () => {
       if (!ref.current) return;
       initializeMap(ref.current);
@@ -39,28 +35,28 @@ export default function Map(props: BoxProps) {
     window.addEventListener("load", listener, { once: true });
 
      return () => {
-      window.removeEventListener("load", listener);
-      map?.dispose();
-      setMap(null);
-      spacesLayer?.dispose();
-      setSpacesLayer(null);
+        window.removeEventListener("load", listener);
+        map?.dispose();
+        setMap(null);
+        spacesLayer?.dispose();
+        setSpacesLayer(null);
     }; 
 
     function initializeMap(
       parentElement: HTMLElement,
     ) {
-      map = new Microsoft.Maps.Map(parentElement, {
-        credentials: env.REACT_APP_BING_MAPS,
-        showMapTypeSelector: false,
-        showLogo: false,
-        showScalebar: true,
-        showZoomButtons: false,
-      });
-      setMap(map);
-  
-      spacesLayer = new Microsoft.Maps.Layer("spaces");
-      map.layers.insert(spacesLayer);
-      setSpacesLayer(spacesLayer);
+        map = new Microsoft.Maps.Map(parentElement, {
+          credentials: env.REACT_APP_BING_MAPS,
+          showMapTypeSelector: false,
+          showLogo: false,
+          showScalebar: true,
+          showZoomButtons: false,
+        });
+        setMap(map);
+    
+        spacesLayer = new Microsoft.Maps.Layer("spaces");
+        map.layers.insert(spacesLayer);
+        setSpacesLayer(spacesLayer);
     }
   }, []);
 
@@ -80,7 +76,7 @@ export default function Map(props: BoxProps) {
 
   //If the selectedLocation or searchRadius change, update the mapView
   useLayoutEffect(() => {
-    if (!map || !selectedLocation) return;
+    if (!map || !selectedLocation || Number.isNaN(searchRadius)) return;
     setMapView(map, selectedLocation, searchRadius);
   }, [map, selectedLocation, searchRadius]);
 
