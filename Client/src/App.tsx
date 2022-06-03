@@ -9,6 +9,7 @@ import AppStyles from "./AppStyles";
 import YourSpaces from "./components/YourSpaces/YourSpaces";
 import SingleSpace from "./components/SingleSpace/SingleSpace";
 import SwipeableEdgeDrawer from "./components/SwipeableEdge/SwipeableEdge";
+import RegisterSpace from "./components/registerSpace/RegisterSpace";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           
           {/* DUMMY ROUTE FOR SWIPEABLE EDGE TO BE DELETED AFTER TESTING */}
           <Route path="/swipe" element={<SwipeableEdgeDrawer />} />
+          <Route path="/registerSpace" element={<RegisterSpace />} />
         </Route>
       </Routes>
     </Box>

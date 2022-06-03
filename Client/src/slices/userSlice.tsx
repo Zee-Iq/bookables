@@ -145,4 +145,4 @@ export const selectRegInProgress = (state: RootState) =>
 export const selectRegSuccess = (state: RootState) => state.user.regSuccess;
 export const selectRegError = (state: RootState) => state.user.regError;
 
-export const {logout} = userSlice.actions
+export const {logout, setLoginError} = userSlice.actions
