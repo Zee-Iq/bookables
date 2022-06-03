@@ -1,13 +1,11 @@
 import { Container } from "@mui/material";
-import {  Outlet } from "react-router-dom";
-import Navbar from "./Topbar/Navbar";
+import { Outlet } from "react-router-dom";
+import Topbar from "./Topbar/Topbar";
 
 const Layout = () => {
   return (
-    <Container
-      sx={{ display: "grid", gridTemplateRows: "max-content 1fr", gap: 1, minHeight: "100vh" }}
-    >
-      <Navbar />
+    <Container>
+      <Topbar />
       <Outlet />
     </Container>
   );
