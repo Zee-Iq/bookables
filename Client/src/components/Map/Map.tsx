@@ -1,5 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -13,66 +14,49 @@ import { selectSpacesInArea } from "../../slices/spacesSlice";
 export let getMapSession: () => Promise<string> | null = () => null;
 
 export default function Map(props: BoxProps) {
-  const ref = useRef<HTMLDivElement>();
+  let { current: mapContainer } = useRef<HTMLDivElement>();
+  let { current: map } = useRef<Microsoft.Maps.Map>();
+  let { current: spacesLayer } = useRef<Microsoft.Maps.Layer>();
+
+  const initializeSpacesLayer = useCallback((map: Microsoft.Maps.Map) => {
+    if (spacesLayer) return;
+    spacesLayer = new Microsoft.Maps.Layer("spaces");
+    map.layers.insert(spacesLayer);
+  }, []);
+
+  const initializeMap = useCallback((parentElement: HTMLElement) => {
+    if(!window.Microsoft?.Maps?.Map) return
+    if (map) return initializeSpacesLayer(map);
+    map = new Microsoft.Maps.Map(parentElement, {
+      credentials: env.REACT_APP_BING_MAPS,
+      showMapTypeSelector: false,
+      showLogo: false,
+      showScalebar: true,
+      showZoomButtons: false,
+    });
+    initializeSpacesLayer(map);
+    getMapSession = () => map ? new Promise(map.getCredentials) : null
+  }, []);
+
   const { selectedLocation, searchRadius } = useSelector(selectFilters);
-  const [map, setMap] = useState<Microsoft.Maps.Map | null>(null);
-  const [spacesLayer, setSpacesLayer] = useState<Microsoft.Maps.Layer | null>(
-    null
-  );
   const spaces = useSelector(selectSpacesInArea);
 
   //Check if the Bing Maps is already loaded, if not register an event listener to do so
   useLayoutEffect(() => {
-    if (!ref.current) return;
-    let map: Microsoft.Maps.Map | null = null;
-    let spacesLayer: Microsoft.Maps.Layer | null = null;
+    if (!mapContainer) return;
 
     const listener = () => {
-      if (!ref.current) return;
-      initializeMap(ref.current);
+      if (!mapContainer) return;
+      initializeMap(mapContainer);
     };
 
+    initializeMap(mapContainer)
     window.addEventListener("load", listener, { once: true });
 
-     return () => {
-        window.removeEventListener("load", listener);
-        map?.dispose();
-        setMap(null);
-        spacesLayer?.dispose();
-        setSpacesLayer(null);
-    }; 
-
-    function initializeMap(
-      parentElement: HTMLElement,
-    ) {
-        map = new Microsoft.Maps.Map(parentElement, {
-          credentials: env.REACT_APP_BING_MAPS,
-          showMapTypeSelector: false,
-          showLogo: false,
-          showScalebar: true,
-          showZoomButtons: false,
-        });
-        setMap(map);
-    
-        spacesLayer = new Microsoft.Maps.Layer("spaces");
-        map.layers.insert(spacesLayer);
-        setSpacesLayer(spacesLayer);
-    }
-  }, []);
-
-
-  //If the map changes, set the exported getMapSession function
-  useEffect(() => {
-    if (!map) {
-      getMapSession = () => null;
-      return;
-    }
-    getMapSession = () => new Promise(map.getCredentials);
-
     return () => {
-      getMapSession = () => null;
+      window.removeEventListener("load", listener);
     };
-  }, [map]);
+  }, []);
 
   //If the selectedLocation or searchRadius change, update the mapView
   useLayoutEffect(() => {
@@ -95,7 +79,13 @@ export default function Map(props: BoxProps) {
     );
   }, [spaces, spacesLayer, map]);
 
-  return <Box  sx={{ width: "100%", aspectRatio: "1/1" }} {...props} ref={ref}></Box>;
+  return (
+    <Box
+      sx={{ width: "100%", aspectRatio: "1/1" }}
+      {...props}
+      ref={(ref) => (mapContainer = ref as HTMLDivElement)}
+    ></Box>
+  );
 }
 
 function setMapView(
