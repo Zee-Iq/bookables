@@ -2,9 +2,7 @@ import { Box, BoxProps } from "@mui/material";
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
-  useState,
 } from "react";
 import { useSelector } from "react-redux";
 import env from "../../config/env";
@@ -14,61 +12,67 @@ import { selectSpacesInArea } from "../../slices/spacesSlice";
 export let getMapSession: () => Promise<string> | null = () => null;
 
 export default function Map(props: BoxProps) {
-  let { current: mapContainer } = useRef<HTMLDivElement>();
-  let { current: map } = useRef<Microsoft.Maps.Map>();
-  let { current: spacesLayer } = useRef<Microsoft.Maps.Layer>();
+  let mapContainer = useRef<HTMLDivElement>();
+  let map = useRef<Microsoft.Maps.Map>();
+  let spacesLayer = useRef<Microsoft.Maps.Layer>();
+
+  getMapSession = useCallback(() => (map.current ? new Promise(map.current.getCredentials) : null), [])
 
   const initializeSpacesLayer = useCallback((map: Microsoft.Maps.Map) => {
-    if (spacesLayer) return;
-    spacesLayer = new Microsoft.Maps.Layer("spaces");
-    map.layers.insert(spacesLayer);
+    if (spacesLayer.current) return;
+    spacesLayer.current = new Microsoft.Maps.Layer("spaces");
+    map.layers.insert(spacesLayer.current);
   }, []);
 
   const initializeMap = useCallback((parentElement: HTMLElement) => {
-    if(!window.Microsoft?.Maps?.Map) return
-    if (map) return initializeSpacesLayer(map);
-    map = new Microsoft.Maps.Map(parentElement, {
+    if (!window.Microsoft?.Maps?.Map) return;
+    if (map.current) return initializeSpacesLayer(map.current);
+    map.current = new Microsoft.Maps.Map(parentElement, {
       credentials: env.REACT_APP_BING_MAPS,
       showMapTypeSelector: false,
       showLogo: false,
       showScalebar: true,
       showZoomButtons: false,
     });
-    initializeSpacesLayer(map);
-    getMapSession = () => map ? new Promise(map.getCredentials) : null
+    initializeSpacesLayer(map.current);
   }, []);
 
   const { selectedLocation, searchRadius } = useSelector(selectFilters);
   const spaces = useSelector(selectSpacesInArea);
 
   //Check if the Bing Maps is already loaded, if not register an event listener to do so
-  useLayoutEffect(() => {
-    if (!mapContainer) return;
+  useEffect(() => {
+    if (!mapContainer.current) return;
 
     const listener = () => {
-      if (!mapContainer) return;
-      initializeMap(mapContainer);
+      if (!mapContainer.current) return;
+      initializeMap(mapContainer.current);
     };
 
-    initializeMap(mapContainer)
+    if (window.Microsoft?.Maps?.Map) return initializeMap(mapContainer.current);
     window.addEventListener("load", listener, { once: true });
 
     return () => {
       window.removeEventListener("load", listener);
+      map.current?.dispose();
+      map.current = undefined;
+      spacesLayer.current?.dispose();
+      spacesLayer.current = undefined; 
     };
   }, []);
 
   //If the selectedLocation or searchRadius change, update the mapView
-  useLayoutEffect(() => {
-    if (!map || !selectedLocation || Number.isNaN(searchRadius)) return;
-    setMapView(map, selectedLocation, searchRadius);
-  }, [map, selectedLocation, searchRadius]);
+  useEffect(() => {
+    if (!map.current || !selectedLocation || Number.isNaN(searchRadius)) return;
+    
+    setMapView(map.current, selectedLocation, searchRadius);
+  }, [selectedLocation, searchRadius]);
 
   //If the spaces change, update the spacesLayer
-  useLayoutEffect(() => {
-    if (!map || !spacesLayer) return;
-    spacesLayer.clear();
-    spacesLayer.add(
+  useEffect(() => {
+    if (!map.current || !spacesLayer.current) return;
+    spacesLayer.current.clear();
+    spacesLayer.current.add(
       spaces.map((space) => {
         const location = new Microsoft.Maps.Location(
           space.point.coordinates[0],
@@ -77,13 +81,13 @@ export default function Map(props: BoxProps) {
         return new Microsoft.Maps.Pushpin(location);
       })
     );
-  }, [spaces, spacesLayer, map]);
+  }, [spaces]);
 
   return (
     <Box
       sx={{ width: "100%", aspectRatio: "1/1" }}
       {...props}
-      ref={(ref) => (mapContainer = ref as HTMLDivElement)}
+      ref={(ref) => (mapContainer.current = ref as HTMLDivElement)}
     ></Box>
   );
 }
