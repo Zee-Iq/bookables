@@ -65,6 +65,8 @@ export default function Search(props: BoxProps) {
           ...props.sx,
           "& .searchInput": { width: "100%", boxSizing: "border-box" },
           p: 2,
+          display:{xs:"none", md:"block"}
+
         },
       }}
     >
@@ -178,6 +180,7 @@ export default function Search(props: BoxProps) {
               display: "grid",
               gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
               gap: 2,
+
             }}
           >
             <FormControl className="searchInput">
