@@ -4,17 +4,32 @@ import mongoose from "mongoose";
 import Bookables from "types";
 import env from "../config/env";
 import Space from "../models/Space";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+
 const spacesRouter = express.Router();
 
-const authMiddleware: RequestHandler = async (req, res, next) => {
-  console.warn("Replace with actual implementation of the authMiddleware.");
-  req.user = {
-    _id: new mongoose.Types.ObjectId("628ca4a90b48ec82d91b06ec"),
-    email: { isConfirmed: true, address: "szymanekmilosz92@gmail.com" },
-    roles: ["host", "tenant"],
+const authMiddleware: ({
+  allowUnauthenticated,
+}?: {
+  allowUnauthenticated: boolean;
+}) => RequestHandler =
+  ({ allowUnauthenticated } = { allowUnauthenticated: false }) =>
+  async (req, res, next) => {
+    const [method, token] = req.headers.authorization?.split(" ") || [
+      null,
+      null,
+    ];
+    if (method?.toLowerCase() !== "bearer" || typeof token !== "string")
+      return res.sendStatus(401);
+    const payload = await jwt.verify(token, env.SECRET);
+    if (typeof payload === "string")
+      throw new Error("Unexpected Token payload.");
+    const user = await User.findById(payload.id);
+    if (!user) return res.sendStatus(403);
+    req.user = user;
+    next();
   };
-  next();
-};
 
 const catchErrors = (handler: RequestHandler): RequestHandler => {
   return async (req, res, next) => {
@@ -26,7 +41,17 @@ const catchErrors = (handler: RequestHandler): RequestHandler => {
   };
 };
 
-spacesRouter.use(authMiddleware, express.json());
+spacesRouter.use(express.json(), express.urlencoded())
+
+spacesRouter.get(
+  "/",
+  catchErrors(async (req, res) => {
+    console.warn("Implement fetching spaces by location and radius.")
+    return res.json(await Space.find().exec());
+  })
+);
+
+spacesRouter.use(catchErrors(authMiddleware()));
 
 spacesRouter.get(
   "/owned",
@@ -34,6 +59,8 @@ spacesRouter.get(
     return res.json(await Space.find({ owner: req.user!._id }).exec());
   })
 );
+
+
 
 async function setSpace(
   space: mongoose.Document<unknown, any, Bookables.Space> &
@@ -57,6 +84,7 @@ async function setSpace(
   }
 }
 
+
 spacesRouter.post(
   "/create",
   catchErrors(async (req, res) => {
@@ -71,6 +99,7 @@ spacesRouter.patch(
   "/:spaceId/update",
   catchErrors(async (req, res, next) => {
     const { spaceId } = req.params;
+    console.log(spaceId)
     const space = await Space.findById(spaceId).exec();
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
@@ -156,6 +185,9 @@ const errorHandler: ErrorRequestHandler = async (error, req, res, next) => {
     return res.status(400).json({ type: "NoLocationFoundError", error });
   if (error instanceof MultipleLocationsFoundError)
     return res.status(400).json({ type: "MultipleLocationsFoundError", error });
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    return res.status(422).send({ type: "DuplicateKeyError", error });
+  }
   return res.status(500).send(error.message);
 };
 

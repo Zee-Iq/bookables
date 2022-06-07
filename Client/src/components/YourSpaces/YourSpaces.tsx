@@ -1,19 +1,16 @@
-import { Box, Divider, List, ListItemButton, Paper } from "@mui/material";
+import { Box, List, ListItemButton, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import Bookables from "types";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchSpacesForHost, seletOwnedSpaces } from "../../slices/spacesSlice";
-import SpaceEditor from "../SpaceEditor/SpaceEditor";
 import AddIcon from "@mui/icons-material/Add";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const YourSpaces = () => {
-  const [selectedSpace, setSelectedSpace] = useState<Bookables.Space>();
   const dispatch = useAppDispatch();
   const spaces = useAppSelector(seletOwnedSpaces);
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    if (spaces.length > 0) setSelectedSpace(spaces[0]);
-  }, [spaces]);
 
   useEffect(() => {
     dispatch(fetchSpacesForHost());
@@ -25,17 +22,17 @@ const YourSpaces = () => {
           {spaces.map((space) => (
             <ListItemButton
               key={space.name}
-              onClick={() => setSelectedSpace(space)}
+              onClick={() => navigate(`./${space._id}`)}
             >
               {space.name}
             </ListItemButton>
           ))}
-          <ListItemButton onClick={() => setSelectedSpace(undefined)}>
+          <ListItemButton onClick={() => navigate(`./`)}>
             <AddIcon /> new Space
           </ListItemButton>
         </List>
       </Paper>
-      <SpaceEditor space={selectedSpace} />
+      <Outlet/>
     </Box>
   );
 };

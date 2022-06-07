@@ -38,7 +38,7 @@ const pointSchema = new Schema<Bookables.Point>({
 
 const addressSchema = new Schema<Bookables.Address>({
   addressLine: { type: String, required: true },
-  adminDistrict2: { type: String, required: true },
+  adminDistrict2: { type: String},
   adminDistrict: { type: String, required: true },
   countryRegion: { type: String, required: true },
   formattedAddress: { type: String, required: true },
@@ -58,8 +58,9 @@ const spaceSchema = new Schema<Bookables.Space>({
     ref: "User",
     required: true,
     index: true,
+    unique: false
   },
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: false },
   description: String,
   address: { type: addressSchema, required: true },
   contactInformation: { type: contactInformationSchema, required: true },
@@ -70,6 +71,8 @@ const spaceSchema = new Schema<Bookables.Space>({
     validate: [hasOnlyUniqueIds],
   },
 });
+
+spaceSchema.index({owner: 1, name: 1}, {unique: true})
 
 const Space = model("Space", spaceSchema);
 export default Space;

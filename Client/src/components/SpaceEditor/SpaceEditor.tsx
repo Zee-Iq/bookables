@@ -1,22 +1,15 @@
 import { Button, FormGroup, Paper, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import Bookables from "types";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { createSpace, deleteSpace, SpaceInformation, updateSpace, selectOwnedSpace } from "../../slices/spacesSlice";
+import {useParams} from "react-router-dom"
 
 interface SpaceEditorProps {
   space?: Bookables.Space;
 }
 
-type RecursivePartial<T> = {
-  [P in keyof T]?: RecursivePartial<T[P]>;
-};
-
-const initialSpace: Pick<
-  Bookables.Space,
-  "bookables" | "description" | "name"
-> & {
-  address: Omit<Bookables.Address, "_id">;
-  contactInformation: Omit<Bookables.ContactInformation, "_id">;
-} = {
+const initialSpace: SpaceInformation = {
   address: {
     addressLine: "",
     adminDistrict: "",
@@ -35,15 +28,20 @@ const initialSpace: Pick<
   name: "",
 };
 
-const SpaceEditor = ({ space }: SpaceEditorProps) => {
-  const [updatedSpace, setUpdatedSpace] = useState<typeof initialSpace>(
+const SpaceEditor = (props: SpaceEditorProps) => {
+  const {spaceId} = useParams()
+  const space = useAppSelector(selectOwnedSpace(spaceId))
+  const [updatedSpace, setUpdatedSpace] = useState<SpaceInformation>(
     space || initialSpace
   );
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    if(space) setUpdatedSpace(space)
-    else setUpdatedSpace(initialSpace)
+    if (space) setUpdatedSpace(space);
+    else setUpdatedSpace(initialSpace);
   }, [space]);
+
   return (
     <Paper sx={{ padding: 2 }}>
       <form>
@@ -145,9 +143,15 @@ const SpaceEditor = ({ space }: SpaceEditorProps) => {
             }
           />
         </FormGroup>
-        <Button>{!space ? "Create" : "Update"}</Button>
-        <Button>Cancel</Button>
-        {space ? <Button>Delete</Button> : null}
+        {!space ? (
+          <Button onClick={() => dispatch(createSpace(updatedSpace))}>
+            Create
+          </Button>
+        ) : (
+          <Button onClick={() => dispatch(updateSpace({...updatedSpace, spaceId: space._id as unknown as string}))}>Update</Button>
+        )}
+        <Button onClick={() => setUpdatedSpace(space || initialSpace)}>Cancel</Button>
+        {space ? <Button onClick={() => dispatch(deleteSpace(space._id as unknown as string))}>Delete</Button> : null}
       </form>
       <pre>{JSON.stringify(space, null, 5)}</pre>
     </Paper>
