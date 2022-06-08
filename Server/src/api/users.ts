@@ -115,4 +115,36 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
+
+userRouter.post("/updatedUser", async (req, res) => {
+
+  try {
+
+    const {_id} = req.body
+
+    const user = await User.findOne({_id: _id});
+
+    if (!user) return res.send({ success: false, loginError: "user does not exist" });
+
+    res.send({ success: true, user: user });
+  }
+
+  catch (error) {
+
+    if (error instanceof Error) {
+      
+      console.error("ERROR:", error);
+
+      return res.send(error.message);
+    }
+
+    console.error(error);
+
+    return res.status(500).send("unknown error code");
+  }
+
+
+})
+
+
 export default userRouter;

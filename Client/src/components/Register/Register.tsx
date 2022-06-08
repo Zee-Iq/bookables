@@ -50,7 +50,7 @@ export default function Register() {
     return <Navigate to="/" />;
   }
 
-  if (regInProgress && regSuccess) return <Navigate to="/pleaseconfirm" />
+  if (regInProgress && regSuccess) return <Navigate to="/" />
 
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
