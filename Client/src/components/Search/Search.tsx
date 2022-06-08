@@ -213,9 +213,11 @@ export default function Search(props: BoxProps) {
               type="number"
               variant="outlined"
               value={searchRadius}
-              onChange={(e) =>
-                dispatch(setSearchRadius(Number.parseInt(e.target.value)))
-              }
+              onChange={(e) => {
+                const newRadius = Number.parseInt(e.target.value);
+                if (Number.isNaN(newRadius) || newRadius < 5 ) return;
+                dispatch(setSearchRadius(newRadius));
+              }}
               className="searchInput"
             />
           </Box>
