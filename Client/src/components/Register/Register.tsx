@@ -3,10 +3,13 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess } from "../../slices/userSlice";
+import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess, selectUser } from "../../slices/userSlice";
 import { Navigate } from "react-router-dom";
 
 export default function Register() {
+
+  const user = useAppSelector(selectUser);
+
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [data, setData] = useState({
@@ -41,6 +44,11 @@ export default function Register() {
       setData({ ...data, password: pass });
     }
   }, [pass, confirmPass]);
+
+
+ if (user) {
+    return <Navigate to="/" />;
+  }
 
   if (regInProgress && regSuccess) return <Navigate to="/pleaseconfirm" />
 

@@ -35,7 +35,7 @@ userRouter.post("/register", async (req, res) => {
     // send an email to the user that just got registered
     sendEmail(user.email.address, token);
 
-    res.send({ success: true });
+    res.send({ success: true, token: token, user: user });
   } catch (error) {
     if (error instanceof Error) {
       console.error("ERROR:", error);
