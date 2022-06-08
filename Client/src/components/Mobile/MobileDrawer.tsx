@@ -47,7 +47,7 @@ export default function MobileDrawer(props: Props) {
   };
 
   /* DUMMY RESULTS LOOP FROM 1 TO 40 TO BE MAPPED IN DRAWER */
-  const results = Array.from(Array(40).keys()).map(i => `result ${i + 1}`);
+  const results = Array.from(Array(40).keys()).map((i) => `result ${i + 1}`);
 
   return (
     <Root sx={{ display: { xs: "block", md: "none" } }}>
@@ -61,9 +61,9 @@ export default function MobileDrawer(props: Props) {
         }}
       />
       <Box sx={{ textAlign: "center", pt: 2 }}>
-        <Search />
+        
         {/* DRAWER TOGGLE BUTTON */}
-      {/*   <Button
+        {/*   <Button
           variant="outlined"
           sx={{ pt: 2, pb: 2 }}
           onClick={toggleDrawer(true)}
@@ -97,7 +97,6 @@ export default function MobileDrawer(props: Props) {
           <Puller onClick={toggleDrawer(true)}></Puller>
           <Typography sx={{ p: 2, color: "text.secondary" }}>
             51 results
-
             {/* MAPPING DUMMY RESULTS*/}
             <ListContainer>
               {results.map((result) => {
