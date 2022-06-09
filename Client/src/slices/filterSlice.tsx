@@ -2,24 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
 import { getMapSession } from "../components/Map/Map";
-type Location = {
-  name: string;
-  point: Bookables.Point;
-  address: Partial<{
-    addressLine: string;
-    locality: string;
-    neighborhood: string;
-    adminDistrict: string;
-    adminDistrict2: string;
-    formattedAddress: string;
-    postalCode: string;
-    countryRegion: string;
-    countryRegionIso2: string;
-    landmark: string;
-  }>;
-  confidence: "Low" | "Medium" | "High"
-};
-export type LabeledLocation = { label: string } & Location;
+
+export type LabeledLocation = { label: string } & Bookables.Location;
 interface FilterState {
   fromDate: string;
   toDate: string;
@@ -100,7 +84,7 @@ const fetchAutosuggest = createAsyncThunk(
     const encodedQuery = encodeURIComponent(query)
     const key = (await getMapSession()) || process.env.REACT_APP_BING_MAPS
     const response = await fetch(`https://dev.virtualearth.net/REST/v1/Locations?key=${key}&query=${encodedQuery}&maxResults=${20}`);
-    const locationSuggestions: Location[] = (await response.json()).resourceSets[0]?.resources;
+    const locationSuggestions: Bookables.Location[] = (await response.json()).resourceSets[0]?.resources;
     return locationSuggestions.map((suggestion) => ({
       label: suggestion.name,
       ...suggestion,
