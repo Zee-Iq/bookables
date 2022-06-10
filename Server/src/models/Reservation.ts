@@ -9,8 +9,8 @@ const reservationSchema = new Schema<Bookables.Reservation>({
     index: true,
     unique: false,
   },
-  from: { type: Date, required: true },
-  to: { type: Date, required: true },
+  from: { type: Date, required: true, index: true },
+  to: { type: Date, required: true, index: true },
 });
 
-export default model("Reservation", reservationSchema);
+export default model<Bookables.Reservation>("Reservation", reservationSchema);

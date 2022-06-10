@@ -1,8 +1,7 @@
 import {
   Autocomplete,
   Button,
-  FormGroup,
-  Paper,
+  Box,
   TextField,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +20,7 @@ import { getMapSession } from "../Map/Map";
 import env from "../../config/env";
 import axios from "axios";
 import BookablesEditor from "../BookablesEditor/BookablesEditor";
+import LabeledFormGroup from "../LabeledFormGroup/LabeledFormGroup";
 
 interface SpaceEditorProps {
   space?: Bookables.Space;
@@ -112,9 +112,9 @@ const SpaceEditor = (props: SpaceEditorProps) => {
     return <Navigate to={"./" + createdSpace._id} />;
 
   return (
-    <Paper sx={{ padding: 2 }}>
-      <form>
-        <FormGroup>
+
+      <Box>
+        <LabeledFormGroup label="Space Information">
           <TextField
             label="Name"
             value={updatedSpace.name}
@@ -129,8 +129,8 @@ const SpaceEditor = (props: SpaceEditorProps) => {
               setUpdatedSpace({ ...updatedSpace, description: e.target.value })
             }
           />
-        </FormGroup>
-        <FormGroup>
+        </LabeledFormGroup>
+        <LabeledFormGroup label="Address">
           <Autocomplete
             renderInput={(props) => (
               <TextField {...props} label="Street Address and Number" />
@@ -204,8 +204,8 @@ const SpaceEditor = (props: SpaceEditorProps) => {
             loading={fetchingSuggestions}
             freeSolo
           />
-        </FormGroup>
-        <FormGroup>
+        </LabeledFormGroup>
+        <LabeledFormGroup label="Contact Information">
           <TextField
             label="Email"
             value={updatedSpace.contactInformation.email}
@@ -232,7 +232,7 @@ const SpaceEditor = (props: SpaceEditorProps) => {
               })
             }
           />
-        </FormGroup>
+        </LabeledFormGroup>
         {space && <BookablesEditor bookables={space.bookables} spaceId={space._id as unknown as string} />}
         {!space ? (
           <Button onClick={() => dispatch(createSpace(updatedSpace))}>
@@ -264,8 +264,7 @@ const SpaceEditor = (props: SpaceEditorProps) => {
             Delete
           </Button>
         ) : null}
-      </form>
-    </Paper>
+      </Box>
   );
 };
 

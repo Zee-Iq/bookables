@@ -27,15 +27,15 @@ const YourSpaces = () => {
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: { md: "max-content 1fr" },
+        display: "flex",
+        flexDirection: {xs: "column", md: "row"},
         gap: 1,
         pb: 1,
         pt: 1,
         height: "100%"
       }}
     >
-      <Paper>
+      <Paper sx={{ p: 2 }}>
         <TextField
           label="Filter"
           type="text"
@@ -63,7 +63,9 @@ const YourSpaces = () => {
             ))}
         </List>
       </Paper>
-      <Outlet />
+      <Paper sx={{ padding: 2, overflow: "hidden" }}>
+        <Outlet />
+      </Paper>
     </Box>
   );
 };
