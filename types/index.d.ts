@@ -61,7 +61,7 @@ declare namespace Bookables {
     addressLine: string;
     adminDistrict: string;
     adminDistrict2?: string;
-    countryRegion: strin;
+    countryRegion: string;
     formattedAddress: string;
     locality: string;
     postalCode: string;
