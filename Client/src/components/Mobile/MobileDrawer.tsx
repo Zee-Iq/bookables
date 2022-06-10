@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { Button, Container } from "@mui/material";
 import SwipeVerticalSharpIcon from "@mui/icons-material/SwipeVerticalSharp";
-import DrawerListMobile from "./DrawerListMobile";
 import DrawerList from "./DrawerList";
 
 const drawerBleeding = 70;
@@ -114,11 +113,13 @@ export default function MobileDrawer(props: Props) {
               </Box>
             </Box>
           </Container>
-          <Typography sx={{ p: 2, color: "text.secondary" }}>
+          <Typography
+            onClick={(event) => event.stopPropagation()}
+            sx={{ p: 2, color: "text.secondary" }}
+          >
             {/* MAPPING DUMMY RESULTS*/}
             <Container>
               <ListContainer>
-                <DrawerListMobile />
                 <DrawerList />
               </ListContainer>
             </Container>
