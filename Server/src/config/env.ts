@@ -7,11 +7,19 @@ interface Env {
   SMTP_PASS: string;
   SECRET: string;
   URL: string;
+  BING_MAPS: string;
   WEBSITES_PORT: string;
 }
 
 function parseEnv(env: NodeJS.ProcessEnv): Env {
   const parsedEnv = { ...env };
+
+  if (typeof parsedEnv.APPSETTING_BING_MAPS === "string")
+  parsedEnv.BING_MAPS = parsedEnv.APPSETTING_BING_MAPS;
+
+  if (typeof parsedEnv.BING_MAPS !== "string")
+    throw new Error("env.BING_MAPS is missing");
+
 
   if (typeof parsedEnv.APPSETTING_WEBSITES_PORT === "string")
     parsedEnv.WEBSITES_PORT = parsedEnv.APPSETTING_WEBSITES_PORT;
