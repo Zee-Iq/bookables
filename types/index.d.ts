@@ -46,7 +46,8 @@ declare namespace Bookables {
   export type BookableType = "seat" | "room";
   interface Bookable {
     _id: Types.ObjectId;
-    identification: string;
+    spaceId: Types.ObjectId;
+    name: string;
     type: BookableType;
     hourlyRate: number;
   }
@@ -84,6 +85,12 @@ declare namespace Bookables {
     point: Point;
     bookables: Bookable[];
     contactInformation: ContactInformation;
+  }
+
+  type Reservation = {
+    bookableId: Types.ObjectId;
+    from: Date;
+    to: Date;
   }
 
   type Location = {

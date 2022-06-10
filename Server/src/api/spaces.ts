@@ -6,6 +6,7 @@ import env from "../config/env";
 import Space from "../models/Space";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
+import Bookable from "../models/Bookable";
 
 const spacesRouter = express.Router();
 
@@ -56,7 +57,8 @@ spacesRouter.use(catchErrors(authMiddleware()));
 spacesRouter.get(
   "/owned",
   catchErrors(async (req, res) => {
-    return res.json(await Space.find({ owner: req.user!._id }).exec());
+
+    return res.json(await Space.find({ owner: req.user!._id }).populate("bookables").exec());
   })
 );
 
@@ -70,6 +72,7 @@ async function setSpace(
   requestBody: any
 ) {
   for (const path in Space.schema.paths) {
+    console.log(path)
     if (Object.prototype.hasOwnProperty.call(requestBody, path)) {
       if (path.startsWith("_") || path === "point" || path === "owner")
         continue;
@@ -91,7 +94,8 @@ spacesRouter.post(
     const space = new Space();
     await setSpace(space, req.body);
     space.set("owner", req.user!._id);
-    return res.status(201).json(await space.save());
+    await (await space.populate("bookables")).save()
+    return res.status(201).json(space);
   })
 );
 
@@ -107,6 +111,7 @@ spacesRouter.patch(
     await setSpace(space, req.body);
 
     await space.save();
+    await space.populate("bookables");
     return res.json(space);
   })
 );
@@ -130,8 +135,9 @@ spacesRouter.post(
     const space = await Space.findById(spaceId).exec();
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
-    space.bookables.push(req.body);
-    await space.save();
+    const bookable = new Bookable({...req.body, spaceId});
+    await bookable.save();
+    await space.populate("bookables")
     return res.json(space);
   })
 );
@@ -140,15 +146,14 @@ spacesRouter.patch(
   "/:spaceId/:bookableId/updateBookable",
   catchErrors(async (req, res) => {
     const { spaceId, bookableId } = req.params;
-    const space = await Space.findById(spaceId).exec();
+    const [space, bookable] = await Promise.all([Space.findById(spaceId).exec(), Bookable.findById(bookableId).exec()])
     if (!space) throw new SpaceNotFoundError(spaceId);
+    console.log(bookable)
+    if (!bookable || !bookable.spaceId.equals(space._id)) throw new BookableNotFoundError(bookableId, spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
-    const bookable = space.bookables.find(
-      (bookable) => bookable._id.toHexString() === bookableId
-    );
-    if (!bookable) throw new BookableNotFoundError(bookableId, spaceId);
     Object.assign(bookable, req.body);
-    await space.save();
+    await bookable.save();
+    await space.populate("bookables")
     return res.json(space);
   })
 );
@@ -157,16 +162,14 @@ spacesRouter.delete(
   "/:spaceId/:bookableId/deleteBookable",
   catchErrors(async (req, res) => {
     const { spaceId, bookableId } = req.params;
-    const space = await Space.findById(spaceId).exec();
+    const [space, bookable] = await Promise.all([Space.findById(spaceId).exec(), Bookable.findById(bookableId).exec()])
+    console.log("space", space)
+    console.log("bookables", bookable)
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
-    const initialLength = space.bookables.length;
-    space.bookables = space.bookables.filter(
-      (bookable) => !bookable._id.equals(bookableId)
-    );
-    if (initialLength === space.bookables.length)
-      throw new BookableNotFoundError(bookableId, spaceId);
-    await space.save();
+    if (!bookable || !bookable.spaceId.equals(space._id) ) throw new BookableNotFoundError(bookableId, spaceId);
+    await bookable.delete()
+    await space.populate("bookables");
     return res.json(space);
   })
 );

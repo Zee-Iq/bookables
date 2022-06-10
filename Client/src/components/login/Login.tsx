@@ -2,27 +2,41 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { login, selectUser, selectLoginInError, setLoginError } from "../../slices/userSlice";
+import {
+  login,
+  selectUser,
+  selectLoginInError,
+  setLoginError,
+} from "../../slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const loginError = useAppSelector(selectLoginInError);
+  const location = useLocation();
 
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  let from = (location.state as any)?.from?.pathname || "/";
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
-    return <Navigate to="/" />;
+    dispatch(setLoginError(null));
+    return (
+      <Navigate
+        to={from}
+        replace
+      />
+    );
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!data.password || !data.email) return dispatch(setLoginError("Email and Password are required"));
+    if (!data.password || !data.email)
+      return dispatch(setLoginError("Email and Password are required"));
     dispatch(login({ email: data.email, password: data.password }));
   };
 
@@ -77,4 +91,11 @@ export default function Login() {
       </div>
     </Box>
   );
+}
+
+function isStateObject(
+  state: unknown
+): state is { [key: string | number]: unknown } {
+  if (typeof state !== "object" || state !== null) return false;
+  return true;
 }

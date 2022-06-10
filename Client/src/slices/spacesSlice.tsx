@@ -9,12 +9,14 @@ interface SpacesState {
   spacesInArea: Bookables.Space[];
   ownedSpaces: Bookables.Space[];
   selectedSpace: Bookables.Space | null;
+  createdSpace: Bookables.Space | null;
 }
 
 const initialState: SpacesState = {
   spacesInArea: [],
   ownedSpaces: [],
   selectedSpace: null,
+  createdSpace: null,
 };
 
 const spacesSlice = createSlice({
@@ -33,11 +35,16 @@ const spacesSlice = createSlice({
       state.ownedSpaces.push(action.payload);
     },
     updateOwnedSpace(state, action: PayloadAction<Bookables.Space>) {
-      state.ownedSpaces = state.ownedSpaces.map(space => space._id === action.payload._id ? action.payload : space)
+      state.ownedSpaces = state.ownedSpaces.map((space) =>
+        space._id === action.payload._id ? action.payload : space
+      );
     },
     setSpacesInArea(state, action: PayloadAction<Bookables.Space[]>) {
       state.spacesInArea = action.payload;
     },
+    setCreatedSpace(state, action: PayloadAction<Bookables.Space | null>) {
+      state.createdSpace = action.payload
+    }
   },
 });
 
@@ -110,16 +117,25 @@ export const createSpace = createAsyncThunk(
   "spaces/createSpace",
   async (space: SpaceInformation, thunkApi) => {
     const { dispatch } = thunkApi;
-    const { addOwnedSpace } = spacesSlice.actions;
+    const { addOwnedSpace, setCreatedSpace } = spacesSlice.actions;
     const state = thunkApi.getState() as RootState;
     const user = selectUser(state);
     const token = selectToken(state);
     if (!user || !user.roles.includes("host") || !token) return;
-    const response = await axios.post<Bookables.Space>(`/spaces/create`, space, {
-      headers: { authorization: `bearer ${token}` },
-      validateStatus: () => true,
-    });
-    if (response.status === 201) return dispatch(addOwnedSpace(response.data));
+    const response = await axios.post<Bookables.Space>(
+      `/spaces/create`,
+      space,
+      {
+        headers: { authorization: `bearer ${token}` },
+        validateStatus: () => true,
+      }
+    );
+    if (response.status === 201) {
+      dispatch(addOwnedSpace(response.data));
+      dispatch(setCreatedSpace(response.data));
+      setTimeout(() => dispatch(setCreatedSpace(null)))
+      
+    }
   }
 );
 
@@ -142,7 +158,8 @@ export const updateSpace = createAsyncThunk(
         validateStatus: () => true,
       }
     );
-    if (response.status === 200) return dispatch(updateOwnedSpace(response.data));
+    if (response.status === 200)
+      return dispatch(updateOwnedSpace(response.data));
   }
 );
 
@@ -155,7 +172,16 @@ export const selectSpacesInArea = (state: RootState) =>
   state.spaces.spacesInArea;
 export const seletOwnedSpaces = (state: RootState) => state.spaces.ownedSpaces;
 
-export const selectOwnedSpace = (id: string | undefined) => (state: RootState) => id ? state.spaces.ownedSpaces.find(space => space._id as unknown as string === id) : null
+export const selectOwnedSpace =
+  (id: string | undefined) => (state: RootState) =>
+    id
+      ? state.spaces.ownedSpaces.find(
+          (space) => (space._id as unknown as string) === id
+        )
+      : null;
+
+export const selectCreatedSpace = (state: RootState) =>
+      state.spaces.createdSpace;
 
 // exporting actions
 //export const {} = spacesSlice.actions;
