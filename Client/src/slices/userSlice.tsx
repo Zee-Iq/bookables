@@ -69,8 +69,6 @@ export const register = createAsyncThunk(
       "users/register",
       registerInformation
     );
-
-    console.log("response.data.success ", response.data.success);
     if (response.data.success)
       thunkApi.dispatch(userSlice.actions.setRegSuccess(true));
     else throw new Error("something went wrong");

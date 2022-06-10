@@ -9,6 +9,7 @@ import AppStyles from "./AppStyles";
 import YourSpaces from "./components/YourSpaces/YourSpaces";
 import SingleSpace from "./components/SingleSpace/SingleSpace";
 import RegisterSpace from "./components/registerSpace/RegisterSpace";
+import SpaceEditor from "./components/SpaceEditor/SpaceEditor";
 
 const App = () => {
   return (
@@ -17,7 +18,10 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="singlespace" element={<SingleSpace />} />
-          <Route path="yourspaces" element={<YourSpaces />} />
+          <Route path="yourspaces" element={<YourSpaces />}>
+            <Route index element={<SpaceEditor />} />
+            <Route path=":spaceId" element={<SpaceEditor />} />
+          </Route>
           <Route
             path="/emailConfirmation/:token"
             element={<EmailConfirmed />}
@@ -25,6 +29,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
 
           <Route path="/login" element={<Login />} />
+
           <Route path="/registerSpace" element={<RegisterSpace />} />
         </Route>
       </Routes>

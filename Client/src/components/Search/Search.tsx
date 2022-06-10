@@ -65,6 +65,8 @@ export default function Search(props: BoxProps) {
           ...props.sx,
           "& .searchInput": { width: "100%", boxSizing: "border-box" },
           p: 2,
+          display:{xs:"block"}
+
         },
       }}
     >
@@ -162,14 +164,16 @@ export default function Search(props: BoxProps) {
         </LocalizationProvider>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Button
+        <Button 
           variant="text"
+          color="secondary"
           endIcon={
             showsAdditionalFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />
           }
           onClick={() => setShowsAdditionalFilters(!showsAdditionalFilters)}
         >
-          <Typography>More Filters</Typography>
+          <Button variant="text" color="info" >More Filters</Button>
+          {/* <Typography color="secondary">More Filters</Typography> */}
         </Button>
         {showsAdditionalFilters ? (
           <Box
@@ -178,6 +182,7 @@ export default function Search(props: BoxProps) {
               display: "grid",
               gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
               gap: 2,
+
             }}
           >
             <FormControl className="searchInput">
@@ -213,9 +218,11 @@ export default function Search(props: BoxProps) {
               type="number"
               variant="outlined"
               value={searchRadius}
-              onChange={(e) =>
-                dispatch(setSearchRadius(Number.parseInt(e.target.value)))
-              }
+              onChange={(e) => {
+                const newRadius = Number.parseInt(e.target.value);
+                if (Number.isNaN(newRadius) || newRadius < 5 ) return;
+                dispatch(setSearchRadius(newRadius));
+              }}
               className="searchInput"
             />
           </Box>

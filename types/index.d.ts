@@ -60,7 +60,7 @@ declare namespace Bookables {
     _id: Types.ObjectId;
     addressLine: string;
     adminDistrict: string;
-    adminDistrict2: string;
+    adminDistrict2?: string;
     countryRegion: strin;
     formattedAddress: string;
     locality: string;
@@ -85,6 +85,24 @@ declare namespace Bookables {
     bookables: Bookable[];
     contactInformation: ContactInformation;
   }
+
+  type Location = {
+  name: string;
+  point: Bookables.Point;
+  address: Partial<{
+    addressLine: string;
+    locality: string;
+    neighborhood: string;
+    adminDistrict: string;
+    adminDistrict2: string;
+    formattedAddress: string;
+    postalCode: string;
+    countryRegion: string;
+    countryRegionIso2: string;
+    landmark: string;
+  }>;
+  confidence: "Low" | "Medium" | "High"
+};
 }
 
 export default Bookables;

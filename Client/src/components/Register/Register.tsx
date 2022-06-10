@@ -62,11 +62,10 @@ export default function Register() {
       password: data.password,
     };
 
-    console.log("registerInformation ", registerInformation);
+
     dispatch(register(registerInformation));
   };
 
-console.log("response is", );
 
 
   return (

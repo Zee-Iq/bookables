@@ -16,7 +16,6 @@ export default function Login() {
     email: "",
     password: "",
   });
-  console.log(user);
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
     return <Navigate to="/" />;
