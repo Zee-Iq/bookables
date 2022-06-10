@@ -99,6 +99,8 @@ const Topbar = () => {
                 BOOKABLES
               </Typography>
             </Link>
+              
+                
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -152,7 +154,7 @@ const Topbar = () => {
             <Box sx={{ display: "flex" }}>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
-                  <Button
+                  <Button variant="text" 
                     key={page}
                     onClick={() => {
                       handleSelectPage(page);
