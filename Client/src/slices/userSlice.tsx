@@ -95,7 +95,7 @@ const userSlice = createSlice({
     setLoginInProgress: (state, action: PayloadAction<boolean>) => {
       state.loginInProgress = action.payload;
     },
-    setLoginError: (state, action: PayloadAction<string>) => {
+    setLoginError: (state, action: PayloadAction<string | null>) => {
       state.loginError = action.payload;
     },
     setRegError: (state, action: PayloadAction<string>) => {
