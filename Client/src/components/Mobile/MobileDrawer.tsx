@@ -11,8 +11,6 @@ import SwipeVerticalSharpIcon from "@mui/icons-material/SwipeVerticalSharp";
 import DrawerListMobile from "./DrawerListMobile";
 import DrawerList from "./DrawerList";
 
-
-
 const drawerBleeding = 70;
 
 interface Props {
@@ -41,7 +39,6 @@ const ListContainer = styled(Box)(() => ({
   marginTop: "20px",
   maxHeight: "550px",
   overflow: "auto",
-  
 }));
 
 export default function MobileDrawer(props: Props) {
@@ -54,11 +51,9 @@ export default function MobileDrawer(props: Props) {
   /* DUMMY RESULTS LOOP FROM 1 TO 40 TO BE MAPPED IN DRAWER */
   const results = Array.from(Array(40).keys()).map((i) => `result ${i + 1}`);
 
-   
-
   return (
     <Root sx={{ display: { xs: "block", md: "block" } }}>
-      <CssBaseline  />
+      <CssBaseline />
       <Global
         styles={{
           ".MuiDrawer-root > .MuiPaper-root": {
@@ -67,20 +62,8 @@ export default function MobileDrawer(props: Props) {
           },
         }}
       />
-      {/* DRAWER TOGGLE BUTTON JUST FOR DEVELOPER USE */}
 
-      {/* <Box sx={{ textAlign: "center", pt: 2 }}>
-        
-        <Button
-          variant="outlined"
-          sx={{ pt: 2, pb: 2 }}
-          onClick={toggleDrawer(true)}
-        >
-          Show all available spaces
-        </Button> 
-      </Box>*/}
       <SwipeableDrawer
-        className="DrawerStyle"
         anchor="bottom"
         open={open}
         onClose={toggleDrawer(false)}
@@ -104,7 +87,6 @@ export default function MobileDrawer(props: Props) {
             display: { xs: "block", md: "block" },
             pointerEvents: "all",
           }}
-          
         >
           <Puller />
           <Container>
@@ -117,9 +99,10 @@ export default function MobileDrawer(props: Props) {
             >
               <Box>
                 <Button>
-                    <Button variant="text" color="info" >Available spaces</Button>
-                  <Box sx={{ flexGrow: 2 }}>
-                  </Box>
+                  <Button variant="text" color="info">
+                    Available spaces
+                  </Button>
+                  <Box sx={{ flexGrow: 2 }}></Box>
                   <Box>
                     <SwipeVerticalSharpIcon
                       color="secondary"
@@ -137,7 +120,6 @@ export default function MobileDrawer(props: Props) {
               <ListContainer>
                 <DrawerListMobile />
                 <DrawerList />
-                
               </ListContainer>
             </Container>
           </Typography>

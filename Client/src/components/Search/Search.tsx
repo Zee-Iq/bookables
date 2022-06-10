@@ -65,7 +65,7 @@ export default function Search(props: BoxProps) {
           ...props.sx,
           "& .searchInput": { width: "100%", boxSizing: "border-box" },
           p: 2,
-          display:{xs:"none", md:"block"}
+          display:{xs:"block"}
 
         },
       }}
@@ -164,14 +164,16 @@ export default function Search(props: BoxProps) {
         </LocalizationProvider>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Button
+        <Button 
           variant="text"
+          color="secondary"
           endIcon={
             showsAdditionalFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />
           }
           onClick={() => setShowsAdditionalFilters(!showsAdditionalFilters)}
         >
-          <Typography>More Filters</Typography>
+          <Button variant="text" color="info" >More Filters</Button>
+          {/* <Typography color="secondary">More Filters</Typography> */}
         </Button>
         {showsAdditionalFilters ? (
           <Box
