@@ -1,13 +1,17 @@
 import * as React from "react";
-import { ClassNames, Global } from "@emotion/react";
+import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Search from "../Search/Search";
-import { Button, List, ListItem } from "@mui/material";
+import { Button, Container } from "@mui/material";
+import SwipeVerticalSharpIcon from "@mui/icons-material/SwipeVerticalSharp";
+import DrawerListMobile from "./DrawerListMobile";
+import DrawerList from "./DrawerList";
+
+
 
 const drawerBleeding = 70;
 
@@ -35,8 +39,9 @@ const Puller = styled(Box)(({ theme }) => ({
 
 const ListContainer = styled(Box)(() => ({
   marginTop: "20px",
-  maxHeight: "350px",
+  maxHeight: "550px",
   overflow: "auto",
+  
 }));
 
 export default function MobileDrawer(props: Props) {
@@ -49,9 +54,11 @@ export default function MobileDrawer(props: Props) {
   /* DUMMY RESULTS LOOP FROM 1 TO 40 TO BE MAPPED IN DRAWER */
   const results = Array.from(Array(40).keys()).map((i) => `result ${i + 1}`);
 
+   
+
   return (
-    <Root sx={{ display: { xs: "block", md: "none" } }}>
-      <CssBaseline />
+    <Root sx={{ display: { xs: "block", md: "block" } }}>
+      <CssBaseline  />
       <Global
         styles={{
           ".MuiDrawer-root > .MuiPaper-root": {
@@ -60,24 +67,27 @@ export default function MobileDrawer(props: Props) {
           },
         }}
       />
-      <Box sx={{ textAlign: "center", pt: 2 }}>
+      {/* DRAWER TOGGLE BUTTON JUST FOR DEVELOPER USE */}
+
+      {/* <Box sx={{ textAlign: "center", pt: 2 }}>
         
-        {/* DRAWER TOGGLE BUTTON */}
-        {/*   <Button
+        <Button
           variant="outlined"
           sx={{ pt: 2, pb: 2 }}
           onClick={toggleDrawer(true)}
         >
           Show all available spaces
-        </Button> */}
-      </Box>
+        </Button> 
+      </Box>*/}
       <SwipeableDrawer
+        className="DrawerStyle"
         anchor="bottom"
         open={open}
         onClose={toggleDrawer(false)}
+        onClick={toggleDrawer(!open)}
         onOpen={toggleDrawer(true)}
         swipeAreaWidth={drawerBleeding}
-        disableSwipeToOpen={false}
+        disableSwipeToOpen={true}
         ModalProps={{
           keepMounted: true,
         }}
@@ -91,18 +101,45 @@ export default function MobileDrawer(props: Props) {
             visibility: "visible",
             right: 0,
             left: 0,
-            display: { xs: "block", md: "none" },
+            display: { xs: "block", md: "block" },
+            pointerEvents: "all",
           }}
+          
         >
-          <Puller onClick={toggleDrawer(true)}></Puller>
+          <Puller />
+          <Container>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: 2,
+              }}
+            >
+              <Box>
+                <Button>
+                    <Button variant="text" color="info" >Available spaces</Button>
+                  <Box sx={{ flexGrow: 2 }}>
+                  </Box>
+                  <Box>
+                    <SwipeVerticalSharpIcon
+                      color="secondary"
+                      fontSize="small"
+                      sx={{ marginTop: "0.25rem" }}
+                    />
+                  </Box>
+                </Button>
+              </Box>
+            </Box>
+          </Container>
           <Typography sx={{ p: 2, color: "text.secondary" }}>
-            51 results
             {/* MAPPING DUMMY RESULTS*/}
-            <ListContainer>
-              {results.map((result) => {
-                return <div>{result}</div>;
-              })}
-            </ListContainer>
+            <Container>
+              <ListContainer>
+                <DrawerListMobile />
+                <DrawerList />
+                
+              </ListContainer>
+            </Container>
           </Typography>
         </StyledBox>
         <StyledBox
@@ -110,7 +147,7 @@ export default function MobileDrawer(props: Props) {
             px: 2,
             pb: 2,
             height: "100%",
-            overflow: "auto",
+            overflow: "hidden",
           }}
         ></StyledBox>
       </SwipeableDrawer>
