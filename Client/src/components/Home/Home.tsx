@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../hooks";
 import { fetchSpacesInArea } from "../../slices/spacesSlice";
 import Map from "../Map/Map";
-import MobileDrawer from "../Mobile/MobileDrawer";
+import SwipeableDrawerEdge from "../SwipeableDrawerEdge/SwipeableDrawerEdge";
 import Search from "../Search/Search";
 const Home = () => {
   const dispatch = useAppDispatch()
@@ -13,7 +13,7 @@ const Home = () => {
   }, [dispatch])
   return (
     <Box>
-    <MobileDrawer />
+    <SwipeableDrawerEdge />
     <Search />
     <Map />
     </Box>

@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { Button, Container } from "@mui/material";
 import SwipeVerticalSharpIcon from "@mui/icons-material/SwipeVerticalSharp";
-import DrawerList from "./DrawerList";
+import BookablesList from "../BookablesList/BookablesList";
 
 const drawerBleeding = 70;
 
@@ -120,7 +120,7 @@ export default function MobileDrawer(props: Props) {
             {/* MAPPING DUMMY RESULTS*/}
             <Container>
               <ListContainer>
-                <DrawerList />
+                <BookablesList />
               </ListContainer>
             </Container>
           </Typography>
