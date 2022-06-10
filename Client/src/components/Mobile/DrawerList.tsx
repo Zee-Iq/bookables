@@ -45,7 +45,7 @@ export default function DrawerList() {
   };
 
   return (
-    <Box sx={{display: {xs:"none", md:"flex" }, flexGrow: 1,  height: 400,  }}>
+    <Box sx={{display: {xs:"flex", md:"flex" }, flexGrow: 1,  height: 400,  }}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
