@@ -10,6 +10,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const loginError = useAppSelector(selectLoginInError);
+  
 
   const [data, setData] = useState({
     email: "",
@@ -26,6 +27,7 @@ export default function Login() {
     if (!data.password || !data.email) return dispatch(setLoginError("Email and Password are required"));
     dispatch(login({ email: data.email, password: data.password }));
   };
+
 
   return (
     <Box
