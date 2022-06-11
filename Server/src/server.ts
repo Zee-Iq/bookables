@@ -5,6 +5,7 @@ import env from "./config/env";
 import spacesRouter from "./api/spaces"
 import userRouter from "./api/users"
 import path from "path";
+import reservationRouter from "./api/reservation";
 
 declare global {
   namespace Express {
@@ -20,6 +21,7 @@ const app = express();
 
 app.use("/users", userRouter);
 app.use("/spaces", spacesRouter);
+app.use("/reservations", reservationRouter);
 
 const spaDir = path.join(__dirname,"public")
 const spaIndex = path.join(spaDir,"index.html")
