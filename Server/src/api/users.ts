@@ -120,9 +120,16 @@ userRouter.post("/updatedUser", async (req, res) => {
 
   try {
 
-    const {_id} = req.body
+    const {token} = req.body
 
-    const user = await User.findOne({_id: _id});
+    const verify = jwt.verify(token, env.SECRET);
+
+    if (typeof verify == "string") {
+      return res.sendStatus(400);
+    }
+
+    
+    const user = await User.findOne({_id:  verify.id});
 
     if (!user) return res.send({ success: false, loginError: "user does not exist" });
 
