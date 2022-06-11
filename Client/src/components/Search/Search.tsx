@@ -166,14 +166,13 @@ export default function Search(props: BoxProps) {
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Button 
           variant="text"
-          color="secondary"
           endIcon={
             showsAdditionalFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />
           }
           onClick={() => setShowsAdditionalFilters(!showsAdditionalFilters)}
         >
-          <Button variant="text" color="info" >More Filters</Button>
-          {/* <Typography color="secondary">More Filters</Typography> */}
+          
+           <Typography >More Filters</Typography> 
         </Button>
         {showsAdditionalFilters ? (
           <Box

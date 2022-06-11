@@ -6,16 +6,16 @@ import Map from "../Map/Map";
 import SwipeableDrawerEdge from "../SwipeableDrawerEdge/SwipeableDrawerEdge";
 import Search from "../Search/Search";
 const Home = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchSpacesInArea({} as any))
-  }, [dispatch])
+    dispatch(fetchSpacesInArea({} as any));
+  }, [dispatch]);
   return (
     <Box>
-    <SwipeableDrawerEdge />
-    <Search />
-    <Map />
+      <SwipeableDrawerEdge />
+      <Search />
+      <Map />
     </Box>
   );
 };
