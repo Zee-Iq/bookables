@@ -10,11 +10,18 @@ const Layout = () => {
         flexDirection: "column",
         width: "100vw",
         height: "100vh",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
-      <Topbar />
-      <Box sx={{flexGrow: 1}}>
+        <Topbar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          height: "1px",
+          width: "100%",
+          position: "relative",
+        }}
+      >
         <Outlet />
       </Box>
     </Container>
