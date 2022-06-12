@@ -55,6 +55,7 @@ spaceSchema.virtual("bookables", {
 });
 
 spaceSchema.index({ owner: 1, name: 1 }, { unique: true });
+spaceSchema.index({point: "2dsphere"})
 
 const Space = model<Bookables.Space>("Space", spaceSchema);
 export default Space;

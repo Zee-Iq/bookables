@@ -70,7 +70,7 @@ declare namespace Bookables {
 
   type Latitude = number;
   type Longitude = number;
-  type Coordinates = [Latitude, Longitude];
+  type Coordinates = [Longitude,Latitude];
 
   type Point = {
     type: "Point";
