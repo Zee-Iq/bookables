@@ -5,9 +5,9 @@ import Search from "../Search/Search";
 const Home = () => {
   return (
     <Box>
-    <SwipeableDrawerEdge />
-    <Search />
-    <Map />
+      <SwipeableDrawerEdge />
+      <Search />
+      <Map />
     </Box>
   );
 };

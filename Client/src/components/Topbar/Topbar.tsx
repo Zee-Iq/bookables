@@ -118,7 +118,7 @@ const Topbar = () => {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar color="secondary" position="fixed">
         <Container>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Link style={{ textDecoration: "none", color: "unset" }} to="/">

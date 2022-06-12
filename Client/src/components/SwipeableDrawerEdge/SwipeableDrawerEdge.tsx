@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import { grey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -52,7 +51,6 @@ export default function MobileDrawer(props: Props) {
 
   return (
     <Root sx={{ display: { xs: "block", md: "block" } }}>
-      <CssBaseline />
       <Global
         styles={{
           ".MuiDrawer-root > .MuiPaper-root": {
@@ -96,34 +94,21 @@ export default function MobileDrawer(props: Props) {
                 marginTop: 2,
               }}
             >
-              <Box>
-                <Button>
-                  <Button variant="text" color="info">
-                    Available spaces
-                  </Button>
-                  <Box sx={{ flexGrow: 2 }}></Box>
-                  <Box>
-                    <SwipeVerticalSharpIcon
-                      color="secondary"
-                      fontSize="small"
-                      sx={{ marginTop: "0.25rem" }}
-                    />
-                  </Box>
-                </Button>
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Typography color={"primary"}>Available spaces</Typography>
+                <SwipeVerticalSharpIcon color="primary" fontSize="small" />
               </Box>
             </Box>
           </Container>
-          <Typography
+
+          <Container
             onClick={(event) => event.stopPropagation()}
             sx={{ p: 2, color: "text.secondary" }}
           >
-            {/* MAPPING DUMMY RESULTS*/}
-            <Container>
-              <ListContainer>
-                <BookablesList />
-              </ListContainer>
-            </Container>
-          </Typography>
+            <ListContainer>
+              <BookablesList />
+            </ListContainer>
+          </Container>
         </StyledBox>
         <StyledBox
           sx={{
