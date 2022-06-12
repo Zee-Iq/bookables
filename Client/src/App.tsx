@@ -10,6 +10,7 @@ import YourSpaces from "./components/YourSpaces/YourSpaces";
 import SingleSpace from "./components/SingleSpace/SingleSpace";
 import RegisterSpace from "./components/registerSpace/RegisterSpace";
 import SpaceEditor from "./components/SpaceEditor/SpaceEditor";
+import Profile from "./components/Profile/Profile";
 
 const App = () => {
   return (
@@ -27,10 +28,9 @@ const App = () => {
             element={<EmailConfirmed />}
           />
           <Route path="/register" element={<Register />} />
-
           <Route path="/login" element={<Login />} />
-
           <Route path="/registerSpace" element={<RegisterSpace />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </Box>
