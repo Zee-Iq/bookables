@@ -21,7 +21,7 @@ export default function LabeledFormGroup({
         p: 2,
         border: "1px solid",
         borderColor: "primary.main",
-        borderRadius: "0.5rem",
+        borderRadius: 1,
       }}
     >
       <Typography

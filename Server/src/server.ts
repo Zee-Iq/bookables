@@ -6,6 +6,7 @@ import spacesRouter from "./api/spaces"
 import userRouter from "./api/users"
 import path from "path";
 import reservationRouter from "./api/reservation";
+import { errorHandler } from "./middlewares/errorhandler";
 
 declare global {
   namespace Express {
@@ -29,6 +30,8 @@ app.use("/", express.static(spaDir))
 app.get("*", (req, res) => {
   res.sendFile(spaIndex)
 })
+
+app.use(errorHandler)
 
 app.listen(env.WEBSITES_PORT || 4000, () => {
   console.log(`App running on ${env.WEBSITES_PORT ? env.WEBSITES_PORT : 4000}`);

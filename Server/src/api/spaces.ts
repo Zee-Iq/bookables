@@ -4,24 +4,144 @@ import mongoose from "mongoose";
 import Bookables from "types";
 import env from "../config/env";
 import Space from "../models/Space";
-import jwt from "jsonwebtoken";
-import User from "../models/User";
 import Bookable from "../models/Bookable";
 import Reservation from "../models/Reservation";
-import { authMiddleware, catchErrors } from "../utils";
-import { BookableNotFoundError, ClientError, MultipleLocationsFoundError, NoLocationFoundError, SpaceNotFoundError, UnexpectedResponseError } from "../errors";
+import { catchErrors } from "../utils";
+import {
+  BookableNotFoundError,
+  InvalidQueryParameterError,
+  MissingQueryParameterError,
+  MultipleLocationsFoundError,
+  NoLocationFoundError,
+  SpaceNotFoundError,
+  UnexpectedResponseError,
+} from "../errors";
+import { authMiddleware } from "../middlewares/auth";
 
 const spacesRouter = express.Router();
 
-
-
-spacesRouter.use(express.json(), express.urlencoded());
+spacesRouter.use(express.json());
 
 spacesRouter.get(
-  "/",
+  "/list",
   catchErrors(async (req, res) => {
-    console.warn("Implement fetching spaces by location and radius.");
-    return res.json(await Space.find().exec());
+    const spaces = await Space.find().exec();
+    res.json(spaces);
+  })
+);
+
+spacesRouter.get(
+  "/availableinarea",
+  catchErrors(async (req, res) => {
+    const { from, to, types: typesQuery, nw: nwQuery, se: seQuery } = req.query;
+    if (!from || !to || !typesQuery || !nwQuery || !seQuery)
+      throw new MissingQueryParameterError(
+        ["from", "to", "types", "nw", "se"],
+        req.query
+      );
+    let types: "room" | "seat"[];
+    try {
+      types = JSON.parse(typesQuery as string);
+    } catch (error) {
+      console.log(error);
+      throw new InvalidQueryParameterError(
+        "types",
+        '"room" | "seat"[]',
+        typesQuery
+      );
+    }
+
+    let nw: number[];
+    try {
+      nw = JSON.parse(nwQuery as string);
+    } catch (error) {
+      console.log(error);
+      throw new InvalidQueryParameterError(
+        "ne",
+        "[longitude, latitude]",
+        nwQuery
+      );
+    }
+
+    let se: number[];
+    try {
+      se = JSON.parse(seQuery as string);
+    } catch (error) {
+      console.log(error);
+      throw new InvalidQueryParameterError(
+        "se",
+        "[longitude, latitude]",
+        seQuery
+      );
+    }
+
+    const unavailableBookableIds = await Reservation.find({
+      from: { $lte: to },
+      to: { $gte: from },
+    })
+      .exec()
+      .then((reservations) =>
+        reservations.map((reservation) => reservation.bookableId)
+      );
+
+    /*     const spaces = await Space.find({
+      point: {
+        $geoWithin: {
+          $geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [11.647095532226572, 51.660819175987264],
+                [12.222504467773447, 51.660819175987264],
+                [12.222504467773447, 51.30247689929721],
+                [11.647095532226572, 51.30247689929721],
+                [11.647095532226572, 51.660819175987264],
+              ],
+            ],
+          },
+        },
+      },
+    })
+      .populate({
+        path: "bookables",
+        match: {
+          _id: { $nin: unavailableBookableIds },
+          type: { $in: types },
+        },
+      })
+      .exec(); */
+
+    const spaces = await Space.where("point")
+      .within({
+        box: [nw, se],
+      })
+      .populate({
+        path: "bookables",
+        match: {
+          _id: { $nin: unavailableBookableIds },
+          type: { $in: types },
+        },
+      })
+      .exec();
+
+    /*       const spaces = await Space.find({
+      point: {
+        $near: {
+          $geometry: { type: "Point", coordinates: [lat, long] },
+          $maxDistance: radius,
+        },
+      },
+    })
+      .populate({
+        path: "bookables",
+        match: {
+          _id: { $nin: unavailableBookableIds },
+          type: { $in: types },
+        },
+      })
+      .exec(); */
+
+    res.json(spaces);
   })
 );
 
@@ -35,7 +155,6 @@ spacesRouter.get(
     );
   })
 );
-
 
 async function setSpace(
   space: mongoose.Document<unknown, any, Bookables.Space> &
@@ -72,9 +191,8 @@ spacesRouter.post(
 
 spacesRouter.patch(
   "/:spaceId/update",
-  catchErrors(async (req, res, next) => {
+  catchErrors(async (req, res) => {
     const { spaceId } = req.params;
-    console.log(spaceId);
     const space = await Space.findById(spaceId).exec();
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
@@ -106,7 +224,7 @@ spacesRouter.post(
     const space = await Space.findById(spaceId).exec();
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
-    const bookable = new Bookable({ ...req.body, spaceId });
+    const bookable = new Bookable({ ...req.body, spaceId, _id: undefined });
     await bookable.save();
     await space.populate("bookables");
     return res.json(space);
@@ -116,13 +234,13 @@ spacesRouter.post(
 spacesRouter.patch(
   "/:spaceId/:bookableId/updateBookable",
   catchErrors(async (req, res) => {
+    console.log("here")
     const { spaceId, bookableId } = req.params;
     const [space, bookable] = await Promise.all([
       Space.findById(spaceId).exec(),
       Bookable.findById(bookableId).exec(),
     ]);
     if (!space) throw new SpaceNotFoundError(spaceId);
-    console.log(bookable);
     if (!bookable || !bookable.spaceId.equals(space._id))
       throw new BookableNotFoundError(bookableId, spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
@@ -141,8 +259,6 @@ spacesRouter.delete(
       Space.findById(spaceId).exec(),
       Bookable.findById(bookableId).exec(),
     ]);
-    console.log("space", space);
-    console.log("bookables", bookable);
     if (!space) throw new SpaceNotFoundError(spaceId);
     if (!space.owner.equals(req.user!._id)) return res.sendStatus(403);
     if (!bookable || !bookable.spaceId.equals(space._id))
@@ -152,26 +268,6 @@ spacesRouter.delete(
     return res.json(space);
   })
 );
-
-const errorHandler: ErrorRequestHandler = async (error, req, res, next) => {
-  console.error(error);
-
-  if (error instanceof mongoose.Error.ValidationError) {
-    return res.status(400).json({ type: "ValidationError", error });
-  }
-  if (error instanceof mongoose.Error.DocumentNotFoundError)
-    return res.status(404).json({ type: "DocumentNotFoundError", error });
-  if (error instanceof mongoose.Error.CastError)
-    return res.status(400).json({ type: "CastError", error });
-  if (error instanceof ClientError)
-    return res.status(400).json({ type: error.name, error });
-  if (error.name === "MongoServerError" && error.code === 11000) {
-    return res.status(422).send({ type: "DuplicateKeyError", error });
-  }
-  return res.status(500).send(error.message);
-};
-
-spacesRouter.use(errorHandler);
 
 async function parseLocation(
   address: Bookables.Address
@@ -205,10 +301,14 @@ async function parseLocation(
 
   return {
     address: response.data.resourceSets[0].resources[0].address,
-    point: response.data.resourceSets[0].resources[0].point,
+    point: {
+      type: "Point",
+      coordinates: [
+        response.data.resourceSets[0].resources[0].point.coordinates[1],
+        response.data.resourceSets[0].resources[0].point.coordinates[0],
+      ],
+    },
   };
 }
-
-
 
 export default spacesRouter;

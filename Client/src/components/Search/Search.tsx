@@ -24,11 +24,11 @@ import {
   setFromDate,
   setLocationInput,
   setToDate,
-  setSearchRadius,
   setTypes,
   setSelectedLocation,
   LabeledLocation,
 } from "../../slices/filterSlice";
+import { fetchSpacesInArea } from "../../slices/spacesSlice";
 
 const isSameLocation = (
   location1: LabeledLocation,
@@ -50,7 +50,6 @@ export default function Search(props: BoxProps) {
     fromDate,
     toDate,
     locationInput,
-    searchRadius,
     types,
     locationSuggestions,
     selectedLocation,
@@ -65,8 +64,7 @@ export default function Search(props: BoxProps) {
           ...props.sx,
           "& .searchInput": { width: "100%", boxSizing: "border-box" },
           p: 2,
-          display:{xs:"block"}
-
+          display: { xs: "block" },
         },
       }}
     >
@@ -137,6 +135,7 @@ export default function Search(props: BoxProps) {
               try {
                 date instanceof Date &&
                   dispatch(setFromDate(date.toISOString()));
+                dispatch(fetchSpacesInArea());
               } catch (error) {}
             }}
             ampm={false}
@@ -157,6 +156,7 @@ export default function Search(props: BoxProps) {
             onChange={(date: unknown) => {
               try {
                 date instanceof Date && dispatch(setToDate(date.toISOString()));
+                dispatch(fetchSpacesInArea());
               } catch (error) {}
             }}
             ampm={false}
@@ -164,7 +164,7 @@ export default function Search(props: BoxProps) {
         </LocalizationProvider>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Button 
+        <Button
           variant="text"
           endIcon={
             showsAdditionalFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />
@@ -181,7 +181,6 @@ export default function Search(props: BoxProps) {
               display: "grid",
               gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
               gap: 2,
-
             }}
           >
             <FormControl className="searchInput">
@@ -211,19 +210,6 @@ export default function Search(props: BoxProps) {
                 </MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              id="radius"
-              label="Search Radius (km)"
-              type="number"
-              variant="outlined"
-              value={searchRadius}
-              onChange={(e) => {
-                const newRadius = Number.parseInt(e.target.value);
-                if (Number.isNaN(newRadius) || newRadius < 5 ) return;
-                dispatch(setSearchRadius(newRadius));
-              }}
-              className="searchInput"
-            />
           </Box>
         ) : null}
       </Box>

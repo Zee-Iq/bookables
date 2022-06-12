@@ -38,6 +38,7 @@ export class MissingQueryParameterError extends ClientError {
     public receivedParameters: any
   ) {
     super("Missing Query Parameters in Request.");
+    this.name = MissingQueryParameterError.name
   }
 }
 
@@ -47,14 +48,17 @@ export class MultipleLocationsFoundError extends ClientError {
     public possibleAddresses: Bookables.Address[]
   ) {
     super("Multiple Locations found for given Address.");
+    this.name = MultipleLocationsFoundError.name
   }
 }
 
 export class InvalidQueryParameterError extends ClientError {
   constructor(
+    public parameterName: string,
     public expectedValues: string | string[],
     public receivedValue: any
   ) {
     super("Received Invalid Query Parameter");
+    this.name = InvalidQueryParameterError.name
   }
 }
