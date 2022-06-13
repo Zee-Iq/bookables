@@ -15,16 +15,23 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const loginError = useAppSelector(selectLoginInError);
+  const location = useLocation();
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  let from = (location.state as any)?.from?.pathname || "/";
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
-    return <Navigate to={state ? "/registerSpace" : "/"} />;
+    dispatch(setLoginError(null));
+    return (
+      <Navigate
+        to={from}
+        replace
+      />
+    );
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,7 +43,7 @@ export default function Login() {
 
   const handleCreateAccount = () => {
 
-    navigate("/register", {state: state})
+    navigate("/register", {state: location.state})
   }
 
   return (
@@ -107,3 +114,5 @@ export default function Login() {
     </Box>
   );
 }
+
+

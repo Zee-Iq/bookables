@@ -15,9 +15,9 @@ import PayoutInformation from "./components/PayoutInformation/PayoutInformation"
 const App = () => {
   return (
     <Box sx={AppStyles}>
-      <Routes>
+       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+           <Route index element={<Home />} />
           <Route path="singlespace" element={<SingleSpace />} />
           <Route path="yourspaces" element={<YourSpaces />}>
             <Route index element={<SpaceEditor />} />
@@ -34,7 +34,7 @@ const App = () => {
           <Route path="/registerSpace" element={<RegisterSpace />} />
           <Route path="/payoutInformation" element={<PayoutInformation />} />
         </Route>
-      </Routes>
+      </Routes> 
     </Box>
   );
 };

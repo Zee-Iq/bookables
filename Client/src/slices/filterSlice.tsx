@@ -2,8 +2,19 @@ import { createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import Bookables from "types";
 import { getMapSession } from "../components/Map/Map";
+import env from "../config/env";
+import moment from "moment";
 
-export type LabeledLocation = { label: string } & Bookables.Location;
+
+type South = Bookables.Latitude
+type North = Bookables.Latitude
+type West = Bookables.Longitude
+type East = Bookables.Longitude
+export type LabeledLocation = { label: string } & Bookables.Location & {bbox: [South, West, North, East]};
+
+
+type Point = {type: "Point", coordinates: [number, number]}
+type Box = {nw: number[], se: number[]}
 interface FilterState {
   fromDate: string;
   toDate: string;
@@ -11,17 +22,19 @@ interface FilterState {
   locationSuggestions: LabeledLocation[];
   fetchingLocationSuggestions: boolean;
   selectedLocation: LabeledLocation | null;
-  searchRadius: number;
+  mapCenter: Point | null,
+  mapBox: Box | null,
   types: Bookables.BookableType[];
 }
 const initialState: FilterState = {
-  fromDate: new Date().toISOString(),
-  toDate: new Date().toISOString(),
+  fromDate: moment().toISOString(),
+  toDate: moment().add(1, "day").toISOString(),
   locationInput: "",
   locationSuggestions: [],
   fetchingLocationSuggestions: false,
   selectedLocation: null,
-  searchRadius: 10,
+  mapCenter: null,
+  mapBox: null,
   types: ["room", "seat"],
 };
 // defining generics example
@@ -41,11 +54,14 @@ const filterSlice = createSlice({
     setFromDate: (state, action: PayloadAction<string>) => {
       state.fromDate = action.payload;
     },
-    setSearchRadius: (state, action: PayloadAction<number>) => {
-      state.searchRadius = action.payload;
-    },
     setTypes: (state, action: PayloadAction<Bookables.BookableType[]>) => {
       state.types = action.payload;
+    },
+    setMapCenter: (state, action: PayloadAction<{longitude: number, latitude: number}>) => {
+      state.mapCenter = {type: "Point", coordinates: [action.payload.longitude, action.payload.latitude]}
+    },
+    setMapBox: (state, action: PayloadAction<Box>) => {
+      state.mapBox = action.payload
     },
     setSelectedLocation: (
       state,
@@ -82,9 +98,9 @@ const fetchAutosuggest = createAsyncThunk(
   "filter/fetchAutosuggest",
   async (query: string) => {
     const encodedQuery = encodeURIComponent(query)
-    const key = (await getMapSession()) || process.env.REACT_APP_BING_MAPS
+    const key = (await getMapSession()) || env.REACT_APP_BING_MAPS
     const response = await fetch(`https://dev.virtualearth.net/REST/v1/Locations?key=${key}&query=${encodedQuery}&maxResults=${20}`);
-    const locationSuggestions: Bookables.Location[] = (await response.json()).resourceSets[0]?.resources;
+    const locationSuggestions: (Bookables.Location & {bbox: [South, West, North, East]})[] = (await response.json()).resourceSets[0]?.resources;
     return locationSuggestions.map((suggestion) => ({
       label: suggestion.name,
       ...suggestion,
@@ -109,9 +125,10 @@ export const {
   setToDate,
   setFromDate,
   resetFilter,
-  setSearchRadius,
   setTypes,
   setSelectedLocation,
+  setMapCenter,
+  setMapBox
 } = filterSlice.actions;
 
 

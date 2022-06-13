@@ -17,10 +17,32 @@ import { logout, selectUser } from "../../slices/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 
-const settings = ["Profile", "Bookings", "Logout"];
+type Setting = "Profile" | "Bookings" | "Your spaces" | "Logout";
+
+const hostAndUserSettings: Setting[] = [
+  "Profile",
+  "Bookings",
+  "Your spaces",
+  "Logout",
+];
+const hostSettings: Setting[] = ["Profile", "Your spaces", "Logout"];
+const tenantSettings: Setting[] = ["Profile", "Bookings", "Logout"];
+const noRolesSettings: Setting[] = ["Profile", "Logout"];
 
 const Topbar = () => {
   const user = useAppSelector(selectUser);
+
+  //const settings = user?.roles.includes("host")? ["Profile", "Bookings", "Logout"]?user.roles.includes("tenant")?["asdasdasd"] : []
+
+  // ? is checking if user is null or undefined, if so returns null or undefined, if it is not either one, the program continues with &&.user.rolesroles etc
+  const settings =
+    user?.roles.includes("host") && user.roles.includes("tenant")
+      ? hostAndUserSettings
+      : user?.roles.includes("host")
+      ? hostSettings
+      : user?.roles.includes("tenant")
+      ? tenantSettings
+      : noRolesSettings;
 
   const pages = useMemo(
     () =>
@@ -57,11 +79,24 @@ const Topbar = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSelectMenuItem = (item: string) => {
-    switch (item) {
+  const handleSelectMenuItem = (setting: Setting) => {
+    switch (setting) {
       case "Logout":
         dispatch(logout());
         break;
+      case "Bookings":
+        navigate("/bookings");
+        break;
+      case "Profile":
+        navigate("/profile");
+        break;
+      case "Your spaces":
+        navigate("/yourspaces");
+        break;
+      default:
+        // const never checks if the switch case block contains a case for each possible setting
+        const never: never = setting;
+        throw never;
     }
     handleCloseUserMenu();
   };
@@ -83,24 +118,22 @@ const Topbar = () => {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar color="secondary" position="fixed">
         <Container>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Link style={{textDecoration:"none", color:"unset"}} to="/">
+            <Link style={{ textDecoration: "none", color: "unset" }} to="/">
               <Typography
                 variant="h5"
                 component="div"
                 sx={{
                   display: { xs: "none", md: "flex" },
-                  textDecoration:"",
+                  textDecoration: "",
                   fontWeight: "500",
                 }}
               >
                 BOOKABLES
               </Typography>
             </Link>
-              
-                
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -134,14 +167,17 @@ const Topbar = () => {
               </Menu>
             </Box>
 
-            <Link style={{textDecoration:"none", color:"unset", flexGrow: 1}} to="/" >
+            <Link
+              style={{ textDecoration: "none", color: "unset", flexGrow: 1 }}
+              to="/"
+            >
               <Typography
                 variant="h5"
                 noWrap
                 sx={{
                   mr: 2,
                   display: { xs: "flex", md: "none" },
-                  
+
                   fontWeight: "500",
                   color: "inherit",
                 }}
@@ -154,7 +190,8 @@ const Topbar = () => {
             <Box sx={{ display: "flex" }}>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
-                  <Button variant="text" 
+                  <Button
+                    variant="text"
                     key={page}
                     onClick={() => {
                       handleSelectPage(page);
@@ -191,7 +228,9 @@ const Topbar = () => {
                     ))}
                   </Menu>
                 </Box>
-              ): <div></div>}
+              ) : (
+                <div></div>
+              )}
             </Box>
           </Toolbar>
         </Container>

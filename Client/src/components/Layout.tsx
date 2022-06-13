@@ -13,8 +13,15 @@ const Layout = () => {
         overflow: "hidden",
       }}
     >
-      <Topbar />
-      <Box>
+        <Topbar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          height: "1px",
+          width: "100%",
+          position: "relative",
+        }}
+      >
         <Outlet />
       </Box>
     </Container>

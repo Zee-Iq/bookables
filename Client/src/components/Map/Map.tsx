@@ -3,9 +3,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useStore } from "react-redux";
 import Bookables from "types";
 import env from "../../config/env";
-import { useAppStore } from "../../hooks";
-import { LabeledLocation, selectFilters } from "../../slices/filterSlice";
-import { selectSpacesInArea } from "../../slices/spacesSlice";
+import { useAppDispatch, useAppStore } from "../../hooks";
+import {
+  LabeledLocation,
+  selectFilters,
+  setMapBox,
+  setMapCenter,
+} from "../../slices/filterSlice";
+import {
+  fetchSpacesInArea,
+  selectSpacesInArea,
+} from "../../slices/spacesSlice";
 
 declare global {
   interface Window {
@@ -44,7 +52,8 @@ export default function Map(props: BoxProps) {
   let mapContainer = useRef<HTMLDivElement>();
   let map = useRef<Microsoft.Maps.Map>();
   let spacesLayer = useRef<Microsoft.Maps.Layer>();
-  const { selectedLocation, searchRadius } = useSelector(selectFilters);
+  const dispatch = useAppDispatch();
+  const { selectedLocation } = useSelector(selectFilters);
   const spaces = useSelector(selectSpacesInArea);
   const store = useAppStore();
 
@@ -77,23 +86,45 @@ export default function Map(props: BoxProps) {
 
     const init = () => {
       const spaces = selectSpacesInArea(store.getState());
-      createPushpins(initializeSpacesLayer(initializeMap()), spaces);
+      const map = initializeMap();
+      Microsoft.Maps.Events.addHandler(map, "viewchangeend", (e) => {
+        const location = map.getCenter();
+        const box = map.getBounds();
+        const nw = box.getNorthwest();
+        const se = box.getSoutheast();
+        dispatch(
+          setMapCenter({
+            longitude: location.longitude,
+            latitude: location.latitude,
+          })
+        );
+        dispatch(
+          setMapBox({
+            nw: [nw.longitude, nw.latitude],
+            se: [se.longitude, se.latitude],
+          })
+        );
+        dispatch(fetchSpacesInArea());
+      });
+      
+      createPushpins(initializeSpacesLayer(map), spaces);
     };
 
-    if(MapStateObserver.mapReady) return init()
+    if (MapStateObserver.mapReady) return init();
     MapStateObserver.onReady(init);
     return () => {
       MapStateObserver.removeCallback(init);
-      if(MapStateObserver.mapReady && spacesLayer.current) spacesLayer.current.dispose()
-      if(MapStateObserver.mapReady && map.current) map.current.dispose()
+      if (MapStateObserver.mapReady && spacesLayer.current)
+        spacesLayer.current.dispose();
+      if (MapStateObserver.mapReady && map.current) map.current.dispose();
     };
   }, []);
 
   //If the selectedLocation or searchRadius change, update the mapView
   useEffect(() => {
-    if (!map.current || !selectedLocation || Number.isNaN(searchRadius)) return;
-    setMapView(map.current, selectedLocation, searchRadius);
-  }, [selectedLocation, searchRadius]);
+    if (!map.current || !selectedLocation) return;
+    setMapView(map.current, selectedLocation);
+  }, [selectedLocation]);
 
   //If the spaces change, update the spacesLayer
   useEffect(() => {
@@ -106,6 +137,7 @@ export default function Map(props: BoxProps) {
       sx={{ width: "100%", aspectRatio: "1/1" }}
       {...props}
       ref={mapContainer}
+      id="map"
     ></Box>
   );
 }
@@ -122,14 +154,15 @@ function loadMapsPackage() {
 function setMapView(
   map: Microsoft.Maps.Map,
   selectedLocation: LabeledLocation,
-  searchRadius: number
 ) {
-  const location = new Microsoft.Maps.Location(
-    selectedLocation.point.coordinates[0],
-    selectedLocation.point.coordinates[1]
+  console.log(selectedLocation);
+
+  const locationRect = Microsoft.Maps.LocationRect.fromEdges(
+    selectedLocation.bbox[2],
+    selectedLocation.bbox[1],
+    selectedLocation.bbox[0],
+    selectedLocation.bbox[3]
   );
-  const angle = radiusToAngle(searchRadius);
-  const locationRect = new Microsoft.Maps.LocationRect(location, angle, angle);
   map.setView({ bounds: locationRect });
 }
 
@@ -141,17 +174,12 @@ function createPushpins(
   spacesLayer.add(
     spaces.map((space) => {
       const location = new Microsoft.Maps.Location(
-        space.point.coordinates[0],
-        space.point.coordinates[1]
+        space.point.coordinates[1],
+        space.point.coordinates[0]
       );
       return new Microsoft.Maps.Pushpin(location);
     })
   );
-}
-
-function radiusToAngle(radius: number) {
-  const EARTH_RADIUS_KM = 6371.001;
-  return degree(Math.atan(radius / 2 / EARTH_RADIUS_KM) * 2);
 }
 
 function degree(rad: number) {

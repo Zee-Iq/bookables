@@ -46,7 +46,8 @@ declare namespace Bookables {
   export type BookableType = "seat" | "room";
   interface Bookable {
     _id: Types.ObjectId;
-    identification: string;
+    spaceId: Types.ObjectId;
+    name: string;
     type: BookableType;
     hourlyRate: number;
   }
@@ -61,7 +62,7 @@ declare namespace Bookables {
     addressLine: string;
     adminDistrict: string;
     adminDistrict2?: string;
-    countryRegion: strin;
+    countryRegion: string;
     formattedAddress: string;
     locality: string;
     postalCode: string;
@@ -69,7 +70,7 @@ declare namespace Bookables {
 
   type Latitude = number;
   type Longitude = number;
-  type Coordinates = [Latitude, Longitude];
+  type Coordinates = [Longitude,Latitude];
 
   type Point = {
     type: "Point";
@@ -84,6 +85,13 @@ declare namespace Bookables {
     point: Point;
     bookables: Bookable[];
     contactInformation: ContactInformation;
+  }
+
+  type Reservation = {
+    bookableId: Types.ObjectId;
+    from: Date;
+    to: Date;
+    userId: Types.ObjectId;
   }
 
   type Location = {
