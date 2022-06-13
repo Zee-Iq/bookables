@@ -137,6 +137,7 @@ export default function Map(props: BoxProps) {
       sx={{ width: "100%", aspectRatio: "1/1" }}
       {...props}
       ref={mapContainer}
+      id="map"
     ></Box>
   );
 }
