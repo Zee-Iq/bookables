@@ -26,7 +26,7 @@ declare namespace Bookables {
     email: Email;
     password: string;
     roles: UserRole[];
-    paymentProviders?: PaymentProvider[];
+    paymentProviders?: PaymentProvider;
     payoutInformation?: PayoutInformation;
    
   }

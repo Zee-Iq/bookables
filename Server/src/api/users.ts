@@ -122,6 +122,9 @@ userRouter.post("/updatedUser", async (req, res) => {
 
     const {token} = req.body
 
+    if (!token)
+      return res.send({ success: false, errorId: 1 });
+
     const verify = jwt.verify(token, env.SECRET);
 
     if (typeof verify == "string") {
@@ -152,6 +155,15 @@ userRouter.post("/updatedUser", async (req, res) => {
 
 
 })
+
+/* userRouter.post("/updatePayoutInfo", async (req, res) => {
+
+  try {
+    const { userUpdate} = req.body
+  }
+
+
+}) */
 
 
 export default userRouter;

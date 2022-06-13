@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useAppSelector } from "../../hooks";
-import { selectUser } from "../../slices/userSlice";
+import { selectToken } from "../../slices/userSlice";
 import axios from "axios";
 
 const style = {
@@ -19,16 +19,14 @@ const style = {
 };
 
 export default function ConfirmEmailModal() {
-  const user = useAppSelector(selectUser);
+  const token = useAppSelector(selectToken);
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const getUpdatedUser = async () => {
-      const response = await axios.post("/users/updatedUser", {
-        _id: user?._id,
-      });
+      const response = await axios.post("/users/updatedUser", {token});
 
       console.log("response is", response);
 
@@ -39,7 +37,7 @@ export default function ConfirmEmailModal() {
     getUpdatedUser();
   }, []);
 
-  console.log("user is", user?.email.isConfirmed);
+
 
   return (
     <div>

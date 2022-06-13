@@ -4,11 +4,12 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess, selectUser } from "../../slices/userSlice";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export default function Register() {
 
   const user = useAppSelector(selectUser);
+  const { state } = useLocation();
 
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
@@ -47,7 +48,7 @@ export default function Register() {
 
 
  if (user) {
-    return <Navigate to="/" />;
+    return <Navigate to={state ? "/registerSpace" : "/"} />;
   }
 
   if (regInProgress && regSuccess) return <Navigate to="/" />
@@ -66,6 +67,8 @@ export default function Register() {
     dispatch(register(registerInformation));
   };
 
+  console.log("state is", state);
+  
 
 
   return (

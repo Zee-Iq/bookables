@@ -2,15 +2,21 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { login, selectUser, selectLoginInError, setLoginError } from "../../slices/userSlice";
+import {
+  login,
+  selectUser,
+  selectLoginInError,
+  setLoginError,
+} from "../../slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const loginError = useAppSelector(selectLoginInError);
-  
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [data, setData] = useState({
     email: "",
@@ -18,21 +24,27 @@ export default function Login() {
   });
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
-    return <Navigate to="/" />;
+    return <Navigate to={state ? "/registerSpace" : "/"} />;
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!data.password || !data.email) return dispatch(setLoginError("Email and Password are required"));
+    if (!data.password || !data.email)
+      return dispatch(setLoginError("Email and Password are required"));
     dispatch(login({ email: data.email, password: data.password }));
   };
 
+  const handleCreateAccount = () => {
+
+    navigate("/register", {state: state})
+  }
 
   return (
     <Box
       component="form"
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
+        marginTop: "70px",
       }}
       noValidate
       autoComplete="off"
@@ -75,6 +87,21 @@ export default function Login() {
           onClick={handleClick}
         >
           Login
+        </Button>
+
+        <p style={{
+          marginTop: "50px",
+          borderTop: "solid 1px gray",
+          paddingTop: "50px"
+        }}>If you do not have an account yet, please click the button below.</p>
+
+        <Button
+          type="submit"
+          sx={{ marginTop: "10px" }}
+          variant="contained"
+          onClick={handleCreateAccount}
+        >
+        Create an account
         </Button>
       </div>
     </Box>

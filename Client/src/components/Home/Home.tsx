@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import ConfirmEmailModal from "../confirmEmailModal/CofirmEmailModal";
+import ConfirmEmailModal from "../ConfirmEmailModal/CofirmEmailModal";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../hooks";
 import { fetchSpacesInArea } from "../../slices/spacesSlice";
