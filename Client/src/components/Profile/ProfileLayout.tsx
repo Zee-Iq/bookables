@@ -2,15 +2,14 @@ import { Container } from "@mui/material";
 import React from "react";
 import ProfileNavigation from "./ProfileNavigation";
 
-const Profile = () => {
+const ProfileLayout = () => {
   return (
     <>
-      <Container sx={{ display: "flex", border:"10px solid red " }}>
+      <Container>
         <ProfileNavigation />
-
       </Container>
     </>
   );
 };
 
-export default Profile;
+export default ProfileLayout;

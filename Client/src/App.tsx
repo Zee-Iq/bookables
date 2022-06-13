@@ -10,7 +10,10 @@ import YourSpaces from "./components/YourSpaces/YourSpaces";
 import SingleSpace from "./components/SingleSpace/SingleSpace";
 import RegisterSpace from "./components/registerSpace/RegisterSpace";
 import SpaceEditor from "./components/SpaceEditor/SpaceEditor";
-import Profile from "./components/Profile/Profile";
+import ProfileLayout from "./components/Profile/ProfileLayout";
+import AccountDetails from "./components/Profile/AccountDetails";
+import PaymentDetails from "./components/Profile/PaymentDetails";
+import PayoutDetails from "./components/Profile/PayoutDetails";
 
 const App = () => {
   return (
@@ -23,14 +26,19 @@ const App = () => {
             <Route index element={<SpaceEditor />} />
             <Route path=":spaceId" element={<SpaceEditor />} />
           </Route>
+
           <Route
             path="/emailConfirmation/:token"
             element={<EmailConfirmed />}
           />
+
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registerSpace" element={<RegisterSpace />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<ProfileLayout />} />
+          <Route path="/accountdetails " element={<AccountDetails />} />
+          <Route path="/paymentdetails " element={<PaymentDetails />} />
+          <Route path="/payoutdetails " element={<PayoutDetails />} />
         </Route>
       </Routes>
     </Box>
