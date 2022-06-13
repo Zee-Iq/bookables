@@ -91,6 +91,7 @@ declare namespace Bookables {
     bookableId: Types.ObjectId;
     from: Date;
     to: Date;
+    userId: Types.ObjectId;
   }
 
   type Location = {

@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import Bookables from "types";
 import { getMapSession } from "../components/Map/Map";
 import env from "../config/env";
+import moment from "moment";
 
 
 type South = Bookables.Latitude
@@ -26,8 +27,8 @@ interface FilterState {
   types: Bookables.BookableType[];
 }
 const initialState: FilterState = {
-  fromDate: new Date().toISOString(),
-  toDate: new Date().toISOString(),
+  fromDate: moment().toISOString(),
+  toDate: moment().add(1, "day").toISOString(),
   locationInput: "",
   locationSuggestions: [],
   fetchingLocationSuggestions: false,
