@@ -11,10 +11,12 @@ import SingleSpace from "./components/SingleSpace/SingleSpace";
 import RegisterSpace from "./components/RegisterSpace/RegisterSpace";
 import SpaceEditor from "./components/SpaceEditor/SpaceEditor";
 import PayoutInformation from "./components/PayoutInformation/PayoutInformation";
+import ConfirmEmailModal from "./components/ConfirmEmailModal/CofirmEmailModal";
 
 const App = () => {
   return (
     <Box sx={AppStyles}>
+      <ConfirmEmailModal />
        <Routes>
         <Route path="/" element={<Layout />}>
            <Route index element={<Home />} />

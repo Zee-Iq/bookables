@@ -26,12 +26,7 @@ export default function Login() {
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
     dispatch(setLoginError(null));
-    return (
-      <Navigate
-        to={from}
-        replace
-      />
-    );
+    return <Navigate to={from} replace />;
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,9 +37,8 @@ export default function Login() {
   };
 
   const handleCreateAccount = () => {
-
-    navigate("/register", {state: location.state})
-  }
+    navigate("/register", { state: location.state });
+  };
 
   return (
     <Box
@@ -96,11 +90,15 @@ export default function Login() {
           Login
         </Button>
 
-        <p style={{
-          marginTop: "50px",
-          borderTop: "solid 1px gray",
-          paddingTop: "50px"
-        }}>If you do not have an account yet, please click the button below.</p>
+        <p
+          style={{
+            marginTop: "50px",
+            borderTop: "solid 1px gray",
+            paddingTop: "50px",
+          }}
+        >
+          If you do not have an account yet, please click the button below.
+        </p>
 
         <Button
           type="submit"
@@ -108,11 +106,9 @@ export default function Login() {
           variant="contained"
           onClick={handleCreateAccount}
         >
-        Create an account
+          Create an account
         </Button>
       </div>
     </Box>
   );
 }
-
-

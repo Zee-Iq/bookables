@@ -1,46 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks";
-import { selectToken } from "../../slices/userSlice";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-
+import React, { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { getUpdate, selectUser } from "../../slices/userSlice";
+import { useLocation, Navigate } from "react-router-dom";
+import PayoutInformation from "../PayoutInformation/PayoutInformation";
 
 export default function RegisterSpace() {
-  const token = useAppSelector(selectToken);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const [loggedInUser, setLoggedInUser] = useState<any>(null) ;
+  const loggedInUser = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getUpdatedUser = async () => {
-      const response = await axios.post("/users/updatedUser", { token });
-
-      setLoggedInUser(response.data.user);
-    };
-    getUpdatedUser();
-  }, []);
+    dispatch(getUpdate());
+  }, [dispatch]);
 
   const handleUserInformation = () => {
-
-     if (loggedInUser == null) {
-      navigate("/login", {state: location.pathname });
-    } 
-
-    else if (loggedInUser.payoutInformation == null) {
-      navigate("/payoutInformation", {state: location.pathname });
+    if (!loggedInUser) {
+      return <Navigate to="/login" state={{ from: location }} />;
+    } else if (!loggedInUser.roles.includes("host")) {
+      return <PayoutInformation />;
+    } else {
+      return <Navigate to="/yourspaces" />;
     }
+  };
 
-    else {
-      navigate("/yourspaces")
-    }
-
-  }
-
-  handleUserInformation()
-
-  return (
-    <div></div>
-    
-  );
+  return handleUserInformation();
 }

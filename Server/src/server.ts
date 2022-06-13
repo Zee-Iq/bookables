@@ -1,6 +1,6 @@
 import express, { ErrorRequestHandler } from "express";
 import Bookables from "types";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import env from "./config/env";
 import spacesRouter from "./api/spaces"
 import userRouter from "./api/users"
@@ -11,7 +11,10 @@ import { errorHandler } from "./middlewares/errorhandler";
 declare global {
   namespace Express {
     interface Request {
-      user?: Bookables.ShareableUser;
+      user?: Document<unknown, any, Bookables.User> &
+      Bookables.User & {
+        _id: mongoose.Types.ObjectId;
+      };
     }
   }
 }

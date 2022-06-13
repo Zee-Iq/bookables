@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useAppSelector } from "../../hooks";
-import { selectToken } from "../../slices/userSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { selectUser, getUpdate } from "../../slices/userSlice";
+
 import axios from "axios";
 
 const style = {
@@ -19,25 +20,19 @@ const style = {
 };
 
 export default function ConfirmEmailModal() {
-  const token = useAppSelector(selectToken);
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    const getUpdatedUser = async () => {
-      const response = await axios.post("/users/updatedUser", {token});
+    dispatch(getUpdate());
+  }, [dispatch]);
 
-      console.log("response is", response);
-
-      if (response.data.user?.email.isConfirmed === false) {
-        setOpen(true);
-      }
-    };
-    getUpdatedUser();
-  }, []);
-
-
+  useEffect(() => {
+    if (user && !user?.email.isConfirmed) setOpen(true);
+  }, [user]);
 
   return (
     <div>
