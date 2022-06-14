@@ -288,7 +288,7 @@ async function fetchAutosuggest(
       countryRegion: [],
     };
   const response = await axios.get(
-    "http://dev.virtualearth.net/REST/v1/Locations",
+    "https://dev.virtualearth.net/REST/v1/Locations",
     {
       params: { key, addressLine, countryRegion, locality, postalCode, maxResults: 20 },
       signal,
