@@ -100,12 +100,14 @@ export interface RegisterInformation {
 export const register = createAsyncThunk(
   "user/register",
   async (registerInformation: RegisterInformation, thunkApi) => {
-    const response = await axios.post<{ success: boolean }>(
+    const response = await axios.post<{ success: true, token: string; user: Bookables.User  }>(
       "users/register",
       registerInformation
     );
     if (response.data.success)
-      thunkApi.dispatch(userSlice.actions.setRegSuccess(true));
+     { thunkApi.dispatch(userSlice.actions.setRegSuccess(true));
+      thunkApi.dispatch(userSlice.actions.setToken(response.data.token));
+      thunkApi.dispatch(userSlice.actions.setUser(response.data.user));}
     else throw new Error("something went wrong");
   }
 );
