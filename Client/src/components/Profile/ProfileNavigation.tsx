@@ -9,6 +9,7 @@ import {
   Button,
   ListItem,
   ListItemButton,
+  Typography,
 } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -150,6 +151,7 @@ export default function ProfileNavigation() {
         >
           <ManageAccountsOutlinedIcon />
         </Button>
+        <Typography variant="h6" component="h1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo odio fugit sapiente inventore iste odit nemo sunt delectus quidem? Nulla distinctio maiores, laboriosam est odit vero officia animi consequatur delectus earum, magni culpa architecto sed consectetur obcaecati impedit. Numquam dignissimos omnis expedita ducimus, beatae inventore! Dolor saepe nobis suscipit molestias?</Typography>
         <DrawerHeader />
         <Outlet />
       </Main>
