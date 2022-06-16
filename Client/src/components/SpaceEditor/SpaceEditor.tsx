@@ -98,9 +98,6 @@ const SpaceEditor = (props: SpaceEditorProps) => {
     else setUpdatedSpace(initialSpace);
   }, [space]);
 
-  console.log("space", space);
-  console.log("suggestions", suggestions)
-
   useEffect(() => {
     debouncedFetchAutosuggest(updatedSpace.address);
   }, [updatedSpace.address]);
@@ -113,157 +110,160 @@ const SpaceEditor = (props: SpaceEditorProps) => {
 
   return (
 
-      <Box>
-        <LabeledFormGroup label="Space Information">
-          <TextField
-            label="Name"
-            value={updatedSpace.name}
-            onChange={(e) =>
-              setUpdatedSpace({ ...updatedSpace, name: e.target.value })
-            }
-          />
-          <TextField
-            label="description"
-            value={updatedSpace.description}
-            onChange={(e) =>
-              setUpdatedSpace({ ...updatedSpace, description: e.target.value })
-            }
-          />
-        </LabeledFormGroup>
-        <LabeledFormGroup label="Address">
-          <Autocomplete
-            renderInput={(props) => (
-              <TextField {...props} label="Street Address and Number" />
-            )}
-            inputValue={updatedSpace.address.addressLine}
-            onInputChange={(_, value) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                address: {
-                  ...updatedSpace.address,
-                  addressLine: value,
-                },
-              })
-            }
-            options={suggestions.addressLine}
-            filterOptions={(opts) => opts}
-            loading={fetchingSuggestions}
-            freeSolo
-          />
-          <Autocomplete
-            options={suggestions.locality}
-            filterOptions={(opts) => opts}
-            inputValue={updatedSpace.address.locality}
-            onInputChange={(_, value) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                address: {
-                  ...updatedSpace.address,
-                  locality: value,
-                },
-              })
-            }
-            renderInput={(props) => <TextField {...props} label="City" />}
-            loading={fetchingSuggestions}
-            freeSolo
-          />
-          <Autocomplete
-            options={suggestions.postalCode}
-            filterOptions={(opts) => opts}
-            inputValue={updatedSpace.address.postalCode}
-            onInputChange={(_, value) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                address: {
-                  ...updatedSpace.address,
-                  postalCode: value,
-                },
-              })
-            }
-            renderInput={(props) => (
-              <TextField {...props} label="Postal Code" />
-            )}
-            loading={fetchingSuggestions}
-            freeSolo
-          />
-
-          <Autocomplete
-            options={suggestions.countryRegion}
-            filterOptions={(opts) => opts}
-            inputValue={updatedSpace.address.countryRegion}
-            onInputChange={(_, value) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                address: {
-                  ...updatedSpace.address,
-                  countryRegion: value,
-                },
-              })
-            }
-            renderInput={(props) => <TextField {...props} label="Country" />}
-            loading={fetchingSuggestions}
-            freeSolo
-          />
-        </LabeledFormGroup>
-        <LabeledFormGroup label="Contact Information">
-          <TextField
-            label="Email"
-            value={updatedSpace.contactInformation.email}
-            onChange={(e) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                contactInformation: {
-                  ...updatedSpace.contactInformation,
-                  email: e.target.value,
-                },
-              })
-            }
-          />
-          <TextField
-            label="Phone Number"
-            value={updatedSpace.contactInformation.phoneNumber}
-            onChange={(e) =>
-              setUpdatedSpace({
-                ...updatedSpace,
-                contactInformation: {
-                  ...updatedSpace.contactInformation,
-                  phoneNumber: e.target.value,
-                },
-              })
-            }
-          />
-        </LabeledFormGroup>
-        {space && <BookablesEditor bookables={space.bookables} spaceId={space._id as unknown as string} />}
-        {!space ? (
-          <Button onClick={() => dispatch(createSpace(updatedSpace))}>
-            Create
-          </Button>
-        ) : (
-          <Button
-            onClick={() =>
-              dispatch(
-                updateSpace({
+      <Box sx={{display: "flex", height: "100%", flexDirection: "column"}}>
+        <Box sx={{overflow: "auto"}}>
+          <LabeledFormGroup label="Space Information">
+            <TextField
+              label="Name"
+              value={updatedSpace.name}
+              onChange={(e) =>
+                setUpdatedSpace({ ...updatedSpace, name: e.target.value })
+              }
+            />
+            <TextField
+              label="description"
+              value={updatedSpace.description}
+              onChange={(e) =>
+                setUpdatedSpace({ ...updatedSpace, description: e.target.value })
+              }
+            />
+          </LabeledFormGroup>
+          <LabeledFormGroup label="Address">
+            <Autocomplete
+              renderInput={(props) => (
+                <TextField {...props} label="Street Address and Number" />
+              )}
+              inputValue={updatedSpace.address.addressLine}
+              onInputChange={(_, value) =>
+                setUpdatedSpace({
                   ...updatedSpace,
-                  spaceId: space._id as unknown as string,
+                  address: {
+                    ...updatedSpace.address,
+                    addressLine: value,
+                  },
                 })
-              )
-            }
-          >
-            Update
+              }
+              options={suggestions.addressLine}
+              filterOptions={(opts) => opts}
+              loading={fetchingSuggestions}
+              freeSolo
+            />
+            <Autocomplete
+              options={suggestions.locality}
+              filterOptions={(opts) => opts}
+              inputValue={updatedSpace.address.locality}
+              onInputChange={(_, value) =>
+                setUpdatedSpace({
+                  ...updatedSpace,
+                  address: {
+                    ...updatedSpace.address,
+                    locality: value,
+                  },
+                })
+              }
+              renderInput={(props) => <TextField {...props} label="City" />}
+              loading={fetchingSuggestions}
+              freeSolo
+            />
+            <Autocomplete
+              options={suggestions.postalCode}
+              filterOptions={(opts) => opts}
+              inputValue={updatedSpace.address.postalCode}
+              onInputChange={(_, value) =>
+                setUpdatedSpace({
+                  ...updatedSpace,
+                  address: {
+                    ...updatedSpace.address,
+                    postalCode: value,
+                  },
+                })
+              }
+              renderInput={(props) => (
+                <TextField {...props} label="Postal Code" />
+              )}
+              loading={fetchingSuggestions}
+              freeSolo
+            />
+            <Autocomplete
+              options={suggestions.countryRegion}
+              filterOptions={(opts) => opts}
+              inputValue={updatedSpace.address.countryRegion}
+              onInputChange={(_, value) =>
+                setUpdatedSpace({
+                  ...updatedSpace,
+                  address: {
+                    ...updatedSpace.address,
+                    countryRegion: value,
+                  },
+                })
+              }
+              renderInput={(props) => <TextField {...props} label="Country" />}
+              loading={fetchingSuggestions}
+              freeSolo
+            />
+          </LabeledFormGroup>
+          <LabeledFormGroup label="Contact Information">
+            <TextField
+              label="Email"
+              value={updatedSpace.contactInformation.email}
+              onChange={(e) =>
+                setUpdatedSpace({
+                  ...updatedSpace,
+                  contactInformation: {
+                    ...updatedSpace.contactInformation,
+                    email: e.target.value,
+                  },
+                })
+              }
+            />
+            <TextField
+              label="Phone Number"
+              value={updatedSpace.contactInformation.phoneNumber}
+              onChange={(e) =>
+                setUpdatedSpace({
+                  ...updatedSpace,
+                  contactInformation: {
+                    ...updatedSpace.contactInformation,
+                    phoneNumber: e.target.value,
+                  },
+                })
+              }
+            />
+          </LabeledFormGroup>
+          {space && <BookablesEditor bookables={space.bookables} spaceId={space._id as unknown as string} />}
+        </Box>
+        <Box>
+          {!space ? (
+            <Button onClick={() => dispatch(createSpace(updatedSpace))}>
+              Create
+            </Button>
+          ) : (
+            <Button
+              onClick={() =>
+                dispatch(
+                  updateSpace({
+                    ...updatedSpace,
+                    spaceId: space._id as unknown as string,
+                  })
+                )
+              }
+            >
+              Update
+            </Button>
+          )}
+          <Button onClick={() => setUpdatedSpace(space || initialSpace)}>
+            Cancel
           </Button>
-        )}
-        <Button onClick={() => setUpdatedSpace(space || initialSpace)}>
-          Cancel
-        </Button>
-        {space ? (
-          <Button
-            onClick={() =>
-              dispatch(deleteSpace(space._id as unknown as string))
-            }
-          >
-            Delete
-          </Button>
-        ) : null}
+          {space ? (
+            <Button
+              onClick={() =>
+                dispatch(deleteSpace(space._id as unknown as string))
+              }
+            >
+              Delete
+            </Button>
+          ) : null}
+        </Box>
       </Box>
   );
 };

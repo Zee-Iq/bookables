@@ -35,7 +35,7 @@ const YourSpaces = () => {
         height: "100%"
       }}
     >
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: 2, overflow: "hidden", height: {xs: "25%", md: "100%"}, minHeight: "15rem",flexGrow: 1, display: "flex", flexDirection: "column" }}>
         <TextField
           label="Filter"
           type="text"
@@ -45,7 +45,7 @@ const YourSpaces = () => {
           fullWidth
           autoComplete="off"
         />
-        <List>
+        <List sx={{overflow: "auto", }}>
           <ListItemButton onClick={() => navigate(`./`)}>
             <AddIcon /> new Space
           </ListItemButton>
@@ -63,7 +63,7 @@ const YourSpaces = () => {
             ))}
         </List>
       </Paper>
-      <Paper sx={{ padding: 2, overflow: "hidden" }}>
+      <Paper sx={{ padding: 2, overflow: "hidden", flexGrow: 4, width: "100%", height: "100%"  }}>
         <Outlet />
       </Paper>
     </Box>

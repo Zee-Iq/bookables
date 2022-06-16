@@ -11,9 +11,9 @@ const bookableSchema = new Schema<Bookables.Bookable>({
     index: true,
     unique: false,
   },
-  type: { type: String, enum: ["room", "seat"], required: true },
+  type: { type: String, enum: ["room", "seat"], required: true, unique: false },
 });
 
-bookableSchema.index({name: 1, spaceId: 1}, {unique: true})
+bookableSchema.index({name: 1, spaceId: 1, type: 1}, {unique: true})
 
 export default model("Bookable", bookableSchema);
