@@ -9,13 +9,14 @@ import {
   setLoginError,
 } from "../../slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const loginError = useAppSelector(selectLoginInError);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [data, setData] = useState({
     email: "",
@@ -25,12 +26,7 @@ export default function Login() {
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
     dispatch(setLoginError(null));
-    return (
-      <Navigate
-        to={from}
-        replace
-      />
-    );
+    return <Navigate to={from} replace />;
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,11 +36,16 @@ export default function Login() {
     dispatch(login({ email: data.email, password: data.password }));
   };
 
+  const handleCreateAccount = () => {
+    navigate("/register", { state: location.state });
+  };
+
   return (
     <Box
       component="form"
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
+        marginTop: "70px",
       }}
       noValidate
       autoComplete="off"
@@ -88,14 +89,26 @@ export default function Login() {
         >
           Login
         </Button>
+
+        <p
+          style={{
+            marginTop: "50px",
+            borderTop: "solid 1px gray",
+            paddingTop: "50px",
+          }}
+        >
+          If you do not have an account yet, please click the button below.
+        </p>
+
+        <Button
+          type="submit"
+          sx={{ marginTop: "10px" }}
+          variant="contained"
+          onClick={handleCreateAccount}
+        >
+          Create an account
+        </Button>
       </div>
     </Box>
   );
-}
-
-function isStateObject(
-  state: unknown
-): state is { [key: string | number]: unknown } {
-  if (typeof state !== "object" || state !== null) return false;
-  return true;
 }
