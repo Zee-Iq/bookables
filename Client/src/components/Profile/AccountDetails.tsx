@@ -2,7 +2,7 @@ import React from 'react'
 
 const AccountDetails = () => {
   return (
-    <h1>Account Details</h1>
+    <h1>Hello from AccountDetails.tsx</h1>
   )
 }
 

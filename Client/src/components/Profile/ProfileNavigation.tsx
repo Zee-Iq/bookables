@@ -109,7 +109,7 @@ export default function ProfileNavigation() {
             <ListItemButton>
               <Link
                 style={{ textDecoration: "none", color: "unset" }}
-                to="/accountdetails"
+                to="/profile"
               >
                 Account Details
               </Link>
@@ -121,7 +121,7 @@ export default function ProfileNavigation() {
             <ListItemButton>
               <Link
                 style={{ textDecoration: "none", color: "unset" }}
-                to="/paymentdetails"
+                to="./paymentdetails"
               >
                 Payment Details
               </Link>
@@ -133,7 +133,7 @@ export default function ProfileNavigation() {
             <ListItemButton>
               <Link
                 style={{ textDecoration: "none", color: "unset" }}
-                to="/payoutdetails"
+                to="./payoutdetails"
               >
                 Payout Details
               </Link>
@@ -145,7 +145,7 @@ export default function ProfileNavigation() {
         <Button
           size="large"
           variant="contained"
-          color="secondary"
+          color="primary"
           onClick={handleDrawerOpen}
           sx={{ mr: 2 }}
         >
@@ -153,7 +153,7 @@ export default function ProfileNavigation() {
         </Button>
         <Typography variant="h6" component="h1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo odio fugit sapiente inventore iste odit nemo sunt delectus quidem? Nulla distinctio maiores, laboriosam est odit vero officia animi consequatur delectus earum, magni culpa architecto sed consectetur obcaecati impedit. Numquam dignissimos omnis expedita ducimus, beatae inventore! Dolor saepe nobis suscipit molestias?</Typography>
         <DrawerHeader />
-        <Outlet />
+        
       </Main>
     </Box>
   );
