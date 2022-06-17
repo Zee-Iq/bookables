@@ -3,8 +3,8 @@ import User from "../models/User";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
 import sendEmail from "../utils/email";
-
-
+import { authMiddleware } from "../middlewares/auth";
+import { catchErrors } from "../utils";
 
 const userRouter = express.Router();
 
@@ -13,13 +13,11 @@ userRouter.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password)
-      return res.send({ success: false, errorId: 1 });
+    if (!email || !password) return res.send({ success: false, errorId: 1 });
 
     const newUser = new User({
       "email.address": email,
-      password
-
+      password,
     });
 
     const user = await newUser.save();
@@ -35,7 +33,7 @@ userRouter.post("/register", async (req, res) => {
     // send an email to the user that just got registered
     sendEmail(user.email.address, token);
 
-    res.send({ success: true });
+    res.send({ success: true, token: token, user: user });
   } catch (error) {
     if (error instanceof Error) {
       console.error("ERROR:", error);
@@ -56,7 +54,6 @@ userRouter.get("/emailConfirmation/:token", async (req, res) => {
     if (typeof verify == "string") {
       return res.sendStatus(400);
     }
-
 
     const updatedUser = await User.findByIdAndUpdate(
       verify.id,
@@ -88,8 +85,12 @@ userRouter.post("/login", async (req, res) => {
 
     const user = await User.verifyUser(email, password);
 
-    // 
-    if (!user) return res.send({ success: false, loginError: "user or password invalid" });
+    //
+    if (!user)
+      return res.send({
+        success: false,
+        loginError: "user or password invalid",
+      });
 
     const token = await jwt.sign(
       { id: user._id.toHexString(), "email.address": user.email.address },
@@ -100,8 +101,6 @@ userRouter.post("/login", async (req, res) => {
     );
 
     res.send({ success: true, token: token, user: user });
-
-
   } catch (error) {
     if (error instanceof Error) {
       console.error("ERROR:", error);
@@ -114,5 +113,48 @@ userRouter.post("/login", async (req, res) => {
     return res.status(500).send("unknown error code");
   }
 });
+
+userRouter.get("/getUpdate", authMiddleware(), async (req, res) => {
+  try {
+    if (!req.user)
+      return res.send({ success: false, loginError: "user does not exist" });
+
+    res.send({ success: true, user: req.user });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("ERROR:", error);
+
+      return res.send(error.message);
+    }
+
+    console.error(error);
+
+    return res.status(500).send("unknown error code");
+  }
+});
+
+userRouter.patch(
+  "/update",
+  authMiddleware(),
+  catchErrors(async (req, res) => {
+    if (!req.user) return res.sendStatus(500);
+    const { email, password, paymentProviders, payoutInformation } = req.body;
+
+    if (email?.address) req.user.email.address = email.address;
+    if (password) req.user.password = password;
+    if (paymentProviders) {
+      req.user.paymentProviders = paymentProviders;
+      if (req.user.roles.includes("tenant")) req.user.roles.push("tenant");
+    }
+    if (payoutInformation) {
+      req.user.payoutInformation = payoutInformation;
+      if (!req.user.roles.includes("host")) req.user.roles.push("host");
+    }
+
+    await req.user.save();
+
+    res.json({ success: true, user: req.user });
+  })
+);
 
 export default userRouter;

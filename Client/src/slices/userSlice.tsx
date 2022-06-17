@@ -7,7 +7,7 @@ import { RootState } from "../store";
 // initialState
 
 interface UserState {
-  user: Bookables.ShareableUser | null;
+  user: Bookables.User | null;
   token: string | null;
   loginInProgress: boolean;
   loginError: string | null;
@@ -42,7 +42,7 @@ export const login = createAsyncThunk(
     thunkApi.dispatch(userSlice.actions.setLoginInProgress(true));
     const response = await axios.post<
       | { success: false; loginError: string }
-      | { success: true; token: string; user: Bookables.ShareableUser }
+      | { success: true; token: string; user: Bookables.User }
     >("/users/login", loginInformation);
     if (response.data.success) {
       thunkApi.dispatch(userSlice.actions.setToken(response.data.token));
@@ -53,6 +53,41 @@ export const login = createAsyncThunk(
       );
     }
     thunkApi.dispatch(userSlice.actions.setLoginInProgress(false));
+  }
+);
+
+export const getUpdate = createAsyncThunk(
+  "user/getUpdate",
+  async (_, thunkApi) => {
+    const token = selectToken(thunkApi.getState() as RootState);
+    if (!token) return;
+    const response = await axios.get<
+      | { user: Bookables.User; success: true }
+      | { success: false; loginError: string }
+    >("/users/getUpdate", { headers: { authorization: `bearer ${token}` } });
+    if (response.data.success) {
+      thunkApi.dispatch(userSlice.actions.setUser(response.data.user));
+    } else {
+      thunkApi.dispatch(
+        userSlice.actions.setLoginError(response.data.loginError)
+      );
+    }
+  }
+);
+
+export const update = createAsyncThunk(
+  "user/update",
+  async (userUpdate: Partial<Bookables.User>, thunkApi) => {
+    const token = selectToken(thunkApi.getState() as RootState);
+
+    const response = await axios.patch<{ user: Bookables.User; success: true }>(
+      "/users/update",
+      userUpdate,
+      { headers: { authorization: `bearer ${token}` } }
+    );
+    if (response.data.success) {
+      thunkApi.dispatch(userSlice.actions.setUser(response.data.user));
+    }
   }
 );
 
@@ -84,7 +119,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<Bookables.ShareableUser>) => {
+    setUser: (state, action: PayloadAction<Bookables.User>) => {
       state.user = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload));
     },
@@ -108,7 +143,7 @@ const userSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem("user");
-      localStorage.removeItem("token")
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -143,4 +178,4 @@ export const selectRegInProgress = (state: RootState) =>
 export const selectRegSuccess = (state: RootState) => state.user.regSuccess;
 export const selectRegError = (state: RootState) => state.user.regError;
 
-export const {logout, setLoginError} = userSlice.actions
+export const { logout, setLoginError } = userSlice.actions;

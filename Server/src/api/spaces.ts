@@ -273,7 +273,7 @@ async function parseLocation(
   address: Bookables.Address
 ): Promise<{ address: Bookables.Address; point: Bookables.Point }> {
   const response = await axios.get(
-    `http://dev.virtualearth.net/REST/v1/Locations`,
+    `https://dev.virtualearth.net/REST/v1/Locations`,
     { params: { ...address, maxResults: 10, key: env.BING_MAPS } }
   );
 
@@ -286,7 +286,7 @@ async function parseLocation(
   ) {
     throw new UnexpectedResponseError(
       response.data,
-      `http://dev.virtualearth.net/REST/v1/Locations`
+      `https://dev.virtualearth.net/REST/v1/Locations`
     );
   }
 

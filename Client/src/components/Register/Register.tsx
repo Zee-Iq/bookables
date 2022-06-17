@@ -3,10 +3,14 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess } from "../../slices/userSlice";
-import { Navigate } from "react-router-dom";
+import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess, selectUser } from "../../slices/userSlice";
+import { Navigate, useLocation } from "react-router-dom";
 
 export default function Register() {
+
+  const user = useAppSelector(selectUser);
+  const { state } = useLocation();
+
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [data, setData] = useState({
@@ -42,7 +46,12 @@ export default function Register() {
     }
   }, [pass, confirmPass]);
 
-  if (regInProgress && regSuccess) return <Navigate to="/pleaseconfirm" />
+
+ if (user) {
+    return <Navigate to={state ? "/registerSpace" : "/"} />;
+  }
+
+  if (regInProgress && regSuccess) return <Navigate to="/" />
 
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,6 +67,8 @@ export default function Register() {
     dispatch(register(registerInformation));
   };
 
+  console.log("state is", state);
+  
 
 
   return (
