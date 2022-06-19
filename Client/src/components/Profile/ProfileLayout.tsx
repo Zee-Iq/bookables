@@ -5,12 +5,9 @@ import ProfileNavigation from "./ProfileNavigation";
 
 const ProfileLayout = () => {
   return (
-    
-      <Container>
-        <ProfileNavigation />
-        <Outlet />
-      </Container>
-    
+    <Container>
+      <ProfileNavigation />
+    </Container>
   );
 };
 

@@ -13,7 +13,6 @@ import SpaceEditor from "./components/SpaceEditor/SpaceEditor";
 import ProfileLayout from "./components/Profile/ProfileLayout";
 import AccountDetails from "./components/Profile/AccountDetails";
 import PaymentDetails from "./components/Profile/PaymentDetails";
-import PayoutDetails from "./components/Profile/PayoutDetails";
 import PayoutInformation from "./components/PayoutInformation/PayoutInformation";
 import ConfirmEmailModal from "./components/ConfirmEmailModal/CofirmEmailModal";
 
@@ -42,7 +41,7 @@ const App = () => {
           <Route path="profile" element={<ProfileLayout />}>
             <Route index element={<AccountDetails />} />
             <Route path="paymentdetails" element={<PaymentDetails />} />
-            <Route path="payoutdetails" element={<PayoutDetails />} />
+            <Route path="payoutdetails" element={<PayoutInformation />} />
           </Route>
 
           <Route path="/registerSpace" element={<RegisterSpace />} />

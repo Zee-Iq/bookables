@@ -11,11 +11,11 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import { Link, Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const drawerWidth = 260;
 
@@ -38,33 +38,12 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   }),
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
+  justifyContent: "center",
 }));
 
 export default function ProfileNavigation() {
@@ -79,9 +58,11 @@ export default function ProfileNavigation() {
     setOpen(false);
   };
 
+  
+
+ 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" open={open}></AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -97,6 +78,7 @@ export default function ProfileNavigation() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
+            <Typography>Close</Typography>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -104,7 +86,7 @@ export default function ProfileNavigation() {
             )}
           </IconButton>
         </DrawerHeader>
-        <List>
+        <List onClick={handleDrawerClose}>
           <ListItem>
             <ListItemButton>
               <Link
@@ -115,8 +97,6 @@ export default function ProfileNavigation() {
               </Link>
             </ListItemButton>
           </ListItem>
-        </List>
-        <List>
           <ListItem>
             <ListItemButton>
               <Link
@@ -127,8 +107,6 @@ export default function ProfileNavigation() {
               </Link>
             </ListItemButton>
           </ListItem>
-        </List>
-        <List>
           <ListItem>
             <ListItemButton>
               <Link
@@ -147,13 +125,18 @@ export default function ProfileNavigation() {
           variant="contained"
           color="primary"
           onClick={handleDrawerOpen}
-          sx={{ mr: 2 }}
         >
-          <ManageAccountsOutlinedIcon />
+          <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+            <Box>
+              <ManageAccountsOutlinedIcon />
+            </Box>
+            <Box>Open Settings</Box>
+          </Box>
         </Button>
-        <Typography variant="h6" component="h1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo odio fugit sapiente inventore iste odit nemo sunt delectus quidem? Nulla distinctio maiores, laboriosam est odit vero officia animi consequatur delectus earum, magni culpa architecto sed consectetur obcaecati impedit. Numquam dignissimos omnis expedita ducimus, beatae inventore! Dolor saepe nobis suscipit molestias?</Typography>
-        <DrawerHeader />
-        
+
+        <DrawerHeader>
+          <Outlet />
+        </DrawerHeader>
       </Main>
     </Box>
   );
