@@ -2,16 +2,16 @@ import { Schema, model } from "mongoose";
 import Bookables from "types";
 
 const reservationSchema = new Schema<Bookables.Reservation>({
-  bookableId: {
+  bookable: {
     type: Schema.Types.ObjectId,
-    ref: "Space",
+    ref: "Bookable",
     required: true,
     index: true,
     unique: false,
   },
   from: { type: Date, required: true, index: true },
   to: { type: Date, required: true, index: true },
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,

@@ -88,10 +88,17 @@ declare namespace Bookables {
   }
 
   type Reservation = {
-    bookableId: Types.ObjectId;
+    bookable: Types.ObjectId | string;
     from: Date;
     to: Date;
-    userId: Types.ObjectId;
+    user: Types.ObjectId | string;
+  }
+
+  type PopulatedReservation = {
+    bookable: Bookables.Bookable
+    from: Date;
+    to: Date;
+    user: Bookables.User;
   }
 
   type Location = {
