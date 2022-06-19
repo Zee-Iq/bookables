@@ -3,11 +3,17 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { register, RegisterInformation, selectRegError, selectRegInProgress, selectRegSuccess, selectUser } from "../../slices/userSlice";
+import {
+  register,
+  RegisterInformation,
+  selectRegError,
+  selectRegInProgress,
+  selectRegSuccess,
+  selectUser,
+} from "../../slices/userSlice";
 import { Navigate, useLocation } from "react-router-dom";
 
 export default function Register() {
-
   const user = useAppSelector(selectUser);
   const { state } = useLocation();
 
@@ -30,15 +36,10 @@ export default function Register() {
     },
   });
 
- 
-  
-
-  const regInProgress = useAppSelector(selectRegInProgress)
-  const regError = useAppSelector(selectRegError)
-  const regSuccess = useAppSelector(selectRegSuccess)
+  const regInProgress = useAppSelector(selectRegInProgress);
+  const regError = useAppSelector(selectRegError);
+  const regSuccess = useAppSelector(selectRegSuccess);
   const dispatch = useAppDispatch();
-
-
 
   useEffect(() => {
     if (pass === confirmPass && pass.length > 0) {
@@ -46,13 +47,11 @@ export default function Register() {
     }
   }, [pass, confirmPass]);
 
-
- if (user) {
-    return <Navigate to={state ? "/registerSpace" : "/"} />;
+  if (user) {
+    return <Navigate to={state ? (state as any).from.pathname : "/"} />;
   }
 
-  if (regInProgress && regSuccess) return <Navigate to="/" />
-
+  if (regInProgress && regSuccess) return <Navigate to="/" />;
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -63,13 +62,10 @@ export default function Register() {
       password: data.password,
     };
 
-
     dispatch(register(registerInformation));
   };
 
   console.log("state is", state);
-  
-
 
   return (
     <Box

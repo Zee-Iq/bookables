@@ -144,7 +144,9 @@ userRouter.patch(
     if (password) req.user.password = password;
     if (paymentProviders) {
       req.user.paymentProviders = paymentProviders;
-      if (req.user.roles.includes("tenant")) req.user.roles.push("tenant");
+      console.log(req.user.roles);
+      
+      if (!req.user.roles.includes("tenant")) req.user.roles.push("tenant");
     }
     if (payoutInformation) {
       req.user.payoutInformation = payoutInformation;

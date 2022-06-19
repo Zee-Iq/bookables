@@ -41,8 +41,9 @@ export default function PayoutInformation() {
         }}
       >
         <h1>Please provide your payout information</h1>
-        <LabeledFormGroup label="Payout Informations">
+        <LabeledFormGroup style={{ width: "70%" }} label="Payout Informations">
           <TextField
+            style={{ width: "auto" }}
             required
             id="outlined-required-bic"
             label="BIC"
@@ -52,6 +53,7 @@ export default function PayoutInformation() {
           />
 
           <TextField
+            style={{ width: "auto" }}
             id="outlined-required-iban"
             label="IBAN"
             type="text"
@@ -60,6 +62,7 @@ export default function PayoutInformation() {
           />
 
           <TextField
+            style={{ width: "auto" }}
             id="outlined-required-owner"
             label="Owner"
             type="text"

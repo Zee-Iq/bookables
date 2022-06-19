@@ -23,6 +23,9 @@ export default function Login() {
     password: "",
   });
   let from = (location.state as any)?.from?.pathname || "/";
+
+  console.log("from is", from);
+
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
     dispatch(setLoginError(null));

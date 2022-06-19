@@ -8,9 +8,11 @@ import {
 } from "@mui/material";
 import Bookables from "types";
 import moment from "moment";
-import { useAppSelector } from "../../hooks";
+import { useAppSelector} from "../../hooks";
 import { selectFilters } from "../../slices/filterSlice";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom"
+
 
 type BookablesListProps = { bookables: Bookables.Bookable[] } & ListProps;
 
@@ -28,7 +30,17 @@ export default function BookablesList({
     { seats: [] as Bookables.Bookable[], rooms: [] as Bookables.Bookable[] }
   );
 
+  
+  
+  const navigate = useNavigate()
   const timeWindow = useMemo(() => Math.abs(moment(fromDate).diff(moment(toDate), "hours", true)), [fromDate, toDate])
+
+ 
+  const handleBookingClick = () => {
+
+  navigate("/yourBookings")
+  }
+
   return (
     <Box>
       {seats.length > 0 ? (
@@ -41,8 +53,8 @@ export default function BookablesList({
                 sx={{ justifyContent: "space-between" }}
               >
                 {bookable.name}
-                <Button>
-                  Book for{" "}
+                <Button onClick={handleBookingClick}>
+                  Book for {" "}
                   {(
                     timeWindow *
                     (bookable.hourlyRate / 100)
@@ -65,8 +77,8 @@ export default function BookablesList({
                 sx={{ justifyContent: "space-between" }}
               >
                 {bookable.name}
-                <Button>
-                  Book for{" "}
+                <Button >
+                  Book for {" "}
                   {(
                     timeWindow *
                     (bookable.hourlyRate / 100)
