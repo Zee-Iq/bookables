@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { update } from "../../slices/userSlice";
 import { useAppDispatch } from "../../hooks";
 import LabeledFormGroup from "../LabeledFormGroup/LabeledFormGroup";
@@ -37,11 +37,14 @@ export default function PayoutInformation() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "500px",
+          
         }}
       >
-        <h1>Please provide your payout information</h1>
-        <LabeledFormGroup style={{ width: "70%" }} label="Payout Informations">
+        <Typography variant="h6">
+          Please provide your payout information
+        </Typography>
+
+        <LabeledFormGroup label="Payout Informations">
           <TextField
             style={{ width: "auto" }}
             required

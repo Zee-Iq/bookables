@@ -32,7 +32,6 @@ const noRolesSettings: Setting[] = ["Profile", "Logout"];
 const Topbar = () => {
   const user = useAppSelector(selectUser);
 
-  //const settings = user?.roles.includes("host")? ["Profile", "Bookings", "Logout"]?user.roles.includes("tenant")?["asdasdasd"] : []
 
   // ? is checking if user is null or undefined, if so returns null or undefined, if it is not either one, the program continues with &&.user.rolesroles etc
   const settings =
