@@ -1,8 +1,9 @@
 import React from 'react'
+import PaymentProvider from '../PaymentProvider/PaymentProvider'
 
 const PaymentDetails = () => {
   return (
-    <h1>PAYMANT DETAILS</h1>
+    <PaymentProvider />
   )
 }
 
