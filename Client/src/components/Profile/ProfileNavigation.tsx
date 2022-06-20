@@ -58,9 +58,6 @@ export default function ProfileNavigation() {
     setOpen(false);
   };
 
-  
-
- 
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -78,9 +75,14 @@ export default function ProfileNavigation() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            <Typography>Close</Typography>
+            <Typography color="primary" variant="h4">
+              Close
+            </Typography>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
+              <ChevronLeftIcon
+                style={{ margin: "0.25em", marginTop: "0.35em" }}
+                fontSize="large" color="primary" 
+              />
             ) : (
               <ChevronRightIcon />
             )}

@@ -63,7 +63,7 @@ const YourSpaces = () => {
             ))}
         </List>
       </Paper>
-      <Paper sx={{ padding: 2, overflow: "hidden", flexGrow: 4, width: "100%", height: "100%"  }}>
+      <Paper sx={{ padding: 2, overflow: "hidden", flexGrow: 4, width: "100%", height: "100%"  }}> 
         <Outlet />
       </Paper>
     </Box>

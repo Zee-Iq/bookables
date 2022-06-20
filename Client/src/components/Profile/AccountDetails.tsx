@@ -1,20 +1,48 @@
-import { Box, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, TextField, Typography } from "@mui/material";
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { selectUser } from "../../slices/userSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import LabeledFormGroup from "../LabeledFormGroup/LabeledFormGroup";
 
 const AccountDetails = () => {
-  return (
-    <Box sx={{display:"flex", justifyContent:"center", flexDirection:"column"}}>
-      <Box><Typography variant="h4">Account Details</Typography></Box>
-      <Box>LIST HERE
-      <Box>LIST ITEMS HERE</Box>
-      <Box>LIST ITEMS HERE</Box>
-      <Box>LIST ITEMS HERE</Box>
-      <Box>LIST ITEMS HERE</Box>
-      <Box>LIST ITEMS HERE</Box>
-      </Box>
-      
-    </Box>
-  )
-}
+  const loggedInUser = useAppSelector(selectUser);
+ console.log("loggedInUser ", loggedInUser);
 
-export default AccountDetails
+  return (
+    <Box
+      component="form"
+      sx={{
+        marginTop: "70px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6">Your account details</Typography>
+
+        <LabeledFormGroup label="Account Details">
+          <TextField value={loggedInUser?.email.address} />
+
+          <TextField value="*********" />
+        </LabeledFormGroup>
+
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+          <Button type="submit" sx={{ marginTop: "10px" }} variant="contained">
+            Update
+          </Button>
+          <Button type="submit" sx={{ marginTop: "10px" }} variant="contained">
+            Cancel
+          </Button>
+        </Box>
+      </div>
+    </Box>
+  );
+};
+
+export default AccountDetails;
