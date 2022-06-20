@@ -54,7 +54,7 @@ export default function PaymentProvider() {
   };
 
   if (loggedInUser?.roles.includes("tenant") && (location.state as any)?.from?.pathname) {
-    console.log("I AM HERE")
+
     return <Navigate to={(location.state as any)?.from?.pathname} replace />;
   }
   else if (!loggedInUser) return <Navigate to="/" />

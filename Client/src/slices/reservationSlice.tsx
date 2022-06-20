@@ -128,8 +128,9 @@ const bookingSlice = createSlice({
         state.bookingProcess.isCreating = false;
       })
       .addCase(createReservation.rejected, (state, action) => {
-        state.ownReservations.isFetching = false;
-        state.ownReservations.error = action.error;
+        state.bookingProcess.isCreating = false;
+        console.log(action);
+        
       });
   },
 });
@@ -161,6 +162,8 @@ export const createReservation = createAsyncThunk<
   ReservationInformation,
   { state: RootState }
 >("reservation/createReservation", async (reservationInformation, thunkApi) => {
+  const state = thunkApi.getState();
+
   const token = selectToken(thunkApi.getState());
   if (!token)
     thunkApi.rejectWithValue(
@@ -168,10 +171,11 @@ export const createReservation = createAsyncThunk<
     );
   const response = await axios.post(
     "/reservations/create",
-    {
+    { 
+      bookable: reservationInformation.bookable,
       from: reservationInformation.from.toISOString(),
       to: reservationInformation.to.toISOString(),
-      bookable: reservationInformation.bookable,
+      
     },
     {
       headers: { authorization: `bearer ${token}` },

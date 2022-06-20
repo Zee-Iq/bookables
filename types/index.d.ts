@@ -88,6 +88,7 @@ declare namespace Bookables {
   }
 
   type Reservation = {
+    _id: Types.ObjectId | string;
     bookable: Types.ObjectId | string;
     from: Date;
     to: Date;
@@ -95,7 +96,8 @@ declare namespace Bookables {
   }
 
   type PopulatedReservation = {
-    bookable: Bookables.Bookable
+    _id: Types.ObjectId | string;
+    bookable: Omit<Bookables.Bookable,  "spaceId">  & { spaceId: Bookables.Space}
     from: Date;
     to: Date;
     user: Bookables.User;
