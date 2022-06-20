@@ -77,7 +77,7 @@ export default function PaymentProvider() {
           height: "500px",
         }}
       >
-        <LabeledFormGroup style={{width: "80%"}} label="Payment Provider">
+        <LabeledFormGroup label="Payment Provider">
           <TextField
           style={{width: "auto"}}
             required
