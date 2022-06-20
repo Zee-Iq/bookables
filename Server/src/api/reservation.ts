@@ -32,6 +32,8 @@ reservationRouter.post(
       throw new Error("Only Tenants can create reservations.");
     const reservation = new Reservation({ ...req.body, user: req.user?._id }); 
     await (await reservation.save()).populate(["user", "bookable"]);
+    const space = await Space.findById((reservation.bookable as any).spaceId);
+    (reservation.bookable as any).spaceId = space;
     res.json(reservation);
   })
 );

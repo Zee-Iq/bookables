@@ -163,7 +163,7 @@ export const createReservation = createAsyncThunk<
   { state: RootState }
 >("reservation/createReservation", async (reservationInformation, thunkApi) => {
   const state = thunkApi.getState();
-  if (state.reservation.bookingProcess.isCreating) throw new Error("reservation creation is already in process") 
+
   const token = selectToken(thunkApi.getState());
   if (!token)
     thunkApi.rejectWithValue(
