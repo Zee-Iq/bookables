@@ -53,8 +53,9 @@ export default function PaymentProvider() {
   
   };
 
-  if (loggedInUser?.roles.includes("tenant")) {
-    return <Navigate to={(location.state as any)?.from?.pathname} state={location.state} replace />;
+  if (loggedInUser?.roles.includes("tenant") && (location.state as any)?.from?.pathname) {
+
+    return <Navigate to={(location.state as any)?.from?.pathname} replace />;
   }
   else if (!loggedInUser) return <Navigate to="/" />
 
@@ -62,7 +63,7 @@ export default function PaymentProvider() {
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
+        "& .MuiTextField-root": { m: 1,  },
         marginTop: "70px",
       }}
       noValidate
@@ -77,7 +78,7 @@ export default function PaymentProvider() {
           height: "500px",
         }}
       >
-        <LabeledFormGroup label="Payment Provider">
+        <LabeledFormGroup  label="Payment Provider">
           <TextField
           style={{width: "auto"}}
             required
