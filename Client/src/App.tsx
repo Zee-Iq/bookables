@@ -15,13 +15,15 @@ import AccountDetails from "./components/Profile/AccountDetails";
 import PaymentDetails from "./components/Profile/PaymentDetails";
 import PayoutInformation from "./components/PayoutInformation/PayoutInformation";
 import ConfirmEmailModal from "./components/ConfirmEmailModal/CofirmEmailModal";
+import YourBookings from "./components/YourBookings/YourBookings";
+import PaymentProvider from "./components/PaymentProvider/PaymentProvider";
 
 const App = () => {
   return (
     <Box sx={AppStyles}>
       
       <ConfirmEmailModal />
-       <Routes>
+      <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="singlespace" element={<SingleSpace />} />
@@ -46,6 +48,8 @@ const App = () => {
 
           <Route path="/registerSpace" element={<RegisterSpace />} />
           <Route path="/payoutInformation" element={<PayoutInformation />} />
+          <Route path="/paymentProvider" element={<PaymentProvider />} />
+          <Route path="/yourBookings" element={<YourBookings />} />
         </Route>
       </Routes>
     </Box>

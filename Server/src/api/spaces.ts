@@ -81,7 +81,7 @@ spacesRouter.get(
     })
       .exec()
       .then((reservations) =>
-        reservations.map((reservation) => reservation.bookableId)
+        reservations.map((reservation) => reservation.bookable)
       );
 
     /*     const spaces = await Space.find({
