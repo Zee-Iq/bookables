@@ -41,7 +41,7 @@ export default function PayoutInformation() {
         }}
       >
         <h1>Please provide your payout information</h1>
-        <LabeledFormGroup style={{ width: "70%" }} label="Payout Informations">
+        <LabeledFormGroup style={{ width: "80%" }} label="Payout Informations">
           <TextField
             style={{ width: "auto" }}
             required

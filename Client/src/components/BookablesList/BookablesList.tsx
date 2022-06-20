@@ -36,9 +36,9 @@ export default function BookablesList({
   const timeWindow = useMemo(() => Math.abs(moment(fromDate).diff(moment(toDate), "hours", true)), [fromDate, toDate])
 
  
-  const handleBookingClick = () => {
+  const handleBookingClick = ( bookableId: any) => {
 
-  navigate("/yourBookings")
+  navigate("/yourBookings", {state: {fromDate: fromDate, toDate: toDate, bookableId: bookableId}})
   }
 
   return (
@@ -53,7 +53,7 @@ export default function BookablesList({
                 sx={{ justifyContent: "space-between" }}
               >
                 {bookable.name}
-                <Button onClick={handleBookingClick}>
+                <Button onClick={() => handleBookingClick(bookable._id)}>
                   Book for {" "}
                   {(
                     timeWindow *
@@ -77,7 +77,7 @@ export default function BookablesList({
                 sx={{ justifyContent: "space-between" }}
               >
                 {bookable.name}
-                <Button >
+                <Button  onClick={() => handleBookingClick(bookable._id)}>
                   Book for {" "}
                   {(
                     timeWindow *

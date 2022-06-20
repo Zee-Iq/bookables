@@ -54,7 +54,7 @@ export default function PaymentProvider() {
   };
 
   if (loggedInUser?.roles.includes("tenant")) {
-    return <Navigate to={(location.state as any)?.from?.pathname} replace />;
+    return <Navigate to={(location.state as any)?.from?.pathname} state={location.state} replace />;
   }
   else if (!loggedInUser) return <Navigate to="/" />
 
@@ -77,7 +77,7 @@ export default function PaymentProvider() {
           height: "500px",
         }}
       >
-        <LabeledFormGroup style={{width: "70%"}} label="Payment Provider">
+        <LabeledFormGroup style={{width: "80%"}} label="Payment Provider">
           <TextField
           style={{width: "auto"}}
             required

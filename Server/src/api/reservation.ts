@@ -1,7 +1,9 @@
 import express, { ErrorRequestHandler } from "express";
 import { authMiddleware } from "../middlewares/auth";
 import Reservation from "../models/Reservation";
+import Space from "../models/Space";
 import { catchErrors } from "../utils";
+import spacesRouter from "./spaces";
 
 const reservationRouter = express.Router();
 
@@ -14,7 +16,11 @@ reservationRouter.get(
   catchErrors(async (req, res) => {
     const reservations = await Reservation.find({
       user: req.user?._id,
-    }).populate(["user", "bookable"]);
+    }).populate(["user", "bookable", "bookable.spaceId"]);
+    for (const reservation of reservations) {
+      const space = await Space.findById((reservation.bookable as any).spaceId);
+      (reservation.bookable as any).spaceId = space;
+    }
     res.json(reservations);
   })
 );
@@ -24,7 +30,7 @@ reservationRouter.post(
   catchErrors(async (req, res) => {
     if (!req.user?.roles.includes("tenant"))
       throw new Error("Only Tenants can create reservations.");
-    const reservation = new Reservation({ ...req.body, user: req.user?._id });
+    const reservation = new Reservation({ ...req.body, user: req.user?._id }); 
     await (await reservation.save()).populate(["user", "bookable"]);
     res.json(reservation);
   })

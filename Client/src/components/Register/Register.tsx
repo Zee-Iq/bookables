@@ -48,7 +48,7 @@ export default function Register() {
   }, [pass, confirmPass]);
 
   if (user) {
-    return <Navigate to={state ? (state as any).from.pathname : "/"} />;
+    return <Navigate to={state ? (state as any).from.pathname : "/"} state={state} />;
   }
 
   if (regInProgress && regSuccess) return <Navigate to="/" />;

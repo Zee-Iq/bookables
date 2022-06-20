@@ -29,7 +29,7 @@ export default function Login() {
   // if there is a user, login is sucessfull --> show homepage
   if (user) {
     dispatch(setLoginError(null));
-    return <Navigate to={from} replace />;
+    return <Navigate to={from} state={ location.state } replace />;
   }
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
