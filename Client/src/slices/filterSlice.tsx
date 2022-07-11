@@ -11,7 +11,7 @@ type North = Bookables.Latitude
 type West = Bookables.Longitude
 type East = Bookables.Longitude
 export type LabeledLocation = { label: string } & Bookables.Location & {bbox: [South, West, North, East]};
-
+/* test 123 */
 
 type Point = {type: "Point", coordinates: [number, number]}
 type Box = {nw: number[], se: number[]}
